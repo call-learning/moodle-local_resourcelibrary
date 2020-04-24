@@ -15,10 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * IMT Catalog access
+ * Resource Library access
  *
  *
- * @package    local_imtcatalog
+ * @package    local_resourcelibrary
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -27,7 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 
 $capabilities = array(
     // Manage Fields.
-    'local/imtcatalog:manage' => array(
+    'local/resourcelibrary:manage' => array(
         'riskbitmask' => RISK_SPAM | RISK_XSS,
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
@@ -35,21 +35,37 @@ $capabilities = array(
             'manager' => CAP_ALLOW
         )
     ),
-    'local/imtcatalog:configurecustomfields' => array(
+    'local/resourcelibrary:editvalue' => array(
         'riskbitmask' => RISK_SPAM | RISK_XSS,
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
         'archetypes' => array(
             'manager' => CAP_ALLOW,
-            'teacher' => CAP_ALLOW
+            'editingteacher' => CAP_ALLOW
         )
     ),
-    'local/imtcatalog:changelockedcustomfields' => array(
+    'local/resourcelibrary:configurecustomfields' => array(
         'riskbitmask' => RISK_SPAM | RISK_XSS,
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
         'archetypes' => array(
             'manager' => CAP_ALLOW,
+        )
+    ),
+    'local/resourcelibrary:changelockedcustomfields' => array(
+        'riskbitmask' => RISK_SPAM | RISK_XSS,
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_COURSE,
+        'archetypes' => array(
+            'manager' => CAP_ALLOW
         ),
+    ),
+    'local/resourcelibrary:view' => array(
+        'riskbitmask' => RISK_SPAM | RISK_XSS,
+        'captype' => 'read',
+        'contextlevel' => CONTEXT_COURSE,
+        'archetypes' => array(
+            'user' => CAP_ALLOW
+        )
     ),
 );

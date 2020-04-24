@@ -1,0 +1,82 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template block_myoverview/view-list
+
+    This template renders the list view for the myoverview block.
+
+    Example context (json):
+    {
+        "entities": [
+            {
+                "fullname": "Assignment due 1",
+                "viewurl": "https://moodlesite/course/view.php?id=2",
+                "image": "https://moodlesite/pluginfile/123/course/overviewfiles/123.jpg",
+                "fullname": "course 3",
+                "category": "Miscellaneous",
+                "visible": true
+            }
+        ]
+    }
+}}
+
+<ul class="list-group">
+    {{#entities}}
+        <li class="list-group-item entity-listitem"
+            data-region="entity-content"
+            data-entity-id="{{{id}}}">
+            <div class="row-fluid">
+                <div class="col-md-11 col-md-11 d-flex align-items-center">
+                    <div class="d-flex">
+                        <div class="text-muted muted d-flex flex-wrap">
+                        <span class="sr-only">
+                            {{#str}}aria:category, local_resourcelibrary{{/str}}
+                        </span>
+                            <span class="categoryname">
+                                {{{categoryname}}}
+                            </span>
+                            {{#showshortname}}
+                                <div class="pl-1 pr-1">|</div>
+                                <span class="sr-only">
+                                    {{#str}}aria:shortname, local_resourcelibrary{{/str}}
+                                </span>
+                                <div>{{{shortname}}}</div>
+                            {{/showshortname}}
+                        </div>
+                        {{#image}}
+                            <img class="list-icon" src="{{{image}}}" alt="{{#str}}aria:entityimage, local_resourcelibrary{{/str}}">
+                        {{/image}}
+                        {{#iconurl}}
+                            <img class="list-icon"  src="{{{iconurl}}}" alt="{{#str}}aria:entityimage, local_resourcelibrary{{/str}}">
+                        {{/iconurl}}
+                        <a href="{{viewurl}}" class="name">
+                        <span class="sr-only">
+                            {{#str}}aria:fullname, local_resourcelibrary{{/str}}
+                        </span>
+                            {{{fullname}}}
+                        </a>
+                        {{^visible}}
+                            <div class="d-flex flex-wrap">
+                                <span class="tag tag-info">{{#str}} hiddenfromstudents {{/str}}</span>
+                            </div>
+                        {{/visible}}
+                    </div>
+                </div>
+            </div>
+        </li>
+    {{/entities}}
+</ul>

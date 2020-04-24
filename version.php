@@ -15,16 +15,16 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Plugin to manage IMT Library
+ * Plugin to manage Resource Library
  *
  * @link https://www.imt.fr/formation/academie-transformations-educatives/ressources-pedagogiques/pedagotheque-numerique/
- * @package    local_imtcatalog
+ * @package    local_resourcelibrary
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2020042001; // The current plugin version (Date: YYYYMMDDXX).
+$plugin->version   = 2020042005; // The current plugin version (Date: YYYYMMDDXX).
 $plugin->requires  = 2019052005; // Requires this Moodle version.
-$plugin->component = 'local_imtcatalog'; // Full name of the plugin (used for diagnostics).
+$plugin->component = 'local_resourcelibrary'; // Full name of the plugin (used for diagnostics).

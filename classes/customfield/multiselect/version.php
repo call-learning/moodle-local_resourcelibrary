@@ -14,12 +14,17 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+
 /**
- * Plugin to manage IMT Library
+ * Customfield Multiselect Type  - derived from customfield_select
  *
- * @link https://www.imt.fr/formation/academie-transformations-educatives/ressources-pedagogiques/pedagotheque-numerique/
- * @package    local_imtcatalog
+ * @package    local_resourcelibrary
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-$string['pluginname'] = 'IMT Pédagothèque Numérique';
+
+defined('MOODLE_INTERNAL') || die();
+
+$plugin->component = 'customfield_multiselect';
+$plugin->version   = 2019052000;
+$plugin->requires  = 2019051100;

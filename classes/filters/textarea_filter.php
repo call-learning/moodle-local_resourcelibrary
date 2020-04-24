@@ -15,23 +15,30 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Manage activity custom fields for metadata
+ * Simple textarea filter.
+ * A variant of the user_filter_simpleselect
  *
- * @package    local_resourcelibrary
+ * @package   local_resourcelibrary
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once('../../config.php');
-require_once($CFG->libdir.'/adminlib.php');
+namespace local_resourcelibrary\filters;
 
-admin_externalpage_setup('resourcelibrary_coursemodule_customfield');
+defined('MOODLE_INTERNAL') || die;
 
-$output = $PAGE->get_renderer('core_customfield');
-$handler = \local_resourcelibrary\customfield\coursemodule_handler::create();
-$outputpage = new \core_customfield\output\management($handler);
+/**
+ * Generic filter based on a text content
+ *
+ * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class textarea_filter extends simpletext_filter {
+    protected function check_is_righttype(\core_customfield\field_controller $field) {
+        if (!$field instanceof \customfield_textarea\field_controller
+        ) {
+            throw new \moodle_exception('wronghandlerforfilter', 'local_resourcelibrary');
+        }
+    }
+}
 
-echo $output->header(),
-     $output->heading(new lang_string('resourcelibrary_coursemodule_customfield', 'local_resourcelibrary')),
-     $output->render($outputpage),
-     $output->footer();

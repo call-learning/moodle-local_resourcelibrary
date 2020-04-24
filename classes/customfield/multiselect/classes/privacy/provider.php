@@ -13,25 +13,27 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
 /**
- * Manage activity custom fields for metadata
+ * Privacy provider - Customfield Multiselect Type  - derived from customfield_select
  *
  * @package    local_resourcelibrary
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+namespace customfield_multiselect\privacy;
 
-require_once('../../config.php');
-require_once($CFG->libdir.'/adminlib.php');
+use core_customfield\data_controller;
+use core_customfield\privacy\customfield_provider;
+use core_privacy\local\request\writer;
 
-admin_externalpage_setup('resourcelibrary_coursemodule_customfield');
+defined('MOODLE_INTERNAL') || die();
 
-$output = $PAGE->get_renderer('core_customfield');
-$handler = \local_resourcelibrary\customfield\coursemodule_handler::create();
-$outputpage = new \core_customfield\output\management($handler);
-
-echo $output->header(),
-     $output->heading(new lang_string('resourcelibrary_coursemodule_customfield', 'local_resourcelibrary')),
-     $output->render($outputpage),
-     $output->footer();
+/**
+ * Privacy Subsystem for customfield_select implementing null_provider.
+ *
+ * @package    local_resourcelibrary
+ * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class provider extends \customfield_select\privacy\provider {
+}

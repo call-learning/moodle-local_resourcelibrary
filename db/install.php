@@ -15,23 +15,16 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Manage activity custom fields for metadata
+ * Installation of the plugin
  *
  * @package    local_resourcelibrary
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+defined('MOODLE_INTERNAL') || die();
 
-require_once('../../config.php');
-require_once($CFG->libdir.'/adminlib.php');
-
-admin_externalpage_setup('resourcelibrary_coursemodule_customfield');
-
-$output = $PAGE->get_renderer('core_customfield');
-$handler = \local_resourcelibrary\customfield\coursemodule_handler::create();
-$outputpage = new \core_customfield\output\management($handler);
-
-echo $output->header(),
-     $output->heading(new lang_string('resourcelibrary_coursemodule_customfield', 'local_resourcelibrary')),
-     $output->render($outputpage),
-     $output->footer();
+function xmldb_local_resourcelibrary_install() {
+    $result = true;
+    \local_resourcelibrary\locallib\setup::setup_resourcelibrary_custom_fields();
+    return $result;
+}

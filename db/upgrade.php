@@ -13,25 +13,30 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
 /**
- * Manage activity custom fields for metadata
+ * Updates
  *
  * @package    local_resourcelibrary
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once('../../config.php');
-require_once($CFG->libdir.'/adminlib.php');
+defined('MOODLE_INTERNAL') || die();
 
-admin_externalpage_setup('resourcelibrary_coursemodule_customfield');
+function xmldb_local_resourcelibrary_upgrade($oldversion) {
 
-$output = $PAGE->get_renderer('core_customfield');
-$handler = \local_resourcelibrary\customfield\coursemodule_handler::create();
-$outputpage = new \core_customfield\output\management($handler);
+    // Always keep this upgrade step with version being the minimum
+    // allowed version to upgrade from (v3.2.0 right now).
+    if ($oldversion < 2020042002) {
+        upgrade_plugin_savepoint(true, 2020042002, 'local', 'resourcelibrary');
+    }
 
-echo $output->header(),
-     $output->heading(new lang_string('resourcelibrary_coursemodule_customfield', 'local_resourcelibrary')),
-     $output->render($outputpage),
-     $output->footer();
+    if ($oldversion < 2020042003) {
+        \local_resourcelibrary\locallib\setup::setup_resourcelibrary_custom_fields();
+        upgrade_plugin_savepoint(true, 2020042003, 'local', 'resourcelibrary');
+    }
+    if ($oldversion < 2020042005) {
+        \local_resourcelibrary\locallib\setup::setup_resourcelibrary_custom_fields();
+        upgrade_plugin_savepoint(true, 2020042005, 'local', 'resourcelibrary');
+    }
+}

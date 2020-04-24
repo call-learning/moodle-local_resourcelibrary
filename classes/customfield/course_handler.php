@@ -17,27 +17,41 @@
 /**
  * Course handler for metadata fields
  *
- * @package    local_imtcatalog
+ * @package   local_resourcelibrary
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_imtcatalog\customfield;
+namespace local_resourcelibrary\customfield;
 
 defined('MOODLE_INTERNAL') || die;
 
-use common_cf_handler;
-use core_customfield\api;
+use core_customfield\handler;
+use local_resourcelibrary\common_cf_handler;
 use core_customfield\field_controller;
+use restore_activity_task;
 
 /**
  * Course handler for custom fields
  *
- * @package core_course
- * @copyright 2018 David Matamoros <davidmc@moodle.com>
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package local_resourcelibrary
+ * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class course_handler extends common_cf_handler {
+class course_handler extends handler {
+
+    use common_cf_handler;
+
+    /**
+     * @var common_cf_handler
+     */
+    static protected $singleton;
+    /** @var int Field is displayed in the course listing, visible to everybody */
+    const VISIBLETOALL = 2;
+    /** @var int Field is displayed in the course listing but only for teachers */
+    const VISIBLETOTEACHERS = 1;
+    /** @var int Field is not displayed in the course listing */
+    const NOTVISIBLE = 0;
 
     /**
      * Allows to add custom controls to the field configuration form that will be saved in configdata
@@ -45,48 +59,40 @@ class course_handler extends common_cf_handler {
      * @param \MoodleQuickForm $mform
      */
     public function config_form_definition(\MoodleQuickForm $mform) {
-        $mform->addElement('header', 'course_handler_header', get_string('customfieldsettings', 'core_course'));
+        $mform->addElement('header',
+            'course_handler_header', get_string('resourcelibraryfieldsettings', 'local_resourcelibrary'));
         $mform->setExpanded('course_handler_header', true);
 
         // If field is locked.
-        $mform->addElement('selectyesno', 'configdata[locked]', get_string('customfield_islocked', 'core_course'));
-        $mform->addHelpButton('configdata[locked]', 'customfield_islocked', 'core_course');
+        $mform->addElement('selectyesno', 'configdata[locked]',
+            get_string('resourcelibraryfield_islocked', 'local_resourcelibrary'));
+        $mform->addHelpButton('configdata[locked]',
+            'resourcelibraryfield_islocked', 'local_resourcelibrary');
 
         // Field data visibility.
-        $visibilityoptions = [self::VISIBLETOALL => get_string('customfield_visibletoall', 'core_course'),
-            self::VISIBLETOTEACHERS => get_string('customfield_visibletoteachers', 'core_course'),
-            self::NOTVISIBLE => get_string('customfield_notvisible', 'core_course')];
-        $mform->addElement('select', 'configdata[visibility]', get_string('customfield_visibility', 'core_course'),
+        $visibilityoptions = [self::VISIBLETOALL =>
+            get_string('resourcelibraryfield_visibletoall', 'local_resourcelibrary'),
+            self::VISIBLETOTEACHERS =>
+                get_string('resourcelibraryfield_visibletoteachers', 'local_resourcelibrary'),
+            self::NOTVISIBLE =>
+                get_string('resourcelibraryfield_notvisible', 'local_resourcelibrary')];
+        $mform->addElement('select', 'configdata[visibility]',
+            get_string('resourcelibraryfield_visibility', 'local_resourcelibrary'),
             $visibilityoptions);
-        $mform->addHelpButton('configdata[visibility]', 'customfield_visibility', 'core_course');
+        $mform->addHelpButton('configdata[visibility]', 'resourcelibraryfield_visibility', 'local_resourcelibrary');
     }
 
     /**
-     * Creates or updates custom field data.
+     * Returns the context for the data associated with the given instanceid.
      *
-     * @param \restore_task $task
-     * @param array $data
+     * @param int $instanceid id of the record to get the context for
+     * @return \context the context for the given record
      */
-    public function restore_instance_data_from_backup(\restore_task $task, array $data) {
-        $courseid = $task->get_courseid();
-        $context = $this->get_instance_context($courseid);
-        $editablefields = $this->get_editable_fields($courseid);
-        $records = api::get_instance_fields_data($editablefields, $courseid);
-        $target = $task->get_target();
-        $override = ($target != \backup::TARGET_CURRENT_ADDING && $target != \backup::TARGET_EXISTING_ADDING);
-
-        foreach ($records as $d) {
-            $field = $d->get_field();
-            if ($field->get('shortname') === $data['shortname'] && $field->get('type') === $data['type']) {
-                if (!$d->get('id') || $override) {
-                    $d->set($d->datafield(), $data['value']);
-                    $d->set('value', $data['value']);
-                    $d->set('valueformat', $data['valueformat']);
-                    $d->set('contextid', $context->id);
-                    $d->save();
-                }
-                return;
-            }
+    public function get_instance_context(int $instanceid = 0): \context {
+        if ($instanceid > 0) {
+            return \context_course::instance($instanceid);
+        } else {
+            return \context_system::instance();
         }
     }
 
@@ -96,40 +102,26 @@ class course_handler extends common_cf_handler {
      * @param field_controller $field
      * @return string page heading
      */
-    public function setup_edit_page(field_controller $field) : string {
-        global $CFG, $PAGE;
-        require_once($CFG->libdir.'/adminlib.php');
-
-        $title = parent::setup_edit_page($field);
-        admin_externalpage_setup('course_customfield');
-        $PAGE->navbar->add($title);
-        return $title;
+    public function setup_edit_page(field_controller $field): string {
+        return $this->setup_edit_page_with_external($field, 'resourcelibrary_course_customfield');
     }
 
     /**
-     * The current user can view custom fields on the given course.
+     * URL for configuration of the fields on this handler.
      *
-     * @param field_controller $field
-     * @param int $instanceid id of the course to test edit permission
-     * @return bool true if the current can edit custom fields, false otherwise
+     * @return \moodle_url The URL to configure custom fields for this component
      */
-    public function can_view(field_controller $field, int $instanceid) : bool {
-        $visibility = $field->get_configdata_property('visibility');
-        if ($visibility == self::NOTVISIBLE) {
-            return false;
-        } else if ($visibility == self::VISIBLETOTEACHERS) {
-            return has_capability('moodle/course:update', $this->get_instance_context($instanceid));
-        } else {
-            return true;
-        }
+    public function get_configuration_url(): \moodle_url {
+        return new \moodle_url('/local/resourcelibrary/coursefields.php');
     }
 
     /**
      * Returns the parent context for the course
      *
      * @return \context
+     * @throws \dml_exception
      */
-    protected function get_parent_context() : \context {
+    protected function get_parent_context(): \context {
         global $PAGE;
         if ($this->parentcontext) {
             return $this->parentcontext;
@@ -139,21 +131,4 @@ class course_handler extends common_cf_handler {
         return \context_system::instance();
     }
 
-    /**
-     * Context that should be used for new categories created by this handler
-     *
-     * @return \context the context for configuration
-     */
-    public function get_configuration_context() : \context {
-        return \context_system::instance();
-    }
-
-    /**
-     * URL for configuration of the fields on this handler.
-     *
-     * @return \moodle_url The URL to configure custom fields for this component
-     */
-    public function get_configuration_url() : \moodle_url {
-        return new \moodle_url('/local/imtcatalog/coursefields.php');
-    }
 }

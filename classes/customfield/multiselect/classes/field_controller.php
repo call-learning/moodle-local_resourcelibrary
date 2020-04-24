@@ -15,23 +15,28 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Manage activity custom fields for metadata
+ * Customfield Multiselect Type  - derived from customfield_select
  *
  * @package    local_resourcelibrary
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once('../../config.php');
-require_once($CFG->libdir.'/adminlib.php');
 
-admin_externalpage_setup('resourcelibrary_coursemodule_customfield');
+namespace customfield_multiselect;
 
-$output = $PAGE->get_renderer('core_customfield');
-$handler = \local_resourcelibrary\customfield\coursemodule_handler::create();
-$outputpage = new \core_customfield\output\management($handler);
+defined('MOODLE_INTERNAL') || die;
 
-echo $output->header(),
-     $output->heading(new lang_string('resourcelibrary_coursemodule_customfield', 'local_resourcelibrary')),
-     $output->render($outputpage),
-     $output->footer();
+/**
+ * Class field
+ *
+ * @package customfield_select
+ * @copyright 2018 David Matamoros <davidmc@moodle.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class field_controller extends \customfield_select\field_controller {
+    /**
+     * Customfield type
+     */
+    const TYPE = 'multiselect';
+}

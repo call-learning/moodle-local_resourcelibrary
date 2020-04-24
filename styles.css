@@ -1,0 +1,33 @@
+/* Default stylesheet for CompetVet Suivi, will be overridden if necessary in theme */
+.resourcelibrary-filters-form > div.form-group {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+.resourcelibrary-filters-form .form-inline .custom-select,
+.resourcelibrary-filters-form .form-inline .btn,
+.resourcelibrary-filters-form  .form-inline
+{
+    width: 100%;
+}
+
+.local-resourcelibrary .dashboard-card-img {
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.local-resourcelibrary img.list-icon {
+    width: 2em;
+    height: 2em;
+    margin: 1em;
+    border-radius: 50%;
+}
+
+.fdate_selector {
+    flex-wrap: wrap;
+}
+.filter-instructions {
+    font-size: xx-small;
+    font-style: italic;
+}

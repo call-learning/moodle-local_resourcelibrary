@@ -15,23 +15,22 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Manage activity custom fields for metadata
+ * Simple value select filter.
+ * A variant of the user_filter_simpleselect
  *
- * @package    local_resourcelibrary
+ * @package   local_resourcelibrary
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+namespace local_resourcelibrary\filters;
 
-require_once('../../config.php');
-require_once($CFG->libdir.'/adminlib.php');
+defined('MOODLE_INTERNAL') || die;
 
-admin_externalpage_setup('resourcelibrary_coursemodule_customfield');
+/**
+ * Generic filter based on a list of values.
+ * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class select_filter extends simpleselect_filter {
+}
 
-$output = $PAGE->get_renderer('core_customfield');
-$handler = \local_resourcelibrary\customfield\coursemodule_handler::create();
-$outputpage = new \core_customfield\output\management($handler);
-
-echo $output->header(),
-     $output->heading(new lang_string('resourcelibrary_coursemodule_customfield', 'local_resourcelibrary')),
-     $output->render($outputpage),
-     $output->footer();

@@ -17,21 +17,22 @@
 /**
  * Manage course custom fields for metadata
  *
- * @package    local_imtcatalog
+ * @package    local_resourcelibrary
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once('../../config.php');
-require_once($CFG->libdir.'/adminlib.php');
 
-admin_externalpage_setup('catalog_course_customfield');
+require_once('../../config.php');
+require_once($CFG->libdir . '/adminlib.php');
+
+admin_externalpage_setup('resourcelibrary_course_customfield');
 
 $output = $PAGE->get_renderer('core_customfield');
-$handler = \local_imtcatalog\customfield\course_handler::create();
+$handler = \local_resourcelibrary\customfield\course_handler::create();
 $outputpage = new \core_customfield\output\management($handler);
 
 echo $output->header(),
-     $output->heading(new lang_string('course_metadata', 'local_imtcatalog')),
-     $output->render($outputpage),
-     $output->footer();
+$output->heading(new lang_string('resourcelibrary_course_customfield', 'local_resourcelibrary')),
+$output->render($outputpage),
+$output->footer();

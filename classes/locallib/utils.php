@@ -15,18 +15,21 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Plugin to manage IMT Library
+ * Internal function and routine for the plugin
  *
- * @link https://www.imt.fr/formation/academie-transformations-educatives/ressources-pedagogiques/pedagotheque-numerique/
- * @package    local_imtcatalog
+ * @package    local_resourcelibrary
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-$string['pluginname'] = 'IMT Catalog';
 
-$string['activity_metadata'] = 'Metatdata for activity Catalog';
-$string['course_metadata'] = 'Metatdata for course Catalog';
-$string['course_module_customfield'] ='Manage custom catalog field for course modules';
-$string['enableimtcatalog'] = 'Enable IMT Catalog';
-$string['imtcatalog:managefields'] = 'Manage Catalog Fields';
+namespace local_resourcelibrary\locallib;
+defined('MOODLE_INTERNAL') || die();
 
+use local_resourcelibrary\customfield\course_handler;
+
+class utils {
+    public static function course_update_fields($data) {
+        $handler = course_handler::create();
+        $handler->instance_form_save($data);
+    }
+}

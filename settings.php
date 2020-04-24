@@ -17,36 +17,37 @@
 /**
  * This file defines settingpages and externalpages under the "courses" category
  *
- * @package    local_imtcatalog
+ * @package    local_resourcelibrary
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
+defined('MOODLE_INTERNAL') || die;
 if ($hassiteconfig or has_any_capability($capabilities, $systemcontext)) {
-    $settings = new admin_settingpage('local_imtcatalog', get_string('pluginname', 'local_imtcatalog'));
-    $settings->add(
-        new admin_externalpage('catalog_coursemodule_customfield',
-            new lang_string('catalog_coursemodule_customfield', 'local_imtcatalog'),
-            $CFG->wwwroot . '/local/imtcatalog/activityfields.php',
-            array('local/imtcatalog:manage')
+    $settings = new admin_category('resourcelibrary', get_string('pluginname', 'local_resourcelibrary'));
+
+    $settings->add('resourcelibrary',
+        new admin_externalpage('resourcelibrary_coursemodule_customfield',
+            new lang_string('resourcelibrary_coursemodule_customfield', 'local_resourcelibrary'),
+            $CFG->wwwroot . '/local/resourcelibrary/activityfields.php',
+            array('local/resourcelibrary:manage')
         )
     );
-    $settings->add(
-        new admin_externalpage('catalog_coursemodule_customfield',
-            new lang_string('catalog_coursemodule_customfield', 'local_imtcatalog'),
-            $CFG->wwwroot . '/local/imtcatalog/activityfields.php',
-            array('local/imtcatalog:manage')
+    $settings->add('resourcelibrary',
+        new admin_externalpage('resourcelibrary_course_customfield',
+            new lang_string('resourcelibrary_course_customfield', 'local_resourcelibrary'),
+            $CFG->wwwroot . '/local/resourcelibrary/coursefields.php',
+            array('local/resourcelibrary:manage')
         )
     );
-    if (!empty($CFG->enableimtcatalog) && $CFG->enableimtcatalog) {
+    if (!empty($CFG->enableresourcelibrary) && $CFG->enableresourcelibrary) {
         $ADMIN->add('courses', $settings); // Add it to the course menu.
     }
     // Create a global Advanced Feature Toggle.
-    $enableoption = new admin_setting_configcheckbox('enableimtcatalog',
-        new lang_string('enableimtcatalog', 'local_imtcatalog'),
-        new lang_string('enableimtcatalog', 'local_imtcatalog'),
+    $enableoption = new admin_setting_configcheckbox('enableresourcelibrary',
+        new lang_string('enableresourcelibrary', 'local_resourcelibrary'),
+        new lang_string('enableresourcelibrary', 'local_resourcelibrary'),
         1);
-    $enableoption->set_updatedcallback('local_imtcatalog_enable_disable_plugin_callback');
+    $enableoption->set_updatedcallback('local_resourcelibrary_enable_disable_plugin_callback');
 
     $optionalsubsystems = $ADMIN->locate('optionalsubsystems');
     $optionalsubsystems->add($enableoption);
