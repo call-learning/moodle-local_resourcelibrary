@@ -41,18 +41,21 @@ require_once("lib.php");
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class local_resourcelibrary_external extends external_api {
+class local_resourcelibrary_external extends external_api
+{
 
     /**
      * Returns description of method parameters
      *
      * @return external_function_parameters
      */
-    public static function get_filtered_course_content_parameters() {
+    public static function get_filtered_course_content_parameters()
+    {
         return static::get_filter_generic_parameters('courseid', 'course id');
     }
 
-    protected static function get_filter_generic_parameters($parentid, $parentiddesc) {
+    protected static function get_filter_generic_parameters($parentid, $parentiddesc)
+    {
         return new external_function_parameters(
             array($parentid => new external_value(PARAM_INT, $parentiddesc),
                 'filters' => new external_multiple_structure (
@@ -104,7 +107,8 @@ class local_resourcelibrary_external extends external_api {
      * @throws invalid_parameter_exception
      * @throws moodle_exception
      */
-    public static function get_filtered_course_content($courseid, $filters = array(), $limit = 0, $offset = 0, $sorting = array()) {
+    public static function get_filtered_course_content($courseid, $filters = array(), $limit = 0, $offset = 0, $sorting = array())
+    {
         global $PAGE, $DB;
         // Validate parameters.
 
@@ -154,7 +158,7 @@ class local_resourcelibrary_external extends external_api {
                 } else {
                     $additionamoduleinfo->viewurl = (new moodle_url('/course/view.php', array('id' => $courseid)))->out(false);
                 }
-                $fullmodulesinfo[] = array_merge((array) $mod, (array) $additionamoduleinfo);
+                $fullmodulesinfo[] = array_merge((array)$mod, (array)$additionamoduleinfo);
             }
         }
         // Here as we want to sort by time modified, we need to sort the list as it is not possible
@@ -169,7 +173,8 @@ class local_resourcelibrary_external extends external_api {
      * @return external_description
      * @since Moodle 2.2
      */
-    public static function get_filtered_course_content_returns() {
+    public static function get_filtered_course_content_returns()
+    {
         return
             new external_multiple_structure(
                 new external_single_structure(
@@ -204,7 +209,8 @@ class local_resourcelibrary_external extends external_api {
      * @return external_function_parameters
      * @since Moodle 2.3
      */
-    public static function get_filtered_courses_parameters() {
+    public static function get_filtered_courses_parameters()
+    {
         return static::get_filter_generic_parameters('categoryid', 'category id');
     }
 
@@ -223,7 +229,8 @@ class local_resourcelibrary_external extends external_api {
      * @throws required_capability_exception
      * @since Moodle 2.2
      */
-    public static function get_filtered_courses($categoryid = 0, $filters = array(), $limit = 0, $offset = 0, $sorting = array()) {
+    public static function get_filtered_courses($categoryid = 0, $filters = array(), $limit = 0, $offset = 0, $sorting = array())
+    {
         global $CFG, $PAGE;
         require_once($CFG->dirroot . "/course/lib.php");
 
@@ -265,22 +272,20 @@ class local_resourcelibrary_external extends external_api {
 
             // Now security checks.
             $context = context_course::instance($course->id, IGNORE_MISSING);
+            $hasvalidatedcontext = true;
             try {
                 self::validate_context($context);
             } catch (Exception $e) {
-                $exceptionparam = new stdClass();
-                $exceptionparam->message = $e->getMessage();
-                $exceptionparam->courseid = $course->id;
-                throw new moodle_exception('errorcoursecontextnotvalid', 'webservice', '', $exceptionparam);
+                $hasvalidatedcontext = false;
+                $PAGE->set_context(context_system::instance());
             }
-            if ($course->id != SITEID) {
+            if ($course->id != SITEID && $hasvalidatedcontext) {
                 require_capability('moodle/course:view', $context);
             }
-
             $context = context_course::instance($course->id);
             $exporter = new course_summary_exporter($course, ['context' => $context]);
             $renderer = $PAGE->get_renderer('core');
-            $courseinfo = (array) $exporter->export($renderer);
+            $courseinfo = (array)$exporter->export($renderer);
             $courseinfo['sequenceid'] = $sequenceid;
             $courseinfo['parentid'] = $course->category;
             $courseinfo['parentsortorder'] = $course->sortorder;
@@ -291,16 +296,18 @@ class local_resourcelibrary_external extends external_api {
             self::export_fields($courseinfo['customfields'], 'core_course', 'course', $course->id);
             self::export_fields($courseinfo['resourcelibraryfields'], 'local_resourcelibrary', 'course', $course->id);
 
-            $courseadmin = has_capability('moodle/course:update', $context);
-            if ($courseadmin or $course->visible
-                or has_capability('moodle/course:viewhiddencourses', $context)) {
+            $coursevisible = $course->visible || ($hasvalidatedcontext &&
+                    (has_capability('moodle/course:update', $context)
+                        || has_capability('moodle/course:viewhiddencourses', $context)));
+            if ($coursevisible) {
                 $coursesinfo[] = $courseinfo;
             }
         }
         return $coursesinfo;
     }
 
-    protected static function export_fields(&$fieldarray, $component, $area, $courseid) {
+    protected static function export_fields(&$fieldarray, $component, $area, $courseid)
+    {
         $rlfieldhandler = \core_customfield\handler::get_handler($component, $area);
         if ($rlfields = $rlfieldhandler->export_instance_data($courseid)) {
             foreach ($rlfields as $data) {
@@ -320,7 +327,8 @@ class local_resourcelibrary_external extends external_api {
      * @return external_description
      * @since Moodle 2.2
      */
-    public static function get_filtered_courses_returns() {
+    public static function get_filtered_courses_returns()
+    {
         return
             new external_multiple_structure(
                 new external_single_structure(
@@ -379,7 +387,8 @@ class local_resourcelibrary_external extends external_api {
             );
     }
 
-    public static function get_sort_options_sql($sortoptions, $fields) {
+    public static function get_sort_options_sql($sortoptions, $fields)
+    {
         $sortsql = " ";
         foreach ($sortoptions as $sort) {
             $order = strtoupper($sort['order']);

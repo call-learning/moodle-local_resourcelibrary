@@ -41,6 +41,7 @@ $functions = array(
         'type' => 'read',
         'capabilities' => 'moodle/course:view, moodle/course:update, moodle/course:viewhiddencourses',
         'ajax' => true,
+        'loginrequired' => false // Global filter course page is accessible without being logged in.
     ),
     'local_resourcelibrary_get_filtered_course_content' => array(
         'classname' => 'local_resourcelibrary_external',
@@ -50,5 +51,6 @@ $functions = array(
         'type' => 'read',
         'capabilities' => 'moodle/course:view, moodle/course:update, moodle/course:viewhiddencourses',
         'ajax' => true,
+        'loginrequired' => false // Global filter course page is accessible without being logged in.
     ),
 );

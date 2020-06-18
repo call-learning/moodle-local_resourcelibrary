@@ -26,7 +26,9 @@ global $CFG;
 require_once($CFG->dirroot . '/course/lib.php');
 
 $courseid = optional_param('courseid', SITEID, PARAM_INT);
-require_login($courseid); // We make sure the course exists and we can access it.
+if ($CFG->forcelogin) {
+    require_login($courseid, true); // We make sure the course exists and we can access it.
+}
 
 $PAGE->set_pagelayout('standard');
 $pageparams = array();
