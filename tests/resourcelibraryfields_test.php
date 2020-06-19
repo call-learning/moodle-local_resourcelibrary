@@ -30,6 +30,7 @@ defined('MOODLE_INTERNAL') || die();
 global $CFG;
 require_once($CFG->dirroot . '/backup/util/includes/backup_includes.php');
 require_once($CFG->dirroot . '/backup/util/includes/restore_includes.php');
+require_once($CFG->dirroot . '/local/resourcelibrary/tests/lib.php');
 
 /**
  * Tests for customfields in courses
@@ -38,29 +39,7 @@ require_once($CFG->dirroot . '/backup/util/includes/restore_includes.php');
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class local_resourcelibrary_resourcelibraryfield_testcase extends advanced_testcase {
-
-    /**
-     * Set up
-     */
-    protected function setUp() {
-        parent::setUp();
-        $this->resetAfterTest();
-        $this->setAdminUser();
-
-        $dg = self::getDataGenerator();
-        $generator = $dg->get_plugin_generator('local_resourcelibrary');
-        foreach (array('course', 'coursemodule') as $type) {
-            $catid = $generator->create_category([], $type)->get('id');
-            $generator->create_field(['categoryid' => $catid, 'type' => 'text', 'shortname' => 'f1'], $type);
-            $generator->create_field(['categoryid' => $catid, 'type' => 'checkbox', 'shortname' => 'f2'], $type);
-            $generator->create_field(['categoryid' => $catid, 'type' => 'date', 'shortname' => 'f3',
-                'configdata' => ['startyear' => 2000, 'endyear' => 3000, 'includetime' => 1]], $type);
-            $generator->create_field(['categoryid' => $catid, 'type' => 'select', 'shortname' => 'f4',
-                'configdata' => ['options' => "a\nb\nc"]], $type);
-            $dg->create_custom_field(['categoryid' => $catid, 'type' => 'textarea', 'shortname' => 'f5']);
-        }
-    }
+class local_resourcelibrary_resourcelibraryfield_testcase extends local_resourcelibrary_testcase {
 
     /**
      * Test creating course with resourcelibrary custom fields and retrieving them

@@ -24,8 +24,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-
-
 /**
  * Behat data generator for resource library
  *
@@ -34,45 +32,36 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class behat_mod_quiz_generator extends behat_generator_base {
+class behat_local_resourcelibrary_generator extends behat_generator_base {
 
+    /**
+     * @return array|array[]
+     */
     protected function get_creatable_entities(): array {
         return [
-            'course category' => [
-                'datagenerator' => 'resourcelibrary',
-                'required' => ['quiz', 'group'],
-                'switchids' => ['quiz' => 'quiz', 'group' => 'groupid'],
+            'category' => [
+                'datagenerator' => 'category',
+                'required' => ['area']
             ],
-            'course field' => [
-                'datagenerator' => 'resourcelibrary',
-                'required' => ['quiz', 'user'],
-                'switchids' => ['quiz' => 'quiz', 'user' => 'userid'],
-            ],
-            'activity category' => [
-                'datagenerator' => 'resourcelibrary',
-                'required' => ['quiz', 'group'],
-                'switchids' => ['quiz' => 'quiz', 'group' => 'groupid'],
-            ],
-            'activity field' => [
-                'datagenerator' => 'override',
-                'required' => ['quiz', 'user'],
-                'switchids' => ['quiz' => 'quiz', 'user' => 'userid'],
-            ],
+            'field' => [
+                'datagenerator' => 'field',
+                'required' => ['area']
+            ]
         ];
     }
 
     /**
-     * Look up the id of a quiz from its name.
+     * Look up the id of a custom field category from its name.
      *
-     * @param string $quizname the quiz name, for example 'Test quiz'.
+     * @param string $categoryname the category name, for example 'My category'.
      * @return int corresponding id.
+     * @throws dml_exception
      */
-    protected function get_quiz_id(string $quizname): int {
+    protected function preprocess_field($elementdata) {
         global $DB;
-
-        if (!$id = $DB->get_field('quiz', 'id', ['name' => $quizname])) {
-            throw new Exception('There is no quiz with name "' . $quizname . '" does not exist');
-        }
-        return $id;
+        $elementdata['categoryid'] = $DB->get_field('customfield_category', 'id',
+            ['name' => trim($elementdata['customfieldcategory']),
+                'area' => $elementdata['area']]);
+        return $elementdata;
     }
 }

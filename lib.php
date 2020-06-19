@@ -61,7 +61,7 @@ function local_resourcelibrary_coursemodule_standard_elements($formwrapper, $mfo
             }
         }
         $formwrapper->set_data($coursemoduledata);
-        $handler->instance_form_definition_after_data($mform, $coursemoduledata->id);
+        $handler->instance_form_definition_after_data($mform, $coursemoduledata->coursemodule);
     }
 }
 
@@ -123,6 +123,9 @@ function local_resourcelibrary_extend_navigation_course($parentnode, $course, $c
 
 function local_resourcelibrary_extend_navigation(global_navigation $nav) {
     global $CFG, $PAGE;
+    if (empty($CFG->enableresourcelibrary)) {
+        return;
+    }
     if ($PAGE->context) {
         $context = $PAGE->context;
     } else {

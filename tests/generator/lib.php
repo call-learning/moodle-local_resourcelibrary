@@ -39,7 +39,7 @@ require_once($CFG->dirroot.'/customfield/tests/generator/lib.php');
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class local_resourcelibrary_generator extends core_customfield_generator {
+class local_resourcelibrary_generator extends component_generator_base {
     /** @var int Number of created categories and field for each entity. */
     protected $counts = array(
         'course' => array('categorycount' => 0, 'fieldcount' => 0),
@@ -53,7 +53,10 @@ class local_resourcelibrary_generator extends core_customfield_generator {
      * @return category_controller
      * @throws moodle_exception
      */
-    public function create_category($record = null, $type = 'course') {
+    public function create_category($record = null) {
+
+        $type = $record && $record['area'] ? $record['area'] : 'course';
+
         $this->counts[$type]['categorycount']++;
         $i = $this->counts[$type]['categorycount'];
         $record = (object) $record;
@@ -81,7 +84,8 @@ class local_resourcelibrary_generator extends core_customfield_generator {
      * @param array|stdClass $record
      * @return field_controller
      */
-    public function create_field($record, $type='course'): field_controller {
+    public function create_field($record): field_controller {
+        $type = $record && $record['area'] ? $record['area'] : 'course';
         $this->counts[$type]['fieldcount']++;
         $i = $this->counts[$type]['fieldcount'];
         $record = (object) $record;
