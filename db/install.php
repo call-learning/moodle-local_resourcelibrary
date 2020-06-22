@@ -23,6 +23,11 @@
  */
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Install script for local_resourcelibrary
+ * @return bool
+ * @throws coding_exception
+ */
 function xmldb_local_resourcelibrary_install() {
     $result = true;
     \local_resourcelibrary\locallib\setup::setup_resourcelibrary_custom_fields();

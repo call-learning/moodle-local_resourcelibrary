@@ -259,7 +259,7 @@ define(
                         }
                         lastLimit = limit;
                         var additionalValues = {};
-                        if (entityType != 'course') {
+                        if (entityType !== 'course') {
                             additionalValues =  courseId;
                         }
                         var pagePromise = getEntities(

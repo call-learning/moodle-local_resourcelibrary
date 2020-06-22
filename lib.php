@@ -131,19 +131,61 @@ function local_resourcelibrary_extend_navigation(global_navigation $nav) {
     } else {
         $context = \context_system::instance();
     }
-    if (has_capability('local/resourcelibrary:view', $context)) {
-        $urltext = get_string('resourcelibrary', 'local_resourcelibrary');
-        $params = [];
-        if ($context instanceof context_course) {
-            $params['courseid'] = $context->instanceid;
-        }
-        $url = new moodle_url($CFG->wwwroot . '/local/resourcelibrary/pages/resourcelibrary.php', $params);
-        $mycoursesnode = $nav->find('mycourses', null);
-        if ($mycoursesnode) {
-            $node = $nav->create($urltext, $url, navigation_node::NODETYPE_LEAF, null, 'resourcelibrary',
-                new pix_icon('i/course', 'resourcelibrary'));
-            $node->showinflatnavigation = true;
-            $nav->add_node($node, 'mycourses');
-        }
+
+    $urltext = get_string('resourcelibrary', 'local_resourcelibrary');
+    $params = [];
+    if ($context instanceof context_course) {
+        $params['courseid'] = $context->instanceid;
     }
+    $url = new moodle_url($CFG->wwwroot . '/local/resourcelibrary/pages/resourcelibrary.php', $params);
+    $mycoursesnode = $nav->find('mycourses', null);
+    if ($mycoursesnode) {
+        $node = $nav->create($urltext, $url, navigation_node::NODETYPE_LEAF, null, 'resourcelibrary',
+            new pix_icon('i/course', 'resourcelibrary'));
+        $node->showinflatnavigation = true;
+        $nav->add_node($node, 'mycourses');
+    }
+
 }
+
+/**
+ * Get the current user preferences that are available
+ *
+ * @return mixed Array representing current options along with defaults
+ */
+function local_resourcelibrary_user_preferences() {
+    $preferences['local_resourcelibrary_user_sort_preference'] = array(
+        'null' => NULL_NOT_ALLOWED,
+        'default' => local_resourcelibrary\output\base_resourcelibrary::SORT_FULLNAME_ASC,
+        'type' => PARAM_ALPHA,
+        'choices' => array(
+            local_resourcelibrary\output\base_resourcelibrary::SORT_FULLNAME_ASC,
+            local_resourcelibrary\output\base_resourcelibrary::SORT_FULLNAME_DESC,
+            local_resourcelibrary\output\base_resourcelibrary::SORT_LASTMODIF_ASC,
+            local_resourcelibrary\output\base_resourcelibrary::SORT_LASTMODIF_DESC,
+        )
+    );
+    $preferences['local_resourcelibrary_user_view_preference'] = array(
+        'null' => NULL_NOT_ALLOWED,
+        'default' => local_resourcelibrary\output\base_resourcelibrary::VIEW_CARD,
+        'type' => PARAM_ALPHA,
+        'choices' => array(
+            local_resourcelibrary\output\base_resourcelibrary::VIEW_CARD,
+            local_resourcelibrary\output\base_resourcelibrary::VIEW_LIST
+        )
+    );
+
+    $preferences['local_resourcelibrary_user_paging_preference'] = array(
+        'null' => NULL_NOT_ALLOWED,
+        'default' => local_resourcelibrary\output\base_resourcelibrary::PAGING_12,
+        'type' => PARAM_INT,
+        'choices' => array(
+            local_resourcelibrary\output\base_resourcelibrary::PAGING_12,
+            local_resourcelibrary\output\base_resourcelibrary::PAGING_24,
+            local_resourcelibrary\output\base_resourcelibrary::PAGING_48
+        )
+    );
+
+    return $preferences;
+}
+

@@ -35,6 +35,7 @@ before_install:
   - docker run -d -p 127.0.0.1:4444:4444 --net=host -v /dev/shm:/dev/shm selenium/standalone-firefox:2.53.1-beryllium
 
 install:
+  - moodle-plugin-ci add-plugin call-learning/moodle-customfield_multiselect
   - moodle-plugin-ci install
 
 script:
@@ -46,6 +47,6 @@ script:
   - moodle-plugin-ci savepoints
   - moodle-plugin-ci mustache
 # - moodle-plugin-ci grunt
-  - moodle-plugin-ci phpdoc
+# - moodle-plugin-ci phpdoc  # Needs to be re-enabled soon.
   - moodle-plugin-ci phpunit
   - moodle-plugin-ci behat

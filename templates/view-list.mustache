@@ -41,7 +41,7 @@
             data-entity-id="{{{id}}}">
             <div class="row-fluid">
                 <div class="col-md-11 col-md-11 d-flex align-items-center">
-                    <div class="d-flex">
+                    <div class="d-flex align-items-center">
                         <div class="text-muted muted d-flex flex-wrap">
                         <span class="sr-only">
                             {{#str}}aria:category, local_resourcelibrary{{/str}}
@@ -61,20 +61,25 @@
                             <img class="list-icon" src="{{{image}}}" alt="{{#str}}aria:entityimage, local_resourcelibrary{{/str}}">
                         {{/image}}
                         {{#iconurl}}
-                            <img class="list-icon"  src="{{{iconurl}}}" alt="{{#str}}aria:entityimage, local_resourcelibrary{{/str}}">
+                            <img class="list-icon" src="{{{iconurl}}}" alt="{{#str}}aria:entityimage, local_resourcelibrary{{/str}}">
                         {{/iconurl}}
-                        <a href="{{viewurl}}" class="name">
                         <span class="sr-only">
                             {{#str}}aria:fullname, local_resourcelibrary{{/str}}
                         </span>
+                        <span class="item-name">
                             {{{fullname}}}
-                        </a>
+                        </span>
                         {{^visible}}
                             <div class="d-flex flex-wrap">
                                 <span class="tag tag-info">{{#str}} hiddenfromstudents {{/str}}</span>
                             </div>
                         {{/visible}}
                     </div>
+                </div>
+                <div class="d-flex align-items-center">
+                    <a href="{{viewurl}}" class="item-view">
+                        {{# pix }} t/right, core, {{#str}} viewitem, local_resourcelibrary {{/str}} {{/ pix }}
+                    </a>
                 </div>
             </div>
         </li>

@@ -58,8 +58,9 @@ class local_resourcelibrary_api_testcase extends local_resourcelibrary_testcase 
             'customfield_f1' => 'some text',
             'customfield_f2' => 1,
             'customfield_f3' => $now,
-            'customfield_f4' => 2,
-            'customfield_f5_editor' => ['text' => 'test', 'format' => FORMAT_HTML]];
+            'customfield_f4' => [1, 2],
+            'customfield_f5' => 2,
+            'customfield_f6_editor' => ['text' => 'test', 'format' => FORMAT_HTML]];
         $c1 = $dg->create_course($data);
 
         $data['id'] = $c1->id;
@@ -70,7 +71,115 @@ class local_resourcelibrary_api_testcase extends local_resourcelibrary_testcase 
         $this->assertCount(1, $courses);
         $coursedata = $courses[0];
         $rlfields = $coursedata['resourcelibraryfields'];
-        $this->assertCount(5, $rlfields);
+        $this->assertCount(6, $rlfields);
+        $this->assertEquals(array(
+            'type' => 'text',
+            'value' => 'some text',
+            'name' => 'Field 1',
+            'shortname' => 'f1',
+        ), $rlfields[0]);
+        $this->assertEquals(array(
+            'type' => 'multiselect',
+            'value' => 'b, c',
+            'name' => 'Field 4',
+            'shortname' => 'f4',
+        ), $rlfields[3]);
     }
 
+    /**
+     * Test that we can obtain a single row result for a set of fields for a course and course module
+     * get_filtered_courses($ids = array(), $filters = array(), $limit = 0, $offset = 0, $sorting = null) {
+     */
+    public function test_get_filtered_modules_simple() {
+        global $CFG;
+        require_once($CFG->dirroot . '/local/resourcelibrary/externallib.php');
+
+        $dg = $this->getDataGenerator();
+
+        $now = time();
+
+        $moduledata = [
+            'customfield_f1' => 'some text',
+            'customfield_f2' => 1,
+            'customfield_f3' => $now,
+            'customfield_f4' => [1, 2],
+            'customfield_f5' => 2,
+            'customfield_f6_editor' => ['text' => 'test', 'format' => FORMAT_HTML]];
+        $c1 = $dg->create_course();
+        foreach (array('page', 'label', 'page', 'label') as $modtype) {
+            $dg->create_module($modtype, array_merge(
+                ['course' => $c1->id],
+                $moduledata
+            ));
+        }
+        $modules = local_resourcelibrary_external::get_filtered_course_content($c1->id);
+
+        $this->assertCount(4, $modules);
+        $moduledata = $modules[0];
+        $rlfields = $moduledata['resourcelibraryfields'];
+        $this->assertCount(6, $rlfields);
+        $this->assertEquals(array(
+            'type' => 'text',
+            'value' => 'some text',
+            'name' => 'Field 1',
+            'shortname' => 'f1',
+        ), $rlfields[0]);
+        $this->assertEquals(array(
+            'type' => 'multiselect',
+            'value' => 'b, c',
+            'name' => 'Field 4',
+            'shortname' => 'f4',
+        ), $rlfields[3]);
+    }
+
+    /**
+     * Test that we can obtain a single row result for a set of fields for a course and course module
+     * get_filtered_courses($ids = array(), $filters = array(), $limit = 0, $offset = 0, $sorting = null) {
+     */
+    public function test_get_filtered_modules_single_criteria() {
+        global $CFG;
+        require_once($CFG->dirroot . '/local/resourcelibrary/externallib.php');
+
+        $dg = $this->getDataGenerator();
+
+        $now = time();
+
+        $c1 = $dg->create_course();
+        foreach (array('page', 'label', 'page', 'label') as $index => $modtype) {
+            $moduledata = [
+                'customfield_f1' => 'some text' . $index,
+                'customfield_f2' => $index % 2,
+                'customfield_f3' => $now + ((0 - $index % 2) * 20000),
+                'customfield_f4' => [1, 2],
+                'customfield_f5' => (1 + ($index % 2)),
+                'customfield_f6_editor' => ['text' => 'test', 'format' => FORMAT_HTML]];
+            $dg->create_module($modtype, array_merge(
+                ['course' => $c1->id],
+                $moduledata
+            ));
+        }
+
+        $modules = local_resourcelibrary_external::get_filtered_course_content($c1->id, array(array(
+            'type' => 'select',
+            'shortname' => 'f5',
+            'operator' => 1,
+            'value' => '2',
+        )));
+
+        $this->assertCount(2, $modules);
+
+        $this->assertContains(array(
+            'type' => 'select',
+            'value' => 'b',
+            'name' => 'Field 5',
+            'shortname' => 'f5',
+        ), $modules[0]['resourcelibraryfields']);
+
+        $this->assertContains(array(
+            'type' => 'select',
+            'value' => 'b',
+            'name' => 'Field 5',
+            'shortname' => 'f5',
+        ), $modules[1]['resourcelibraryfields']);
+    }
 }

@@ -157,7 +157,7 @@ class customfield_utils {
             if (!empty($filter['shortname'])) {
                 $matchingfields = array_filter($allfields,
                     function($f) use ($filter) {
-                        return $f->get('shortname') == $filter['shortname'];
+                        return strtolower($f->get('shortname')) == strtolower($filter['shortname']);
                     });
                 if ($matchingfields) {
                     $matchingfield = reset($matchingfields);

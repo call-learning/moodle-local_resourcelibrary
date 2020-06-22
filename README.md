@@ -1,5 +1,5 @@
-Catalog Local plugin
-========================
+Resource Library Local plugin
+=============================
 
 [![Build Status](https://travis-ci.org/call-learning/moodle-local_resourcelibrary.svg?branch=master)](https://travis-ci.org/call-learning/moodle-local_resourcelibrary)
 
@@ -26,6 +26,10 @@ The plugin will add a menu under Administration > Courses menu so two new types 
 
 Those custom fields will then be taken into account in the resource library page and each field will have its related search form entry.
 
+The plugin will also add a new navigation menu called "Resources Library" that will list
+all available courses. If you need to make this page accessible through non logged in users, make sure
+you set the "autologin" to on in the Administration > Site administration > Users > Permissions > User policies 
+(See [Auto Login Guest](https://docs.moodle.org/39/en/Guest_access)). If not a login prompt will appear to see the page.
 
 Authors
 =======
@@ -36,10 +40,9 @@ Camille Carlier - Chargée de mission TICE Ingénieure Pédagogique- DP Pole IRM
 TODO
 ====
  * Allow ordering of activities by last modification date
- * Further test (unit + behat)
  * Add more information on the thumbnails
  * Check visibility of courses and activities
- * When values are removed from the list, we would need to reindex
+ * Fix issue with backup (courses & activities) and multiselect
 
 
 

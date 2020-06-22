@@ -101,9 +101,8 @@ abstract class simpleselect_filter extends base_filter {
         static $counter = 0;
         $name = 'ex_simpleselect' . $counter++;
 
-        $value = $data;
         $field = $this->get_sql_field_name();
-        return empty($value) ? array(null, null) : array("$field=:$name", array($name => $value));
+        return empty($data) ? array(null, null) : array("$field=:$name", array($name => $data));
     }
 }
 

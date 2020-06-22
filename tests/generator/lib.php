@@ -26,14 +26,16 @@ defined('MOODLE_INTERNAL') || die();
 
 use \core_customfield\category_controller;
 use \core_customfield\field_controller;
+
 global $CFG;
 
-require_once($CFG->dirroot.'/customfield/tests/generator/lib.php');
+require_once($CFG->dirroot . '/customfield/tests/generator/lib.php');
 
 /**
  * Resource Library data generator.
  *
  * Pretty much the same as custom field generator
+ *
  * @package    local_resourcelibrary
  * @category    test
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
@@ -144,5 +146,36 @@ class local_resourcelibrary_generator extends component_generator_base {
         $field = field_controller::create(0, (object) ['type' => $record->type], $category);
         $handler->save_field_configuration($field, $record);
         return $handler->get_categories_with_fields()[$field->get('categoryid')]->get_fields()[$field->get('id')];
+    }
+
+    /**
+     * Create  field data for one field
+     *
+     * @param array|stdClass $fielddata
+     * @return field_controller
+     * @return \core_customfield\data_controller
+     */
+    public function create_fielddata($fielddata): \core_customfield\data_controller {
+        $fieldid = $fielddata['fieldid'];
+        $instanceid = $fielddata['instanceid'];
+        $value = $fielddata['value'];
+        $field = core_customfield\field_controller::create($fieldid);
+        if ($field instanceof \customfield_multiselect\field_controller) {
+            $value = explode(',', $value);
+        }
+        if ($field instanceof customfield_textarea\field_controller) {
+            $value = ['text' => $value, 'format' => FORMAT_HTML];
+        }
+
+        $data = \core_customfield\data_controller::create(0, (object) ['instanceid' => $instanceid], $field);
+        $data->set('contextid', $data->get_context()->id);
+
+        $rc = new ReflectionClass(get_class($data));
+        $rcm = $rc->getMethod('get_form_element_name');
+        $rcm->setAccessible(true);
+        $formelementname = $rcm->invokeArgs($data, []);
+        $record = (object) [$formelementname => $value];
+        $data->instance_form_save($record);
+        return $data;
     }
 }

@@ -62,6 +62,11 @@ abstract class base_resourcelibrary implements renderable, templatable {
     const DISPLAY_CATEGORIES_ON = 'on';
     const DISPLAY_CATEGORIES_OFF = 'off';
 
+    const SORT_FULLNAME_ASC = "fullname,ASC";
+    const SORT_FULLNAME_DESC = "fullname,DESC";
+    const SORT_LASTMODIF_ASC = "timemodified,ASC";
+    const SORT_LASTMODIF_DESC = "timemodified,DESC";
+
     /**
      * Column on which we sort
      *
@@ -107,12 +112,11 @@ abstract class base_resourcelibrary implements renderable, templatable {
      * @throws \dml_exception
      */
     public function __construct(
-        $sortcolumn = 'fullname',
-        $sortorder = 'ASC',
+        $sort = self::SORT_FULLNAME_ASC,
         $view = self::VIEW_CARD,
         $paging = self::PAGING_12) {
-        $this->sortcolumn = $sortcolumn;
-        $this->sortorder = $sortorder;
+
+        list($this->sortcolumn, $this->sortorder) = explode(',', $sort);
         $this->view = $view;
         $this->paging = $paging;
         $config = get_config('local_resourcelibrary');
@@ -129,9 +133,25 @@ abstract class base_resourcelibrary implements renderable, templatable {
      */
     public function get_preferences() {
         $preferences = [];
-        $preferences[$this->view] = true;
+        $preferences['view'] = self::VIEW_CARD;
         $preferences['sortorder'] = $this->sortorder;
         $preferences['sortcolumn'] = $this->sortcolumn;
+
+        $sort = get_user_preferences('local_resourcelibrary_user_sort_preference');
+        if ($sort) {
+            $sortparms = explode(',', $sort);
+            $preferences['sortcolumn'] = $sortparms[0];
+            $preferences['sortorder'] = $sortparms[1];
+        }
+        $view = get_user_preferences('local_resourcelibrary_user_view_preference');
+        if ($view && in_array($view, [self::VIEW_CARD, self::VIEW_LIST])) {
+            $preferences['view'] = $view;
+        }
+
+        $paging = get_user_preferences('local_resourcelibrary_user_paging_preference');
+        if ($paging) {
+            $preferences['paging'] = $paging;
+        }
         return $preferences;
     }
 

@@ -35,6 +35,7 @@ defined('MOODLE_INTERNAL') || die();
 class behat_local_resourcelibrary_generator extends behat_generator_base {
 
     /**
+     * Get all entities that can be created
      * @return array|array[]
      */
     protected function get_creatable_entities(): array {
@@ -46,6 +47,10 @@ class behat_local_resourcelibrary_generator extends behat_generator_base {
             'field' => [
                 'datagenerator' => 'field',
                 'required' => ['area']
+            ],
+            'fielddata' => [
+                'datagenerator' => 'fielddata',
+                'required' => ['fieldshortname', 'courseshortname']
             ]
         ];
     }
@@ -53,8 +58,8 @@ class behat_local_resourcelibrary_generator extends behat_generator_base {
     /**
      * Look up the id of a custom field category from its name.
      *
-     * @param string $categoryname the category name, for example 'My category'.
-     * @return int corresponding id.
+     * @param array $elementdata current data array
+     * @return array $elementdata
      * @throws dml_exception
      */
     protected function preprocess_field($elementdata) {
@@ -64,4 +69,49 @@ class behat_local_resourcelibrary_generator extends behat_generator_base {
                 'area' => $elementdata['area']]);
         return $elementdata;
     }
+
+    /**
+     * Field Data Identifier
+     *
+     * @param string $shortname
+     * @return bool|mixed
+     * @throws dml_exception
+     */
+    protected function get_fieldid_id($shortname) {
+        global $DB;
+        return $DB->get_field('customfield_category', 'id',
+            ['shortname' => trim($shortname)]);
+    }
+
+    /**
+     * Look up the id of for the instance depending on the area the field is in
+     *
+     * @param array $elementdata current data array
+     * @return array corresponding id.
+     * @throws dml_exception
+     */
+    protected function preprocess_fielddata($elementdata) {
+        global $DB;
+        $elementdata['fieldid'] = $DB->get_field('customfield_field', 'id',
+            ['shortname' => trim($elementdata['fieldshortname'])]);
+        $field = core_customfield\field_controller::create($elementdata['fieldid']);
+        $courseid = $DB->get_field('course', 'id',
+            ['shortname' => trim($elementdata['courseshortname'])]);
+        switch ($field->get_handler()->get_area()) {
+            case 'course':
+                $elementdata['instanceid'] = $courseid;
+                break;
+            case 'coursemodule':
+                $modinfo = course_modinfo::instance($courseid);
+                $activities = $modinfo->get_instances_of($elementdata['activity']);
+                foreach ($activities as $activity) {
+                    if (trim($activity->idnumber) == trim($elementdata['activityidnumber'])) {
+                        $elementdata['instanceid'] = $activity->id;
+                    }
+                }
+                break;
+        }
+        return $elementdata;
+    }
+
 }

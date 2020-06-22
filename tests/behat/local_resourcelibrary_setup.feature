@@ -1,4 +1,4 @@
-@local_resourcelibrary @core @javascript
+@local @local_resourcelibrary @core @javascript
 Feature: As an admin I want to be able to turn on and off the plugin and custom field menus
 
   Background:

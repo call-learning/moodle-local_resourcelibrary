@@ -24,17 +24,26 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Generate basic custom fields
+ * @param testing_data_generator $dg
+ */
 function generate_category_and_fields($dg) {
     $generator = $dg->get_plugin_generator('local_resourcelibrary');
     foreach (array('course', 'coursemodule') as $type) {
         $catid = $generator->create_category(['area' => $type])->get('id');
-        $generator->create_field(['categoryid' => $catid, 'type' => 'text', 'shortname' => 'f1', 'area' => $type]);
-        $generator->create_field(['categoryid' => $catid, 'type' => 'checkbox', 'shortname' => 'f2', 'area' => $type]);
-        $generator->create_field(['categoryid' => $catid, 'type' => 'date', 'shortname' => 'f3',
+        $generator->create_field(['name' => 'Field 1', 'categoryid' => $catid, 'type' => 'text', 'shortname' => 'f1',
+            'area' => $type]);
+        $generator->create_field(['name' => 'Field 2', 'categoryid' => $catid, 'type' => 'checkbox', 'shortname' => 'f2',
+            'area' => $type]);
+        $generator->create_field(['name' => 'Field 3', 'categoryid' => $catid, 'type' => 'date', 'shortname' => 'f3',
             'configdata' => ['startyear' => 2000, 'endyear' => 3000, 'includetime' => 1], 'area' => $type]);
-        $generator->create_field(['categoryid' => $catid, 'type' => 'select', 'shortname' => 'f4',
+        $generator->create_field(['name' => 'Field 4', 'categoryid' => $catid, 'type' => 'multiselect', 'shortname' => 'f4',
             'configdata' => ['options' => "a\nb\nc"], 'area' => $type]);
-        $dg->create_custom_field(['categoryid' => $catid, 'type' => 'textarea', 'shortname' => 'f5', 'area' => $type]);
+        $generator->create_field(['name' => 'Field 5', 'categoryid' => $catid, 'type' => 'select', 'shortname' => 'f5',
+            'configdata' => ['options' => "a\nb\nc"], 'area' => $type]);
+        $generator->create_field(['name' => 'Field 6', 'categoryid' => $catid, 'type' => 'textarea', 'shortname' => 'f6',
+            'area' => $type]);
     }
 }
 

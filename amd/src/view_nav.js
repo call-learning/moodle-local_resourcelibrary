@@ -54,18 +54,19 @@ define(
             var type = null;
             if (filter === 'display') {
                 type = 'local_resourcelibrary_user_view_preference';
-            } else {
+            } else if (filter === 'sort') {
                 type = 'local_resourcelibrary_user_sort_preference';
             }
-
-            Repository.updateUserPreferences({
-                preferences: [
-                    {
-                        type: type,
-                        value: value
-                }
-                ]
-            });
+            if (type) {
+                Repository.updateUserPreferences({
+                    preferences: [
+                        {
+                            type: type,
+                            value: value
+                        }
+                    ]
+                });
+            }
         };
 
         /**
@@ -101,7 +102,6 @@ define(
                     data.originalEvent.preventDefault();
                 }
             );
-
             CustomEvents.define(Selector, [CustomEvents.events.activate]);
             Selector.on(
                 CustomEvents.events.activate,

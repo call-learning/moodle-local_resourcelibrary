@@ -23,6 +23,13 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Upgrade script for local_resourcelibrary
+ * @param string $oldversion
+ * @throws coding_exception
+ * @throws downgrade_exception
+ * @throws upgrade_exception
+ */
 function xmldb_local_resourcelibrary_upgrade($oldversion) {
 
     // Always keep this upgrade step with version being the minimum
@@ -44,5 +51,11 @@ function xmldb_local_resourcelibrary_upgrade($oldversion) {
     }
     if ($oldversion < 2020042007) {
         upgrade_plugin_savepoint(true, 2020042007, 'local', 'resourcelibrary');
+    }
+    if ($oldversion < 2020042008) {
+        upgrade_plugin_savepoint(true, 2020042008, 'local', 'resourcelibrary');
+    }
+    if ($oldversion < 2020042009) {
+        upgrade_plugin_savepoint(true, 2020042009, 'local', 'resourcelibrary');
     }
 }

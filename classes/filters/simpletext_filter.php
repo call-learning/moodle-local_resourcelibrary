@@ -94,11 +94,10 @@ abstract class simpletext_filter extends base_filter {
         static $counter = 0;
         $name = 'ex_textfilter' . $counter++;
 
-        $value = $data['value'];
         $field = $this->get_sql_field_name();
-        return empty($value) ? array(null, null) : array(
+        return empty($data) ? array(null, null) : array(
             $DB->sql_like($field, ":$name", false),
-            array($name => "%$value%"));
+            array($name => "%$data%"));
     }
 }
 

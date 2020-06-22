@@ -26,19 +26,20 @@ global $CFG;
 require_once($CFG->dirroot . '/course/lib.php');
 
 $courseid = optional_param('courseid', SITEID, PARAM_INT);
-if ($CFG->forcelogin) {
-    require_login($courseid, true); // We make sure the course exists and we can access it.
-}
+require_login($courseid, true); // We make sure the course exists and we can access it.
 
 $PAGE->set_pagelayout('standard');
 $pageparams = array();
+$renderable = null;
+
+$context = context_system::instance();
 if ($courseid != SITEID) {
     $pageparams['courseid'] = $courseid;
+    $context = context_course::instance($courseid);
+    $renderable = new local_resourcelibrary\output\activity_resourcelibrary($courseid);
+} else {
+    $renderable = new local_resourcelibrary\output\course_resourcelibrary();
 }
-
-$pageurl = new moodle_url('/local/resourcelibrary/pages/resourcelibrary.php', $pageparams);
-$PAGE->set_context(context_system::instance());
-$PAGE->set_url($pageurl);
 
 $site = get_site();
 
@@ -47,16 +48,24 @@ $strresourcelibrary = get_string('resourcelibrary', 'local_resourcelibrary');
 $pagedesc = $strresourcelibrary;
 $title = $strresourcelibrary;
 
-$renderable = null;
-if ($courseid != SITEID) {
-    $PAGE->set_context(context_course::instance($courseid));
-    $renderable = new local_resourcelibrary\output\activity_resourcelibrary($courseid);
-} else {
-    $renderable = new local_resourcelibrary\output\course_resourcelibrary();
-}
+$pageurl = new moodle_url('/local/resourcelibrary/pages/resourcelibrary.php', $pageparams);
 
+$PAGE->set_context($context);
+$PAGE->set_url($pageurl);
 $PAGE->set_title($title);
 $PAGE->set_heading($pagedesc);
+
+if ($courseid != SITEID) {
+    $mainlibrarypage = new moodle_url($pageurl);
+    $mainlibrarypage->remove_all_params();
+    $PAGE->navigation->initialise($PAGE);
+    $PAGE->navbar->prepend(get_string('courseresourcelibrary', 'local_resourcelibrary'),
+        $mainlibrarypage,
+        navigation_node::TYPE_CUSTOM,
+        'courseresourcelibrary',
+        'mainlibrary'
+    );
+}
 
 $renderer = $PAGE->get_renderer('local_resourcelibrary');
 echo $OUTPUT->header();

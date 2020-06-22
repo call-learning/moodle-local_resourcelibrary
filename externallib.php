@@ -41,21 +41,18 @@ require_once("lib.php");
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class local_resourcelibrary_external extends external_api
-{
+class local_resourcelibrary_external extends external_api {
 
     /**
      * Returns description of method parameters
      *
      * @return external_function_parameters
      */
-    public static function get_filtered_course_content_parameters()
-    {
+    public static function get_filtered_course_content_parameters() {
         return static::get_filter_generic_parameters('courseid', 'course id');
     }
 
-    protected static function get_filter_generic_parameters($parentid, $parentiddesc)
-    {
+    protected static function get_filter_generic_parameters($parentid, $parentiddesc) {
         return new external_function_parameters(
             array($parentid => new external_value(PARAM_INT, $parentiddesc),
                 'filters' => new external_multiple_structure (
@@ -107,8 +104,7 @@ class local_resourcelibrary_external extends external_api
      * @throws invalid_parameter_exception
      * @throws moodle_exception
      */
-    public static function get_filtered_course_content($courseid, $filters = array(), $limit = 0, $offset = 0, $sorting = array())
-    {
+    public static function get_filtered_course_content($courseid, $filters = array(), $limit = 0, $offset = 0, $sorting = array()) {
         global $PAGE, $DB;
         // Validate parameters.
 
@@ -118,12 +114,12 @@ class local_resourcelibrary_external extends external_api
         $sqlparams = array('courseid' => $courseid);
         $sqlwhere = "e.course = :courseid AND m.visible = 1"; // Only activated modules.
 
-        $modulefields =
-            array('section');
+        $modulefields = array('section');
         $additionalfields = array();
         foreach ($modulefields as $mfield) {
             $additionalfields[] = "e.{$mfield} AS {$mfield}";
         }
+        $additionalfields[] = "e.added AS timemodified"; // There is no modification time for course module.
         $additionalfields[] = "m.name AS fullname";
         $additionaljoins = ['LEFT JOIN {modules} m ON m.id = e.module'];
         $handler = local_resourcelibrary\customfield\coursemodule_handler::create();
@@ -147,10 +143,10 @@ class local_resourcelibrary_external extends external_api
                     (new course_module_summary_exporter(null, ['cm' => $cm]))->export($renderer);
                 $additionamoduleinfo->modname = $cm->modname;
                 $additionamoduleinfo->groupmode = $cm->groupmode;
-                $additionamoduleinfo->grouping = $cm->grouping;
-                $additionamoduleinfo->shortname = $cm->shortname;
+                $additionamoduleinfo->groupingid = $cm->groupingid;
+                $additionamoduleinfo->idnumber = $cm->idnumber;
                 $additionamoduleinfo->fullname = $cm->name;
-                $additionamoduleinfo->parentid = $cm->courseid;
+                $additionamoduleinfo->parentid = $cm->course;
                 $additionamoduleinfo->visible = $cm->uservisible;
                 $additionamoduleinfo->timemodified = $DB->get_field($cm->modname, 'timemodified', array('id' => $cm->instance));
                 if ($cm->url) {
@@ -158,7 +154,11 @@ class local_resourcelibrary_external extends external_api
                 } else {
                     $additionamoduleinfo->viewurl = (new moodle_url('/course/view.php', array('id' => $courseid)))->out(false);
                 }
-                $fullmodulesinfo[] = array_merge((array)$mod, (array)$additionamoduleinfo);
+                $additionamoduleinfo->resourcelibraryfields = [];
+                self::export_fields($additionamoduleinfo->resourcelibraryfields, 'local_resourcelibrary', 'coursemodule',
+                    $cm->id);
+
+                $fullmodulesinfo[] = array_merge((array) $mod, (array) $additionamoduleinfo);
             }
         }
         // Here as we want to sort by time modified, we need to sort the list as it is not possible
@@ -173,8 +173,7 @@ class local_resourcelibrary_external extends external_api
      * @return external_description
      * @since Moodle 2.2
      */
-    public static function get_filtered_course_content_returns()
-    {
+    public static function get_filtered_course_content_returns() {
         return
             new external_multiple_structure(
                 new external_single_structure(
@@ -189,9 +188,7 @@ class local_resourcelibrary_external extends external_api
                             '1: available to student, 0:not available', VALUE_OPTIONAL),
                         'groupmode' => new external_value(PARAM_INT, 'no group, separate, visible',
                             VALUE_OPTIONAL),
-                        'grouping' => new external_value(PARAM_INT, 'Grouping mode',
-                            VALUE_OPTIONAL),
-                        'defaultgroupingid' => new external_value(PARAM_INT, 'default grouping id',
+                        'groupingid' => new external_value(PARAM_INT, 'grouping id',
                             VALUE_OPTIONAL),
                         'timecreated' => new external_value(PARAM_INT,
                             'timestamp when the course have been created', VALUE_OPTIONAL),
@@ -209,8 +206,7 @@ class local_resourcelibrary_external extends external_api
      * @return external_function_parameters
      * @since Moodle 2.3
      */
-    public static function get_filtered_courses_parameters()
-    {
+    public static function get_filtered_courses_parameters() {
         return static::get_filter_generic_parameters('categoryid', 'category id');
     }
 
@@ -229,14 +225,13 @@ class local_resourcelibrary_external extends external_api
      * @throws required_capability_exception
      * @since Moodle 2.2
      */
-    public static function get_filtered_courses($categoryid = 0, $filters = array(), $limit = 0, $offset = 0, $sorting = array())
-    {
+    public static function get_filtered_courses($categoryid = 0, $filters = array(), $limit = 0, $offset = 0, $sorting = array()) {
         global $CFG, $PAGE;
         require_once($CFG->dirroot . "/course/lib.php");
 
         // Validate parameter.
         $inparams = compact(array('categoryid', 'filters', 'limit', 'offset', 'sorting'));
-        $params = self::validate_parameters(self::get_filtered_courses_parameters(), $inparams);
+        self::validate_parameters(self::get_filtered_courses_parameters(), $inparams);
 
         // Retrieve courses.
 
@@ -275,17 +270,23 @@ class local_resourcelibrary_external extends external_api
             $hasvalidatedcontext = true;
             try {
                 self::validate_context($context);
+                $PAGE->set_context($context);
             } catch (Exception $e) {
                 $hasvalidatedcontext = false;
                 $PAGE->set_context(context_system::instance());
             }
-            if ($course->id != SITEID && $hasvalidatedcontext) {
-                require_capability('moodle/course:view', $context);
+            $coursevisible = $course->visible;
+            $coursevisible = $coursevisible || has_capability('moodle/course:update', $context)
+                || has_capability('moodle/course:viewhiddencourses', $context)
+                || has_capability('moodle/course:view', $context)
+                || is_enrolled($context);
+            if (!$coursevisible) {
+                continue;
             }
             $context = context_course::instance($course->id);
             $exporter = new course_summary_exporter($course, ['context' => $context]);
             $renderer = $PAGE->get_renderer('core');
-            $courseinfo = (array)$exporter->export($renderer);
+            $courseinfo = (array) $exporter->export($renderer);
             $courseinfo['sequenceid'] = $sequenceid;
             $courseinfo['parentid'] = $course->category;
             $courseinfo['parentsortorder'] = $course->sortorder;
@@ -295,19 +296,13 @@ class local_resourcelibrary_external extends external_api
             $courseinfo['resourcelibraryfields'] = [];
             self::export_fields($courseinfo['customfields'], 'core_course', 'course', $course->id);
             self::export_fields($courseinfo['resourcelibraryfields'], 'local_resourcelibrary', 'course', $course->id);
+            $coursesinfo[] = $courseinfo;
 
-            $coursevisible = $course->visible || ($hasvalidatedcontext &&
-                    (has_capability('moodle/course:update', $context)
-                        || has_capability('moodle/course:viewhiddencourses', $context)));
-            if ($coursevisible) {
-                $coursesinfo[] = $courseinfo;
-            }
         }
         return $coursesinfo;
     }
 
-    protected static function export_fields(&$fieldarray, $component, $area, $courseid)
-    {
+    protected static function export_fields(&$fieldarray, $component, $area, $courseid) {
         $rlfieldhandler = \core_customfield\handler::get_handler($component, $area);
         if ($rlfields = $rlfieldhandler->export_instance_data($courseid)) {
             foreach ($rlfields as $data) {
@@ -327,8 +322,7 @@ class local_resourcelibrary_external extends external_api
      * @return external_description
      * @since Moodle 2.2
      */
-    public static function get_filtered_courses_returns()
-    {
+    public static function get_filtered_courses_returns() {
         return
             new external_multiple_structure(
                 new external_single_structure(
@@ -382,13 +376,21 @@ class local_resourcelibrary_external extends external_api
                                         'The type of the custom field - text, checkbox...'),
                                     'value' => new external_value(PARAM_RAW, 'The value of the custom field')]
                             ), 'Custom fields and associated values', VALUE_OPTIONAL),
+                        'resourcelibraryfields' => new external_multiple_structure(
+                            new external_single_structure(
+                                ['name' => new external_value(PARAM_TEXT, 'The name of the custom field'),
+                                    'shortname' => new external_value(PARAM_ALPHANUMEXT,
+                                        'The shortname of the custom field'),
+                                    'type' => new external_value(PARAM_COMPONENT,
+                                        'The type of the custom field - text, checkbox...'),
+                                    'value' => new external_value(PARAM_RAW, 'The value of the custom field')]
+                            ), 'Custom fields and associated values', VALUE_OPTIONAL),
                     ), 'course'
                 )
             );
     }
 
-    public static function get_sort_options_sql($sortoptions, $fields)
-    {
+    public static function get_sort_options_sql($sortoptions, $fields) {
         $sortsql = " ";
         foreach ($sortoptions as $sort) {
             $order = strtoupper($sort['order']);

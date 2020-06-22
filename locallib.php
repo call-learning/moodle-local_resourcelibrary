@@ -23,6 +23,10 @@
  */
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Setup all custom fields at install
+ * @throws coding_exception
+ */
 function setup_customfields() {
     local_resourcelibrary\locallib\setup::setup_resourcelibrary_custom_fields();
 }

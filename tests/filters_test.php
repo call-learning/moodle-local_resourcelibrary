@@ -54,8 +54,9 @@ class local_resourcelibrary_filter_testcase extends local_resourcelibrary_testca
             'customfield_f1' => 'some text',
             'customfield_f2' => 1,
             'customfield_f3' => $now,
-            'customfield_f4' => 2,
-            'customfield_f5_editor' => ['text' => 'test', 'format' => FORMAT_HTML]];
+            'customfield_f4' => [1, 2],
+            'customfield_f5' => 2,
+            'customfield_f6_editor' => ['text' => 'test', 'format' => FORMAT_HTML]];
         $c1 = $dg->create_course($data);
 
         $data['id'] = $c1->id;
@@ -65,8 +66,9 @@ class local_resourcelibrary_filter_testcase extends local_resourcelibrary_testca
             'customfield_f1' => 'some text',
             'customfield_f2' => 1,
             'customfield_f3' => $now,
-            'customfield_f4' => 2,
-            'customfield_f5_editor' => ['text' => 'test', 'format' => FORMAT_HTML]);
+            'customfield_f4' => [1, 2],
+            'customfield_f5' => 2,
+            'customfield_f6_editor' => ['text' => 'test', 'format' => FORMAT_HTML]);
 
         // TODO: It would have been nice here to prefix the form and the values by 'resourcelibrary'.
         // But the datacontroller for each class (checkbox) will answer customfield_xx for the element name which
@@ -82,8 +84,9 @@ class local_resourcelibrary_filter_testcase extends local_resourcelibrary_testca
             $this->assertEquals('some text', $data->customfield_f1);
             $this->assertEquals(1, $data->customfield_f2);
             $this->assertEquals($now, $data->customfield_f3);
-            $this->assertEquals(2, $data->customfield_f4);
-            $this->assertEquals('test', $data->customfield_f5);
+            $this->assertEquals('1,2', $data->customfield_f4);
+            $this->assertEquals(2, $data->customfield_f5);
+            $this->assertEquals('test', $data->customfield_f6);
         }
     }
 

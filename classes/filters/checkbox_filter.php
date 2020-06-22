@@ -95,9 +95,8 @@ class checkbox_filter extends base_filter {
         static $counter = 0;
         $name = 'ex_checkbox' . $counter++;
 
-        $value = $data['value'];
         $field = $this->get_sql_field_name();
-        return empty($value) ? array(null, null) : array("$field=:$name", array($name => $value));
+        return empty($data) ? array(null, null) : array("$field=:$name", array($name => $data));
     }
 }
 

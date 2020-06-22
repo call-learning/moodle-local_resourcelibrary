@@ -51,11 +51,10 @@ class activity_resourcelibrary extends base_resourcelibrary {
      */
     public function __construct(
         $courseid,
-        $sortcolumn = 'fullname',
-        $sortorder = 'DESC',
+        $sort = self::SORT_FULLNAME_ASC,
         $view = self::VIEW_CARD,
         $paging = self::PAGING_12) {
-        parent::__construct($sortcolumn, $sortorder, $view, $paging);
+        parent::__construct($sort, $view, $paging);
         $this->courseid = $courseid;
     }
 

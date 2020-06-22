@@ -54,8 +54,9 @@ class local_resourcelibrary_resourcelibraryfield_testcase extends local_resource
             'customfield_f1' => 'some text',
             'customfield_f2' => 1,
             'customfield_f3' => $now,
-            'customfield_f4' => 2,
-            'customfield_f5_editor' => ['text' => 'test', 'format' => FORMAT_HTML]];
+            'customfield_f4' => [1, 2],
+            'customfield_f5' => 2,
+            'customfield_f6_editor' => ['text' => 'test', 'format' => FORMAT_HTML]];
         $c1 = $dg->create_course($data);
 
         $data['id'] = $c1->id;
@@ -68,10 +69,11 @@ class local_resourcelibrary_resourcelibraryfield_testcase extends local_resource
         $this->assertEquals('some text', $data->f1);
         $this->assertEquals('Yes', $data->f2);
         $this->assertEquals(userdate($now, get_string('strftimedaydatetime')), $data->f3);
-        $this->assertEquals('b', $data->f4);
-        $this->assertEquals('test', $data->f5);
+        $this->assertEquals('b, c', $data->f4);
+        $this->assertEquals('b', $data->f5);
+        $this->assertEquals('test', $data->f6);
 
-        $this->assertEquals(5, count($DB->get_records('customfield_data')));
+        $this->assertEquals(6, count($DB->get_records('customfield_data')));
 
         delete_course($c1->id, false);
 
@@ -93,8 +95,8 @@ class local_resourcelibrary_resourcelibraryfield_testcase extends local_resource
             'customfield_f1' => 'some text',
             'customfield_f2' => 1,
             'customfield_f3' => $now,
-            'customfield_f4' => 2,
-            'customfield_f5_editor' => ['text' => 'test', 'format' => FORMAT_HTML]);
+            'customfield_f5' => 2,
+            'customfield_f6_editor' => ['text' => 'test', 'format' => FORMAT_HTML]);
         $a1 = $dg->create_module('label', (object) $data);
 
         $data = coursemodule_handler::create()->export_instance_data_object($a1->cmid);
@@ -102,10 +104,37 @@ class local_resourcelibrary_resourcelibraryfield_testcase extends local_resource
         $this->assertEquals('some text', $data->f1);
         $this->assertEquals('Yes', $data->f2);
         $this->assertEquals(userdate($now, get_string('strftimedaydatetime')), $data->f3);
-        $this->assertEquals('b', $data->f4);
-        $this->assertEquals('test', $data->f5);
+        $this->assertEquals('b', $data->f5);
+        $this->assertEquals('test', $data->f6);
 
         $this->assertEquals(5, count($DB->get_records('customfield_data')));
+
+        course_delete_module($a1->cmid, false);
+
+        $this->assertEquals(0, count($DB->get_records('customfield_data')));
+    }
+
+    /**
+     * Test creating module with resourcelibrary custom fields and retrieving them
+     */
+    public function test_create_module_multiselect() {
+        global $DB;
+        $this->markTestSkipped(); // For now this is not working due to the array in multichoice custom field.
+        $dg = $this->getDataGenerator();
+
+        $now = time();
+        $c1 = $dg->create_course(['shortname' => 'SN', 'fullname' => 'FN',
+            'summary' => 'DESC', 'summaryformat' => FORMAT_MOODLE]);
+
+        $data = array('course' => $c1->id,
+            'customfield_f4' => [1, 2]);
+        $a1 = $dg->create_module('label', (object) $data);
+
+        $data = coursemodule_handler::create()->export_instance_data_object($a1->cmid);
+
+        $this->assertEquals('b, c', $data->f4);
+
+        $this->assertEquals(1, count($DB->get_records('customfield_data')));
 
         course_delete_module($a1->cmid, false);
 
@@ -124,7 +153,9 @@ class local_resourcelibrary_resourcelibraryfield_testcase extends local_resource
             'summary' => 'DESC',
             'summaryformat' => FORMAT_MOODLE,
             'customfield_f1' => 'some text to backup',
-            'customfield_f2' => 1];
+            'customfield_f2' => 1,
+            'customfield_f4' => [1, 2],
+        ];
 
         $c1 = $dg->create_course($data);
 
@@ -141,13 +172,15 @@ class local_resourcelibrary_resourcelibraryfield_testcase extends local_resource
         $data = course_handler::create()->export_instance_data_object($c1->id);
         $this->assertEquals('some text to backup', $data->f1);
         $this->assertEquals('Yes', $data->f2);
+        $this->assertEquals('b, c', $data->f4);
     }
 
     /**
      * Test backup and restore of custom fields
      */
-    public function test_restore_module_resourcelibraryields() {
+    public function test_restore_module_resourcelibraryfields_simple() {
         global $USER;
+
         $dg = $this->getDataGenerator();
         $now = time();
         $c1 = $dg->create_course([
@@ -159,8 +192,8 @@ class local_resourcelibrary_resourcelibraryfield_testcase extends local_resource
             'customfield_f1' => 'some text',
             'customfield_f2' => 1,
             'customfield_f3' => $now,
-            'customfield_f4' => 2,
-            'customfield_f5_editor' => ['text' => 'test', 'format' => FORMAT_HTML]);
+            'customfield_f5' => 2,
+            'customfield_f6_editor' => ['text' => 'test', 'format' => FORMAT_HTML]);
         $a1 = $dg->create_module('label', (object) $data);
 
         $backupid = $this->backup_course($c1->id);
@@ -172,6 +205,39 @@ class local_resourcelibrary_resourcelibraryfield_testcase extends local_resource
         $data = coursemodule_handler::create()->export_instance_data_object($label->coursemodule);
         $this->assertEquals('some text', $data->f1);
         $this->assertEquals('Yes', $data->f2);
+        $this->assertEquals(userdate($now, get_string('strftimedaydatetime')), $data->f3);
+        $this->assertEquals('b', $data->f5);
+        $this->assertEquals('test', $data->f6);
+
+    }
+
+    /**
+     * Test backup and restore of custom fields
+     */
+    public function test_restore_module_resourcelibraryfields_multiselect() {
+        global $USER;
+        $this->markTestSkipped(); // For now this is not working due to the array in multichoice custom field.
+
+        $dg = $this->getDataGenerator();
+        $now = time();
+        $c1 = $dg->create_course([
+            'shortname' => 'SN',
+            'fullname' => 'FN',
+            'summary' => 'DESC',
+            'summaryformat' => FORMAT_MOODLE]);
+        $data = array('course' => $c1->id,
+            'customfield_f4' => [1, 2]);
+        $a1 = $dg->create_module('label', (object) $data);
+
+        $backupid = $this->backup_course($c1->id);
+
+        // The information is restored but adapted because names are already taken.
+        $c2 = $this->restore_course($backupid, 0, $USER->id);
+        $labels = get_all_instances_in_course('label', $c1);
+        $label = reset($labels); // First one.
+        $data = coursemodule_handler::create()->export_instance_data_object($label->coursemodule);
+        $this->assertEquals('b, c', $data->f4);
+
     }
 
     /**
