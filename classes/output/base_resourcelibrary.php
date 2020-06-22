@@ -26,7 +26,7 @@ namespace local_resourcelibrary\output;
 
 defined('MOODLE_INTERNAL') || die();
 
-use core\message\inbound\handler;
+use core_customfield\handler;
 use local_resourcelibrary\filters\filter_form;
 use renderable;
 use renderer_base;
@@ -108,7 +108,7 @@ abstract class base_resourcelibrary implements renderable, templatable {
      */
     public function __construct(
         $sortcolumn = 'fullname',
-        $sortorder = 'DESC',
+        $sortorder = 'ASC',
         $view = self::VIEW_CARD,
         $paging = self::PAGING_12) {
         $this->sortcolumn = $sortcolumn;
@@ -135,7 +135,7 @@ abstract class base_resourcelibrary implements renderable, templatable {
         return $preferences;
     }
 
-    public function get_export_defaults($output, \core_customfield\handler $handler) {
+    public function get_export_defaults($output, handler $handler) {
         $nocoursesurl = $output->image_url('noentities', 'local_resourcelibrary')->out();
         $defaultvariables = [
             'noentitiesimg' => $nocoursesurl,
