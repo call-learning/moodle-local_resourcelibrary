@@ -43,7 +43,7 @@ class multiselect_filter extends simpleselect_filter {
      */
     public function add_to_form(\MoodleQuickForm &$mform) {
         $choices = $this->_options;
-        $mform->addElement('select',
+        $mform->addElement('searchableselector',
             $this->get_form_value_item_name(),
             $this->_label,
             $choices,

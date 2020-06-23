@@ -7,11 +7,23 @@
 
 .resourcelibrary-filters-form .form-inline .custom-select,
 .resourcelibrary-filters-form .form-inline .btn,
-.resourcelibrary-filters-form  .form-inline
+.resourcelibrary-filters-form  .form-inline,
+.resourcelibrary-filters-form  .form-inline div.d-inline-block.position-relative
 {
-    width: 100%;
+    max-width: 100%;
 }
-
+.resourcelibrary-filters-form .col-form-label.d-inline {
+    float: none;
+    display: block !important;
+    font-size: small;
+    font-variant: petite-caps;
+    font-weight: bold;
+    text-decoration: underline;
+}
+.resourcelibrary-filters-form .form-group.row {
+    display: flex;
+    flex-direction: column;
+}
 .local-resourcelibrary .dashboard-card-img {
     background-size: contain;
     background-repeat: no-repeat;
