@@ -119,7 +119,6 @@ class local_resourcelibrary_resourcelibraryfield_testcase extends local_resource
      */
     public function test_create_module_multiselect() {
         global $DB;
-        $this->markTestSkipped(); // For now this is not working due to the array in multichoice custom field.
         $dg = $this->getDataGenerator();
 
         $now = time();
@@ -216,7 +215,6 @@ class local_resourcelibrary_resourcelibraryfield_testcase extends local_resource
      */
     public function test_restore_module_resourcelibraryfields_multiselect() {
         global $USER;
-        $this->markTestSkipped(); // For now this is not working due to the array in multichoice custom field.
 
         $dg = $this->getDataGenerator();
         $now = time();

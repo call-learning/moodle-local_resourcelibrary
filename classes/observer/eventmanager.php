@@ -26,6 +26,12 @@ defined('MOODLE_INTERNAL') || die();
 use local_resourcelibrary\customfield\course_handler;
 use local_resourcelibrary\customfield\coursemodule_handler;
 
+/**
+ * Class eventmanager
+ *
+ * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class eventmanager {
     /**
      * Course delete event observer.

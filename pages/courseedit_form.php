@@ -16,8 +16,8 @@
 /**
  * Edit course settings form
  *
- * @package    core_course
- * @copyright  1999 onwards Martin Dougiamas (http://dougiamas.com)
+ * @package    local_resourcelibrary
+ * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -28,6 +28,13 @@ defined('MOODLE_INTERNAL') || die;
 require_once($CFG->libdir.'/formslib.php');
 /**
  * A trait for handling course edition for
+ */
+
+/**
+ * A trait for handling course edition form
+ * @package    local_resourcelibrary
+ * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class resourcelibrary_course_edit_form  extends moodleform {
     use resourcelibrary_course_edit_form_trait;

@@ -30,6 +30,8 @@ defined('MOODLE_INTERNAL') || die;
 
 /**
  * The form for handling editing a course.
+ * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 trait resourcelibrary_course_edit_form_trait {
 
@@ -50,7 +52,6 @@ trait resourcelibrary_course_edit_form_trait {
         $handler->instance_form_before_set_data($course);
         // Finally set the current form data.
         $this->set_data($course);
-        /* @var $mform \MoodleQuickForm The underlying quickform. */
         // Push the submit button at the end if it exists.
         if ($mform->elementExists('buttonar')) {
             $submitbuttons = $mform->removeElement('buttonar', false);
@@ -71,6 +72,7 @@ trait resourcelibrary_course_edit_form_trait {
     /**
      * Validation.
      *
+     * @param array $errors
      * @param array $data
      * @param array $files
      * @return array the errors that were found

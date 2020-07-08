@@ -168,7 +168,8 @@ Feature: As an admin I should be able to set and retrieve values from custom fie
     And I log in as "admin"
     Given I am on homepage
     And I follow "Resource Library"
-    And I set the field "Test Field MSelect" to "A,B"
+    And I set the field "Test Field MSelect" to "A"
+    And I set the field "Test Field MSelect" to "B"
     And I click on "Filter" "button"
     Then I should see "Course 1"
     And I should see "Course 2"
@@ -181,7 +182,8 @@ Feature: As an admin I should be able to set and retrieve values from custom fie
     And I log in as "admin"
     Given I am on "Course 1" course homepage
     And I follow "Resource Library"
-    And I set the field "Test Field MSelect" to "A,B"
+    And I set the field "Test Field MSelect" to "A"
+    And I set the field "Test Field MSelect" to "B"
     And I click on "Filter" "button"
     Then I should see "Page 1"
     And I should see "Page 2"

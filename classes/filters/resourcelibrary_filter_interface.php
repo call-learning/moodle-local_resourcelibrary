@@ -52,7 +52,7 @@ interface resourcelibrary_filter_interface {
 
     /**
      * Adds controls specific to this filter in the form.
-     * @param \MoodleQuickForm form
+     * @param \MoodleQuickForm $mform
      *
      */
     public function add_to_form(\MoodleQuickForm &$mform);
@@ -64,13 +64,38 @@ interface resourcelibrary_filter_interface {
      */
     public function get_label();
 
+    /**
+     * Operator: Equals
+     */
     const OPERATOR_EQUAL = 1;
+    /**
+     * Operator: Not Equals - not used.
+     */
     const OPERATOR_NOT_EQUAL = 2;
+    /**
+     * Operator: Contains - not used.
+     */
     const OPERATOR_CONTAINS = 3;
+    /**
+     * Operator: Does not contain - not used.
+     */
     const OPERATOR_DOESNOTCONTAIN = 4;
+    /**
+     * Operator: Empty.
+     */
     const OPERATOR_EMPTY = 5;
+    /**
+     * Operator: Not empty.
+     */
     const OPERATOR_NOTEMPTY = 6;
+    /**
+     * Operator: Less than.
+     */
     const OPERATOR_LESSTHAN = 7;
+    /**
+     * Operator: Greater than.
+     */
     const OPERATOR_GREATERTHAN = 8;
+
 
 }

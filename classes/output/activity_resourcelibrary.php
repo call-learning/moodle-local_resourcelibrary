@@ -41,12 +41,13 @@ use templatable;
 class activity_resourcelibrary extends base_resourcelibrary {
 
     /**
-     * main constructor.
+     * Main constructor.
      * Initialize the user preferences
      *
-     * @param string $grouping Grouping user preference
+     * @param int $courseid
      * @param string $sort Sort user preference
      * @param string $view Display user preference
+     * @param int $paging
      * @throws \dml_exception
      */
     public function __construct(

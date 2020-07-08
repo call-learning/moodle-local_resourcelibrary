@@ -14,8 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 /**
- * Simple value select filter.
- * A variant of the user_filter_simpleselect
+ * Base filter.
  *
  * @package   local_resourcelibrary
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
@@ -63,7 +62,6 @@ abstract class base_filter implements resourcelibrary_filter_interface {
     /**
      * Constructor
      *
-     * @param string $name the name of the filter instance
      * @param \core_customfield\field_controller $field user table filed name
      */
     public function __construct(\core_customfield\field_controller $field) {
@@ -76,7 +74,7 @@ abstract class base_filter implements resourcelibrary_filter_interface {
     /**
      * Adds controls specific to this filter in the form.
      *
-     * @param \MoodleQuickForm form
+     * @param \MoodleQuickForm $mform
      * @throws \coding_exception
      */
     public function add_to_form(\MoodleQuickForm &$mform) {
@@ -137,6 +135,12 @@ abstract class base_filter implements resourcelibrary_filter_interface {
      */
     public abstract function get_sql_filter($data);
 
+    /**
+     * Get field name
+     *
+     * @return string
+     * @throws \ReflectionException
+     */
     protected function get_sql_field_name() {
         $datafieldcolumn = customfield_utils::get_datafieldcolumn_value_from_field_handler($this->_field);
         $fieldid = $this->_field->get('id');

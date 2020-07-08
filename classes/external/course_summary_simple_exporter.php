@@ -15,8 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Same as the course summary exporter but remove any non relevant information
- * to speedup the rendering
+ * Same as the course summary_exporter
+ *
+ * Remove any non relevant information to speedup the rendering
  *
  * @package   local_resourcelibrary
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
@@ -32,17 +33,28 @@ use moodle_url;
 /**
  * Class for exporting a course summary from an stdClass.
  *
- * @copyright  2015 Damyon Wiese
+ * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class course_summary_simple_exporter extends course_summary_exporter {
 
-
+    /**
+     * Define related context
+     *
+     * @return array|string[]
+     */
     protected static function define_related() {
         // We cache the context so it does not need to be retrieved from the course.
         return array('context' => '\\context', 'isfavourite' => 'bool?');
     }
 
+    /**
+     * Get additional values
+     *
+     * @param renderer_base $output
+     * @return array
+     * @throws \moodle_exception
+     */
     protected function get_other_values(renderer_base $output) {
         global $CFG;
         $courseimage = self::get_course_image($this->data);
@@ -55,6 +67,11 @@ class course_summary_simple_exporter extends course_summary_exporter {
         );
     }
 
+    /**
+     * Properties from DB
+     *
+     * @return array|array[]
+     */
     public static function define_properties() {
         return array(
             'id' => array(
@@ -99,6 +116,11 @@ class course_summary_simple_exporter extends course_summary_exporter {
         ];
     }
 
+    /**
+     * Additional properties
+     *
+     * @return array|array[]
+     */
     public static function define_other_properties() {
         return array(
             'viewurl' => array(

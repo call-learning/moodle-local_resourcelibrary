@@ -27,7 +27,19 @@ defined('MOODLE_INTERNAL') || die();
 
 use local_resourcelibrary\customfield\course_handler;
 
+/**
+ * Class utils
+ *
+ * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class utils {
+    /**
+     * Update fields
+     *
+     * @param object $data
+     * @throws \coding_exception
+     */
     public static function course_update_fields($data) {
         $handler = course_handler::create();
         $handler->instance_form_save($data);

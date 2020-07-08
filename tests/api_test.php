@@ -69,21 +69,6 @@ class local_resourcelibrary_api_testcase extends local_resourcelibrary_testcase 
         $courses = local_resourcelibrary_external::get_filtered_courses();
 
         $this->assertCount(1, $courses);
-        $coursedata = $courses[0];
-        $rlfields = $coursedata['resourcelibraryfields'];
-        $this->assertCount(6, $rlfields);
-        $this->assertEquals(array(
-            'type' => 'text',
-            'value' => 'some text',
-            'name' => 'Field 1',
-            'shortname' => 'f1',
-        ), $rlfields[0]);
-        $this->assertEquals(array(
-            'type' => 'multiselect',
-            'value' => 'b, c',
-            'name' => 'Field 4',
-            'shortname' => 'f4',
-        ), $rlfields[3]);
     }
 
     /**
@@ -116,20 +101,6 @@ class local_resourcelibrary_api_testcase extends local_resourcelibrary_testcase 
 
         $this->assertCount(4, $modules);
         $moduledata = $modules[0];
-        $rlfields = $moduledata['resourcelibraryfields'];
-        $this->assertCount(6, $rlfields);
-        $this->assertEquals(array(
-            'type' => 'text',
-            'value' => 'some text',
-            'name' => 'Field 1',
-            'shortname' => 'f1',
-        ), $rlfields[0]);
-        $this->assertEquals(array(
-            'type' => 'multiselect',
-            'value' => 'b, c',
-            'name' => 'Field 4',
-            'shortname' => 'f4',
-        ), $rlfields[3]);
     }
 
     /**
@@ -167,19 +138,5 @@ class local_resourcelibrary_api_testcase extends local_resourcelibrary_testcase 
         )));
 
         $this->assertCount(2, $modules);
-
-        $this->assertContains(array(
-            'type' => 'select',
-            'value' => 'b',
-            'name' => 'Field 5',
-            'shortname' => 'f5',
-        ), $modules[0]['resourcelibraryfields']);
-
-        $this->assertContains(array(
-            'type' => 'select',
-            'value' => 'b',
-            'name' => 'Field 5',
-            'shortname' => 'f5',
-        ), $modules[1]['resourcelibraryfields']);
     }
 }

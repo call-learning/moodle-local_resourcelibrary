@@ -7,11 +7,15 @@
 
 .resourcelibrary-filters-form .form-inline .custom-select,
 .resourcelibrary-filters-form .form-inline .btn,
-.resourcelibrary-filters-form  .form-inline,
-.resourcelibrary-filters-form  .form-inline div.d-inline-block.position-relative
-{
+.resourcelibrary-filters-form .form-inline,
+.resourcelibrary-filters-form .form-inline div.d-inline-block.position-relative {
     max-width: 100%;
 }
+
+.resourcelibrary-filters-form .form-inline .custom-select {
+    width: 100% !important;
+}
+
 .resourcelibrary-filters-form .col-form-label.d-inline {
     float: none;
     display: block !important;
@@ -20,31 +24,42 @@
     font-weight: bold;
     text-decoration: underline;
 }
+
 .resourcelibrary-filters-form .form-group.row {
     display: flex;
     flex-direction: column;
 }
+
 .local-resourcelibrary .dashboard-card-img {
     background-size: contain;
     background-repeat: no-repeat;
 }
 
+.local-resourcelibrary img.list-image {
+    width: 4em;
+    height: 4em;
+    border-radius: 20%;
+}
+
 .local-resourcelibrary img.list-icon {
-    width: 2em;
-    height: 2em;
-    margin: 1em;
-    border-radius: 50%;
+}
+
+.local-resourcelibrary .card-icon {
+    position: absolute;
+    top: 1em;
+    right: 1em;
 }
 
 .fdate_selector {
     flex-wrap: wrap;
 }
+
 .filter-instructions {
     font-size: xx-small;
     font-style: italic;
 }
 
-.resourcelibrary-content  a.item-view  .icon {
+.resourcelibrary-content a.item-view .icon {
     font-size: 40px;
     width: 40px;
     height: 40px;

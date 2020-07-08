@@ -27,13 +27,22 @@ namespace local_resourcelibrary\filters;
 use core_course\customfield\course_handler;
 use core_customfield\category_controller;
 use core_customfield\data_controller;
+use core_customfield\field_controller;
 use core_customfield\handler;
 
 defined('MOODLE_INTERNAL') || die;
 
+/**
+ * Class customfield_utils
+ *
+ * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class customfield_utils {
     /**
-     * @param $type
+     * Get SQL query for given search/filters
+     *
+     * @param string $type
      * @param array $additionaljoins a list of joins in the textual form, they can reference the entity by e.id
      * example 'LEFT JOIN {course_categories} cat ON c.id = e.category'. Note that it should only be one to one relationship
      * No check is done and it can create an erroneous query. This will be placed after the FROM ... and before the
@@ -89,7 +98,6 @@ class customfield_utils {
      * due to the fact the prefix is defined in the customfield type)
      * @return array[]
      * @throws \ReflectionException
-     * @throws \dml_exception
      * @throws \moodle_exception When the shortname is not unique
      */
     public static function get_fields_and_joins_for_cf_handler($handler, $table, $prefix = 'customfield') {
@@ -113,7 +121,7 @@ class customfield_utils {
     /**
      * From a field, get the corresponding column in the data table
      *
-     * @param $field
+     * @param data_controller $field
      * @return string
      * @throws \ReflectionException
      */
@@ -129,10 +137,23 @@ class customfield_utils {
         return $datafield->datafield();
     }
 
+    /**
+     * Get field name
+     *
+     * @param string $prefix
+     * @param string $shortname
+     * @return string
+     */
     public static function get_field_name($prefix, $shortname) {
         return "{$prefix}_" . trim(strtolower($shortname));
     }
 
+    /**
+     * Find filter from field
+     *
+     * @param field_controller $field
+     * @return mixed|null
+     */
     public static function get_filter_from_field($field) {
         $filterclass = '\local_resourcelibrary\filters\\' . $field->get('type') . '_filter';
         if (class_exists($filterclass)) {
@@ -145,7 +166,8 @@ class customfield_utils {
     /**
      * Get the where/params for the matching sql query
      *
-     * @param $filters
+     * @param array $filters
+     * @param field_controller $handler
      * @return array
      */
     public static function get_sql_from_filters_handler($filters, $handler) {
@@ -173,6 +195,23 @@ class customfield_utils {
         return array($sqlwhere, $sqlparams);
     }
 
+    /**
+     * Get records from field handler
+     *
+     * @param handler $handler
+     * @param array $filters
+     * @param int $limit
+     * @param int $offset
+     * @param array $additionaljoins
+     * @param array $additionalfields
+     * @param array $additionalwheres
+     * @param array $additionalparams
+     * @param array $additionalsorts
+     * @return array
+     * @throws \ReflectionException
+     * @throws \dml_exception
+     * @throws \moodle_exception
+     */
     public static function get_records_from_handler(handler $handler,
         $filters,
         $limit,

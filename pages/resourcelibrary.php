@@ -56,15 +56,18 @@ $PAGE->set_title($title);
 $PAGE->set_heading($pagedesc);
 
 if ($courseid != SITEID) {
-    $mainlibrarypage = new moodle_url($pageurl);
-    $mainlibrarypage->remove_all_params();
-    $PAGE->navigation->initialise($PAGE);
-    $PAGE->navbar->prepend(get_string('courseresourcelibrary', 'local_resourcelibrary'),
+    $PAGE->navbar->ignore_active();
+    $mainlibrarypage = new moodle_url('/local/resourcelibrary/pages/resourcelibrary.php');
+    $PAGE->navbar->add(get_string('mainresourcelibrary', 'local_resourcelibrary'),
         $mainlibrarypage,
         navigation_node::TYPE_CUSTOM,
-        'courseresourcelibrary',
+        'mainresourcelibrary',
         'mainlibrary'
     );
+    $course = $DB->get_record('course', array('id' => $courseid));
+    $PAGE->navbar->add(
+        get_string('resourcelibrarycourse:name', 'local_resourcelibrary', course_format_name($course)
+        ));
 }
 
 $renderer = $PAGE->get_renderer('local_resourcelibrary');

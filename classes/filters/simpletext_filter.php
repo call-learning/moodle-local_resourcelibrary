@@ -15,8 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Simple text/textarea filter.
- * A variant of the user_filter_simpleselect
+ * Simple text/textarea filter. A variant of the user_filter_simpleselect.
  *
  * @package   local_resourcelibrary
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
@@ -52,12 +51,18 @@ abstract class simpletext_filter extends base_filter {
         $this->check_is_righttype($field);
     }
 
+    /**
+     * Check if this is the right type for this handler
+     *
+     * @param \core_customfield\field_controller $field
+     * @throws \moodle_exception
+     */
     abstract protected function check_is_righttype(\core_customfield\field_controller $field);
 
     /**
      * Adds controls specific to this filter in the form.
      *
-     * @param \MoodleQuickForm form
+     * @param \MoodleQuickForm $mform
      *
      * @throws \coding_exception
      */

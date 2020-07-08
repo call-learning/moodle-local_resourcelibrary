@@ -15,8 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Simple value select filter.
- * A variant of the user_filter_simpleselect
+ * Simple value select filter. A variant of the user_filter_simpleselect
  *
  * @package   local_resourcelibrary
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
@@ -54,12 +53,12 @@ class checkbox_filter extends base_filter {
         }
     }
 
-
-
     /**
      * Adds controls specific to this filter in the form.
-     * @param \MoodleQuickForm form
      *
+     * @param \MoodleQuickForm $mform
+     *
+     * @throws \coding_exception
      */
     public function add_to_form(\MoodleQuickForm &$mform) {
         $elementname = $this->get_form_value_item_name();

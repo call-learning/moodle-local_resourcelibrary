@@ -31,7 +31,17 @@ use stdClass;
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Class setup
+ *
+ * @package    local_resourcelibrary
+ * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class setup {
+    /**
+     * Generic category short name
+     */
     const GENERIC_CATEGORIES = array('general');
 
     /**

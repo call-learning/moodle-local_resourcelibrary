@@ -42,13 +42,19 @@ use templatable;
  */
 class filters_for_handler {
 
+    /**
+     * @var handler|null
+     */
     protected $handler = null;
+    /**
+     * @var array|field_controller[]
+     */
     protected $fields = [];
 
     /**
      * main constructor.
      * Initialize the user preferences
-     *
+     * @param handler $handler
      * @throws \dml_exception
      */
     public function __construct(handler $handler) {

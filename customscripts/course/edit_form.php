@@ -16,7 +16,7 @@
 /**
  * Edit course settings form
  *
- * @package    core_course
+ * @package local_resourcelibrary
  * @copyright  1999 onwards Martin Dougiamas (http://dougiamas.com)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -31,6 +31,8 @@ require_once($CFG->dirroot . '/course/edit_form.php');
 
 /**
  * The form for handling editing a course.
+ * @copyright  1999 onwards Martin Dougiamas (http://dougiamas.com)
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class editpage_resourcelibrary_course_edit_form extends course_edit_form {
     use resourcelibrary_course_edit_form_trait;

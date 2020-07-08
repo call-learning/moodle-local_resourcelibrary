@@ -34,6 +34,7 @@ require_once("lib.php");
 
 /**
  * Resource Library external functions
+ *
  * This will use internally the course api and filter out the courses or modules that don't match
  * the filters.?
  *
@@ -52,6 +53,13 @@ class local_resourcelibrary_external extends external_api {
         return static::get_filter_generic_parameters('courseid', 'course id');
     }
 
+    /**
+     * Generic filter parameters (common to activities and courses)
+     *
+     * @param string $parentid
+     * @param string $parentiddesc
+     * @return external_function_parameters
+     */
     protected static function get_filter_generic_parameters($parentid, $parentiddesc) {
         return new external_function_parameters(
             array($parentid => new external_value(PARAM_INT, $parentiddesc),
@@ -96,8 +104,10 @@ class local_resourcelibrary_external extends external_api {
      * Get course modules filtered
      *
      * @param int $courseid course id
-     * TODO Add filters
      * @param array $filters
+     * @param int $limit
+     * @param int $offset
+     * @param array $sorting
      * @return array
      * @throws coding_exception
      * @throws dml_exception
@@ -136,6 +146,8 @@ class local_resourcelibrary_external extends external_api {
         $PAGE->set_context($context);
         $renderer = $PAGE->get_renderer('core');
         $fullmodulesinfo = [];
+        $coursesimage = $renderer->get_generated_image_for_id($courseid);
+
         foreach ($modules as $mod) {
             $cm = $modinfo->get_cm($mod->id);
             if ($cm->uservisible) {
@@ -154,13 +166,14 @@ class local_resourcelibrary_external extends external_api {
                 } else {
                     $additionamoduleinfo->viewurl = (new moodle_url('/course/view.php', array('id' => $courseid)))->out(false);
                 }
+                $additionamoduleinfo->image = $coursesimage;
                 $fullmodulesinfo[] = array_merge((array) $mod, (array) $additionamoduleinfo);
             }
         }
         // Here as we want to sort by time modified, we need to sort the list as it is not possible
         // to do it via SQL.
         // TODO: sort the table.
-        return array_slice($fullmodulesinfo, $offset, $limit);
+        return array_slice($fullmodulesinfo, $offset, $limit ? $limit : null);
     }
 
     /**
@@ -182,6 +195,7 @@ class local_resourcelibrary_external extends external_api {
                         'iconurl' => new external_value(PARAM_URL, 'module icon url'),
                         'visible' => new external_value(PARAM_INT,
                             '1: available to student, 0:not available', VALUE_OPTIONAL),
+                        'image' => new external_value(PARAM_RAW, 'course image'),
                         'groupmode' => new external_value(PARAM_INT, 'no group, separate, visible',
                             VALUE_OPTIONAL),
                         'groupingid' => new external_value(PARAM_INT, 'grouping id',
@@ -218,7 +232,6 @@ class local_resourcelibrary_external extends external_api {
      * @throws coding_exception
      * @throws invalid_parameter_exception
      * @throws moodle_exception
-     * @throws required_capability_exception
      * @since Moodle 2.2
      */
     public static function get_filtered_courses($categoryid = 0, $filters = array(), $limit = 0, $offset = 0, $sorting = array()) {
@@ -290,9 +303,18 @@ class local_resourcelibrary_external extends external_api {
 
         }
 
-        return array_slice($coursesinfo, $offset, $limit);
+        return array_slice($coursesinfo, $offset, $limit ? $limit : null);
     }
 
+    /**
+     * Export field values (not used now)
+     *
+     * @param array $fieldarray
+     * @param string $component
+     * @param string $area
+     * @param int $courseid
+     * @throws moodle_exception
+     */
     protected static function export_fields(&$fieldarray, $component, $area, $courseid) {
         $rlfieldhandler = \core_customfield\handler::get_handler($component, $area);
         if ($rlfields = $rlfieldhandler->export_instance_data($courseid, true)) {
@@ -342,7 +364,14 @@ class local_resourcelibrary_external extends external_api {
             );
     }
 
-    public static function get_sort_options_sql($sortoptions, $fields) {
+    /**
+     * Get Sort option for the SQL query
+     *
+     * @param array $sortoptions
+     * @param array $fields
+     * @return string
+     */
+    protected static function get_sort_options_sql($sortoptions, $fields) {
         $sortsql = " ";
         foreach ($sortoptions as $sort) {
             $order = strtoupper($sort['order']);

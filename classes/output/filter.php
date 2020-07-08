@@ -41,12 +41,17 @@ use templatable;
  */
 class filter {
 
+    /**
+     * Associated field
+     *
+     * @var field_controller|null
+     */
     protected $field = null;
 
     /**
-     * main constructor.
+     * Main constructor.
      * Initialize the user preferences
-     *
+     * @param field_controller $field
      * @throws \dml_exception
      */
     public function __construct(field_controller $field) {

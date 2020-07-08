@@ -24,12 +24,20 @@
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Class extending standard backup_plugin in order to implement some
- * helper methods related with the Resource Library plugin
+ * Class extending standard backup_plugin
  *
+ * This class implements some helper methods related with the Resource Library plugin
+ *
+ * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class backup_local_resourcelibrary_plugin extends backup_plugin {
 
+    /**
+     * Define the plugin structure for backup.
+     *
+     * @throws base_element_struct_exception
+     */
     public function define_module_plugin_structure() {
         $rlfields = new backup_optigroup_element('resourcelibraryfields');
         $resourcelibraryfield = new backup_nested_element('resourcelibraryfield', array('id'), array(

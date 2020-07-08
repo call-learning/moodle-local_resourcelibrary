@@ -45,8 +45,9 @@
                 </div>
                 {{/image}}
                 {{#iconurl}}
-                    <div class="card-img dashboard-card-img" style='background-image: url("{{{iconurl}}}");'>
-                        <span class="sr-only">{{#str}}aria:entityimage, local_resourcelibrary{{/str}}</span>
+                    <div class="card-icon">
+                        <img src="{{{iconurl}}}" role="presentation"/>
+                        <span class="sr-only">{{modname}}</span>
                     </div>
                 {{/iconurl}}
             </a>

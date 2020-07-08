@@ -46,25 +46,35 @@ abstract class base_resourcelibrary implements renderable, templatable {
     /**
      * Constants for the user preferences view options
      */
+    /** @var string card view. */
     const VIEW_CARD = 'cards';
+    /** @var string list view. */
     const VIEW_LIST = 'list';
 
     /**
      * Constants for the user paging preferences
      */
+    /** @var int  12 items per page. */
     const PAGING_12 = 12;
+    /** @var int  24 items per page. */
     const PAGING_24 = 24;
+    /** @var int  48 items per page. */
     const PAGING_48 = 48;
 
     /**
      * Constants for the admin category display setting
      */
+    /** @var string  Display category (on|off). */
     const DISPLAY_CATEGORIES_ON = 'on';
+    /** @var string  Display category (on|off). */
     const DISPLAY_CATEGORIES_OFF = 'off';
-
+    /** @var string  Sort by fullname ASC. */
     const SORT_FULLNAME_ASC = "fullname,ASC";
+    /** @var string  Sort by fullname DESC. */
     const SORT_FULLNAME_DESC = "fullname,DESC";
+    /** @var string  Sort by timemodified ASC. */
     const SORT_LASTMODIF_ASC = "timemodified,ASC";
+    /** @var string  Sort by timemodified DESC. */
     const SORT_LASTMODIF_DESC = "timemodified,DESC";
 
     /**
@@ -106,9 +116,9 @@ abstract class base_resourcelibrary implements renderable, templatable {
      * main constructor.
      * Initialize the user preferences
      *
-     * @param string $grouping Grouping user preference
      * @param string $sort Sort user preference
      * @param string $view Display user preference
+     * @param int $paging Paging size
      * @throws \dml_exception
      */
     public function __construct(
@@ -155,6 +165,13 @@ abstract class base_resourcelibrary implements renderable, templatable {
         return $preferences;
     }
 
+    /**
+     * Get export defaults
+     *
+     * @param \core_renderer $output
+     * @param handler $handler
+     * @return array
+     */
     public function get_export_defaults($output, handler $handler) {
         $nocoursesurl = $output->image_url('noentities', 'local_resourcelibrary')->out();
         $defaultvariables = [
@@ -176,6 +193,12 @@ abstract class base_resourcelibrary implements renderable, templatable {
      */
     public abstract function export_for_template(renderer_base $output);
 
+    /**
+     * Get filters to be displayed
+     *
+     * @param string $handler
+     * @return string|string[]|null
+     */
     public function get_filters_content($handler) {
         $filterscontent = (new filter_form(null, ['handler' => $handler],
             'post', '', array('class' => 'resourcelibrary-filters-form')))->render();
