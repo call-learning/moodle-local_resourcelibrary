@@ -23,7 +23,7 @@
  */
 
 use core_course\external\course_module_summary_exporter;
-use core_course\external\course_summary_exporter;
+use local_resourcelibrary\external\course_summary_simple_exporter;
 use local_resourcelibrary\filters\customfield_utils;
 
 defined('MOODLE_INTERNAL') || die;
@@ -124,7 +124,7 @@ class local_resourcelibrary_external extends external_api {
         $additionaljoins = ['LEFT JOIN {modules} m ON m.id = e.module'];
         $handler = local_resourcelibrary\customfield\coursemodule_handler::create();
         $sortsql = self::get_sort_options_sql($sorting, array_keys($additionalfields));
-        $modules = customfield_utils::get_records_from_handler($handler, $filters, $limit, $offset,
+        $modules = customfield_utils::get_records_from_handler($handler, $filters, 0, 0,
             $additionaljoins,
             $additionalfields,
             $sqlwhere,
@@ -154,17 +154,13 @@ class local_resourcelibrary_external extends external_api {
                 } else {
                     $additionamoduleinfo->viewurl = (new moodle_url('/course/view.php', array('id' => $courseid)))->out(false);
                 }
-                $additionamoduleinfo->resourcelibraryfields = [];
-                self::export_fields($additionamoduleinfo->resourcelibraryfields, 'local_resourcelibrary', 'coursemodule',
-                    $cm->id);
-
                 $fullmodulesinfo[] = array_merge((array) $mod, (array) $additionamoduleinfo);
             }
         }
         // Here as we want to sort by time modified, we need to sort the list as it is not possible
         // to do it via SQL.
         // TODO: sort the table.
-        return $fullmodulesinfo;
+        return array_slice($fullmodulesinfo, $offset, $limit);
     }
 
     /**
@@ -253,7 +249,7 @@ class local_resourcelibrary_external extends external_api {
         $handler = local_resourcelibrary\customfield\course_handler::create();
         $sortsql = self::get_sort_options_sql($sorting, array_keys($additionalfields));
 
-        $courses = customfield_utils::get_records_from_handler($handler, $filters, $limit, $offset,
+        $courses = customfield_utils::get_records_from_handler($handler, $filters, 0, 0,
             array('LEFT JOIN {course_categories} ccat ON e.category = ccat.id'),
             $additionalfields,
             $sqlwhere,
@@ -276,35 +272,30 @@ class local_resourcelibrary_external extends external_api {
                 $PAGE->set_context(context_system::instance());
             }
             $coursevisible = $course->visible;
-            $coursevisible = $coursevisible || has_capability('moodle/course:update', $context)
-                || has_capability('moodle/course:viewhiddencourses', $context)
-                || has_capability('moodle/course:view', $context)
+            $coursevisible = $coursevisible || has_any_capability([
+                    'moodle/course:update', 'moodle/course:viewhiddencourses', 'moodle/course:view'], $context)
                 || is_enrolled($context);
             if (!$coursevisible) {
                 continue;
             }
-            $context = context_course::instance($course->id);
-            $exporter = new course_summary_exporter($course, ['context' => $context]);
+            // Here we use a simplified version for performance reasons.
+            $exporter = new course_summary_simple_exporter($course, ['context' => $context]);
             $renderer = $PAGE->get_renderer('core');
             $courseinfo = (array) $exporter->export($renderer);
-            $courseinfo['sequenceid'] = $sequenceid;
             $courseinfo['parentid'] = $course->category;
             $courseinfo['parentsortorder'] = $course->sortorder;
-            $courseinfo['image'] = $courseinfo['courseimage'];
-            unset($courseinfo['courseimage']);
             $courseinfo['customfields'] = [];
             $courseinfo['resourcelibraryfields'] = [];
-            self::export_fields($courseinfo['customfields'], 'core_course', 'course', $course->id);
-            self::export_fields($courseinfo['resourcelibraryfields'], 'local_resourcelibrary', 'course', $course->id);
             $coursesinfo[] = $courseinfo;
 
         }
-        return $coursesinfo;
+
+        return array_slice($coursesinfo, $offset, $limit);
     }
 
     protected static function export_fields(&$fieldarray, $component, $area, $courseid) {
         $rlfieldhandler = \core_customfield\handler::get_handler($component, $area);
-        if ($rlfields = $rlfieldhandler->export_instance_data($courseid)) {
+        if ($rlfields = $rlfieldhandler->export_instance_data($courseid, true)) {
             foreach ($rlfields as $data) {
                 $fieldarray[] = [
                     'type' => $data->get_type(),
@@ -334,57 +325,18 @@ class local_resourcelibrary_external extends external_api {
                             'sort order into the category', VALUE_OPTIONAL),
                         'fullname' => new external_value(PARAM_TEXT, 'full name'),
                         'idnumber' => new external_value(PARAM_RAW, 'id number', VALUE_OPTIONAL),
-                        'summary' => new external_value(PARAM_RAW, 'summary'),
-                        'summaryformat' => new external_format_value('summary'),
                         'image' => new external_value(PARAM_RAW, 'course image'),
-                        'newsitems' => new external_value(PARAM_INT,
-                            'number of recent items appearing on the course page', VALUE_OPTIONAL),
                         'startdate' => new external_value(PARAM_INT,
                             'timestamp when the course start'),
                         'enddate' => new external_value(PARAM_INT,
                             'timestamp when the course end'),
-                        'maxbytes' => new external_value(PARAM_INT,
-                            'largest size of file that can be uploaded into the course',
-                            VALUE_OPTIONAL),
                         'visible' => new external_value(PARAM_INT,
                             '1: available to student, 0:not available', VALUE_OPTIONAL),
-                        'groupmode' => new external_value(PARAM_INT, 'no group, separate, visible',
-                            VALUE_OPTIONAL),
-                        'groupmodeforce' => new external_value(PARAM_INT, '1: yes, 0: no',
-                            VALUE_OPTIONAL),
-                        'defaultgroupingid' => new external_value(PARAM_INT, 'default grouping id',
-                            VALUE_OPTIONAL),
                         'timecreated' => new external_value(PARAM_INT,
                             'timestamp when the course have been created', VALUE_OPTIONAL),
                         'timemodified' => new external_value(PARAM_INT,
                             'timestamp when the course have been modified', VALUE_OPTIONAL),
-                        'enablecompletion' => new external_value(PARAM_INT,
-                            'Enabled, control via completion and activity settings. Disbaled,
-                                        not shown in activity settings.',
-                            VALUE_OPTIONAL),
-                        'completionnotify' => new external_value(PARAM_INT,
-                            '1: yes 0: no', VALUE_OPTIONAL),
-                        'lang' => new external_value(PARAM_SAFEDIR,
-                            'forced course language', VALUE_OPTIONAL),
                         'viewurl' => new external_value(PARAM_URL, 'The course URL'),
-                        'customfields' => new external_multiple_structure(
-                            new external_single_structure(
-                                ['name' => new external_value(PARAM_TEXT, 'The name of the custom field'),
-                                    'shortname' => new external_value(PARAM_ALPHANUMEXT,
-                                        'The shortname of the custom field'),
-                                    'type' => new external_value(PARAM_COMPONENT,
-                                        'The type of the custom field - text, checkbox...'),
-                                    'value' => new external_value(PARAM_RAW, 'The value of the custom field')]
-                            ), 'Custom fields and associated values', VALUE_OPTIONAL),
-                        'resourcelibraryfields' => new external_multiple_structure(
-                            new external_single_structure(
-                                ['name' => new external_value(PARAM_TEXT, 'The name of the custom field'),
-                                    'shortname' => new external_value(PARAM_ALPHANUMEXT,
-                                        'The shortname of the custom field'),
-                                    'type' => new external_value(PARAM_COMPONENT,
-                                        'The type of the custom field - text, checkbox...'),
-                                    'value' => new external_value(PARAM_RAW, 'The value of the custom field')]
-                            ), 'Custom fields and associated values', VALUE_OPTIONAL),
                     ), 'course'
                 )
             );
