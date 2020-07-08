@@ -22,7 +22,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 defined('MOODLE_INTERNAL') || die;
-if ($hassiteconfig or has_any_capability($capabilities, $systemcontext)) {
+if ($hassiteconfig) {
     $settings = new admin_category('resourcelibrary', get_string('pluginname', 'local_resourcelibrary'));
 
     $settings->add('resourcelibrary',
