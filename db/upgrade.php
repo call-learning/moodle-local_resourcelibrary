@@ -58,4 +58,8 @@ function xmldb_local_resourcelibrary_upgrade($oldversion) {
     if ($oldversion < 2020042009) {
         upgrade_plugin_savepoint(true, 2020042009, 'local', 'resourcelibrary');
     }
+    if ($oldversion < 2020042010) {
+        upgrade_plugin_savepoint(true, 2020042010, 'local', 'resourcelibrary');
+    }
+    return true;
 }
