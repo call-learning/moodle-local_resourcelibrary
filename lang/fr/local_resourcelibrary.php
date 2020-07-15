@@ -38,7 +38,6 @@ $string['card'] = 'Vignette';
 $string['course_metadata'] = 'Metatdata pour la Pédagothèque numérique';
 $string['mainresourcelibrary'] = 'Liste de cours';
 $string['resourcelibrary'] = 'Pédagothèque numérique';
-$string['resourcelibrarycourse'] = 'Pédagothèque numérique (Cours)';
 $string['resourcelibrarycourse:name'] = 'Pédagothèque numérique ({$a})';
 $string['resourcelibraryfieldsettings'] = 'Paramètres des champs de la Pédagothèque numérique';
 $string['resourcelibrary_course_customfield'] = 'Gestion des champs personalisés de cours pour la Pédagothèque numérique';
