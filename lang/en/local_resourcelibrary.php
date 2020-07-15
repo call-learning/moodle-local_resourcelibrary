@@ -52,6 +52,10 @@ $string['resourcelibraryfield_visibility'] = 'Resource Library Field visibility'
 $string['resourcelibraryfield_visibility_help'] = 'Resource Library Field visibility';
 $string['resourcelibraryfield_notvisible'] = 'Not visible';
 $string['resourcelibraryfield_notvisible'] = 'Resource Library Field not visible';
+$string['resourcelibrarymainsettings'] = 'Resource Library: Global Settings';
+$string['resourcelibrary:hiddencoursesid'] = 'Hidden Courses Id';
+$string['resourcelibrary:hiddencoursesid:desc'] = 'List of comma separated
+ courses identifiers (course id) that will be invisible on the catalog';
 
 $string['category:general']  = 'Resource Library: Generic fields';
 

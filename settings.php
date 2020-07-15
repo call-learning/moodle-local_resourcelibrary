@@ -39,6 +39,18 @@ if ($hassiteconfig) {
             array('local/resourcelibrary:manage')
         )
     );
+    $mainsettings = new admin_settingpage('resourcelibrarymainsettings',
+        get_string('resourcelibrarymainsettings', 'local_resourcelibrary'),
+        array('local/resourcelibrary:manage'),
+        empty($CFG->enableresourcelibrary));
+
+    $mainsettings->add(new admin_setting_configtext('local_resourcelibrary/hiddencoursesid',
+        get_string('resourcelibrary:hiddencoursesid', 'local_resourcelibrary'),
+        get_string('resourcelibrary:hiddencoursesid:desc', 'local_resourcelibrary'),
+        ''));
+
+    $settings->add('resourcelibrary', $mainsettings);
+
     if (!empty($CFG->enableresourcelibrary) && $CFG->enableresourcelibrary) {
         $ADMIN->add('courses', $settings); // Add it to the course menu.
     }

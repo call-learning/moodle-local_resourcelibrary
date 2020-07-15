@@ -272,8 +272,16 @@ class local_resourcelibrary_external extends external_api {
         // Create return value.
         $coursesinfo = array();
         $sequenceid = 0;
+
+        $invisiblecourseidlist = [];
+        if ($invisiblecoursesids = get_config('local_resourcelibrary', 'hiddencoursesid')) {
+            $invisiblecourseidlist = explode(',', $invisiblecoursesids);
+        }
         foreach ($courses as $course) {
 
+            if (in_array($course->id, $invisiblecourseidlist)) {
+                continue; // Skip invisible courses.
+            }
             // Now security checks.
             $context = context_course::instance($course->id, IGNORE_MISSING);
             $hasvalidatedcontext = true;

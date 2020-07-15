@@ -31,18 +31,23 @@ all available courses. If you need to make this page accessible through non logg
 you set the "autologin" to on in the Administration > Site administration > Users > Permissions > User policies 
 (See [Auto Login Guest](https://docs.moodle.org/39/en/Guest_access)). If not a login prompt will appear to see the page.
 
+If you need to hide courses regardless of the course visibility status, you can do so
+by adding the course ids in the 'hiddencoursesid' settings. The course will not appear in the
+ resource library.
+This is a temporary solution while looking at more generic solution such as hiding a course per category, tag or other.
+ 
 Authors
 =======
-Laurent David - SAS CALL Learning
-Camille Carlier - Chargée de mission TICE Ingénieure Pédagogique- DP Pole IRM - Institut Mines-Télécom.
-
+Project initiated and produced by DP Pole IRM - Institut Mines-Télécom.
+Realised by Laurent David - SAS CALL Learning
 
 TODO
 ====
  * Allow ordering of activities by last modification date
  * Add more information on the thumbnails
  * Check visibility of courses and activities
- * Fix issue with backup (courses & activities) and multiselect
+ * Add tags to courses and module to mark them as invisible on the resource library
+ 
 
 
 
