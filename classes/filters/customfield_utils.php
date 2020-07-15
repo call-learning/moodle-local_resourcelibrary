@@ -119,7 +119,7 @@ class customfield_utils {
     /**
      * From a field, get the corresponding column in the data table
      *
-     * @param data_controller $field
+     * @param field_controller $field
      * @return string
      * @throws \ReflectionException
      */
