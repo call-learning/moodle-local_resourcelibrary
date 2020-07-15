@@ -24,8 +24,6 @@
 
 namespace local_resourcelibrary\filters;
 
-use core_course\customfield\course_handler;
-use core_customfield\category_controller;
 use core_customfield\data_controller;
 use core_customfield\field_controller;
 use core_customfield\handler;
@@ -225,7 +223,7 @@ class customfield_utils {
         global $DB;
         $sqlwhere = "WHERE 1=1 AND " . $additionalwheres;
         $sqlparams = $additionalparams;
-        $sqlorderby = "ORDER BY $additionalsorts";
+        $sqlorderby = $additionalsorts ? "ORDER BY $additionalsorts" : "";
         // Courses or modules which are invisible are last (to avoid gaps in pagination).
 
         list($sqlwherefilter, $sqlparamsfilters) = self::get_sql_from_filters_handler($filters, $handler);

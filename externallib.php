@@ -139,7 +139,7 @@ class local_resourcelibrary_external extends external_api {
             $additionalfields,
             $sqlwhere,
             $sqlparams,
-            'm.visible DESC ' . $sortsql);// Hidden element last of the list. So we don't have any gap.
+            $sortsql);
 
         $modinfo = get_fast_modinfo($courseid);
         $context = \context_course::instance($courseid);
@@ -267,7 +267,7 @@ class local_resourcelibrary_external extends external_api {
             $additionalfields,
             $sqlwhere,
             $sqlparams,
-            'e.visible DESC ' . $sortsql);// Hidden element last of the list. So we don't have any gap.
+            $sortsql);
 
         // Create return value.
         $coursesinfo = array();
@@ -372,17 +372,17 @@ class local_resourcelibrary_external extends external_api {
      * @return string
      */
     protected static function get_sort_options_sql($sortoptions, $fields) {
-        $sortsql = " ";
+        $sortsqls = [];
         foreach ($sortoptions as $sort) {
             $order = strtoupper($sort['order']);
             $column = $sort['column'];
             if (!in_array($column, $fields) || ($order != 'ASC' && $order != 'DESC')) {
                 continue; // Invalid filter, we carry on.
             }
-            $sortsql .= " ,$column $order";
+            $sortsqls[] = "$column $order";
         }
+        $sortsql = implode(',', $sortsqls);
         return $sortsql;
-
     }
 }
 
