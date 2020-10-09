@@ -15,24 +15,34 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Manage course custom fields for metadata
+ * Resource Library additional steps
  *
  * @package    local_resourcelibrary
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+require_once(__DIR__ . '/../../../../lib/behat/behat_base.php');
 
-require_once('../../config.php');
-require_once($CFG->libdir . '/adminlib.php');
+/**
+ * Steps definitions
+ *
+ * @package    local_resourcelibrary
+ * @category   test
+ * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class behat_local_resourcelibrary extends behat_base {
 
-admin_externalpage_setup('resourcelibrary_course_customfield');
+    /**
+     * Checks that the Multiselect Custom Field is installed.
+     *
+     * @Given /^multiselect field is installed$/
+     */
+    public function multiselect_field_is_installed() {
 
-$output = $PAGE->get_renderer('local_resourcelibrary');
-$handler = \core_course\customfield\course_handler::create();
-$outputpage = new \local_resourcelibrary\output\customfield_management($handler);
-
-echo $output->header(),
-$output->heading(new lang_string('resourcelibrary_course_customfield', 'local_resourcelibrary')),
-$output->render($outputpage),
-$output->footer();
+        if (!\local_resourcelibrary\locallib\utils::is_multiselect_installed()) {
+            throw new \Moodle\BehatExtension\Exception\SkippedException;
+        }
+    }
+}

@@ -52,23 +52,22 @@ class setup {
     public static function setup_resourcelibrary_custom_fields() {
         foreach (self::GENERIC_CATEGORIES as $catshorname) {
             $fullname = get_string('category:' . $catshorname, 'local_resourcelibrary');
-            foreach (array('course', 'coursemodule') as $carea) {
-                $categories = category::get_records(array('component' => 'local_resourcelibrary', 'area' => $carea));
-                if (empty($categories)) {
-                    $categorydata = new stdClass();
-                    $categorydata->name = $fullname;
-                    $categorydata->component = 'local_resourcelibrary';
-                    $categorydata->area = $carea;
-                    $categorydata->itemid = 0;
-                    $categorydata->contextid = context_system::instance()->id;
-                    $category = category_controller::create(0, $categorydata);
-                    $category->save();
-                } else {
-                    // Reset the first category name.
-                    $firstcat = reset($categories);
-                    $firstcat->set('name', $fullname);
-                    $firstcat->save();
-                }
+            $carea = 'coursemodule'; // Just add the module ressourcelibrary fields.
+            $categories = category::get_records(array('component' => 'local_resourcelibrary', 'area' => $carea));
+            if (empty($categories)) {
+                $categorydata = new stdClass();
+                $categorydata->name = $fullname;
+                $categorydata->component = 'local_resourcelibrary';
+                $categorydata->area = 'coursemodule'; // Just add the module ressourcelibrary fields.
+                $categorydata->itemid = 0;
+                $categorydata->contextid = context_system::instance()->id;
+                $category = category_controller::create(0, $categorydata);
+                $category->save();
+            } else {
+                // Reset the first category name.
+                $firstcat = reset($categories);
+                $firstcat->set('name', $fullname);
+                $firstcat->save();
             }
         }
 

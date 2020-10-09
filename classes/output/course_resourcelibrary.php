@@ -46,7 +46,7 @@ class course_resourcelibrary extends base_resourcelibrary {
      * @return array Context variables for the template
      */
     public function export_for_template(renderer_base $output) {
-        $handler = \local_resourcelibrary\customfield\course_handler::create();
+        $handler = \core_course\customfield\course_handler::create();
         $defaultvariables = $this->get_export_defaults($output, $handler);
         $defaultvariables['parentid'] = 0;
         $preferences = $this->get_preferences();

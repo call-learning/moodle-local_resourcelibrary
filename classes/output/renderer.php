@@ -43,6 +43,7 @@ class renderer extends plugin_renderer_base {
      *
      * @param course_resourcelibrary $courserl The main renderable
      * @return string HTML string
+     * @throws \moodle_exception
      */
     public function render_course_resourcelibrary(course_resourcelibrary $courserl) {
         return $this->render_from_template('local_resourcelibrary/resourcelibrary',
@@ -54,10 +55,25 @@ class renderer extends plugin_renderer_base {
      *
      * @param activity_resourcelibrary $activityrl The main renderable
      * @return string HTML string
+     * @throws \moodle_exception
      */
     public function render_activity_resourcelibrary(activity_resourcelibrary $activityrl) {
         return $this->render_from_template('local_resourcelibrary/resourcelibrary',
             $activityrl->export_for_template($this));
     }
+
+    /**
+     * Render custom field management interface.
+     *
+     * @param customfield_management $list
+     * @return string HTML
+     * @throws \moodle_exception
+     */
+    protected function render_customfield_management(customfield_management $list) {
+        $context = $list->export_for_template($this);
+
+        return $this->render_from_template('local_resourcelibrary/list', $context);
+    }
+
 
 }

@@ -24,6 +24,8 @@
 
 namespace local_resourcelibrary\filters;
 
+use local_resourcelibrary\locallib\utils;
+
 defined('MOODLE_INTERNAL') || die;
 global $CFG;
 require_once($CFG->libdir . '/formslib.php');
@@ -44,9 +46,11 @@ class filter_form extends \moodleform {
         $handler = $this->_customdata['handler'];
 
         foreach ($handler->get_fields() as $field) {
-            $filter = customfield_utils::get_filter_from_field($field);
-            if ($filter) {
-                $filter->add_to_form($mform);
+            if (!utils::is_field_hidden_filters($handler, $field->get('shortname'))) {
+                $filter = customfield_utils::get_filter_from_field($field);
+                if ($filter) {
+                    $filter->add_to_form($mform);
+                }
             }
         }
         // Add button.

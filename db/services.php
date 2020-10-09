@@ -44,4 +44,31 @@ $functions = array(
         'ajax' => true,
         'loginrequired' => false // Global filter course page is accessible without being logged in.
     ),
+    'local_resourcelibrary_hide_fields_filters' => array(
+        'classname' => '\\local_resourcelibrary\\external\\manage_customfields',
+        'methodname' => 'hide_fields_filter',
+        'description' => 'Hide a set of fields from the filters',
+        'type' => 'write',
+        'capabilities' => 'local/resourcelibrary:configurecustomfields',
+        'ajax' => true,
+        'loginrequired' => true
+    ),
+    'local_resourcelibrary_show_fields_filters' => array(
+        'classname' => '\\local_resourcelibrary\\external\\manage_customfields',
+        'methodname' => 'show_fields_filter',
+        'description' => 'Make sure that the given set of fields will show in the filters',
+        'type' => 'write',
+        'capabilities' => 'local/resourcelibrary:configurecustomfields',
+        'ajax' => true,
+        'loginrequired' => true
+    ),
+    'local_resourcelibrary_get_hidden_fields_filters' => array(
+        'classname' => '\\local_resourcelibrary\\external\\manage_customfields',
+        'methodname' => 'get_hidden_fields_filters',
+        'description' => 'Get the list of filters that are hidden',
+        'type' => 'read',
+        'capabilities' => 'local/resourcelibrary:configurecustomfields',
+        'ajax' => true,
+        'loginrequired' => true
+    ),
 );

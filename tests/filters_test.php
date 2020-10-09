@@ -22,8 +22,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use local_resourcelibrary\customfield\course_handler;
-use local_resourcelibrary\customfield\coursemodule_handler;
+use core_course\customfield\course_handler;
+use local_resourcelibrary\locallib\utils;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -48,27 +48,11 @@ class local_resourcelibrary_filter_testcase extends local_resourcelibrary_testca
         global $DB;
         $dg = $this->getDataGenerator();
 
-        $now = time();
         $data = ['shortname' => 'SN', 'fullname' => 'FN',
-            'summary' => 'DESC', 'summaryformat' => FORMAT_MOODLE,
-            'customfield_f1' => 'some text',
-            'customfield_f2' => 1,
-            'customfield_f3' => $now,
-            'customfield_f4' => [1, 2],
-            'customfield_f5' => 2,
-            'customfield_f6_editor' => ['text' => 'test', 'format' => FORMAT_HTML]];
+            'summary' => 'DESC', 'summaryformat' => FORMAT_MOODLE] + $this->get_simple_cf_data();
         $c1 = $dg->create_course($data);
 
-        $data['id'] = $c1->id;
-        \local_resourcelibrary\locallib\utils::course_update_fields((object) $data);
-
-        $activitydata = array('course' => $c1->id,
-            'customfield_f1' => 'some text',
-            'customfield_f2' => 1,
-            'customfield_f3' => $now,
-            'customfield_f4' => [1, 2],
-            'customfield_f5' => 2,
-            'customfield_f6_editor' => ['text' => 'test', 'format' => FORMAT_HTML]);
+        $activitydata = array('course' => $c1->id) + $this->get_simple_cf_data();
 
         // TODO: It would have been nice here to prefix the form and the values by 'resourcelibrary'.
         // But the datacontroller for each class (checkbox) will answer customfield_xx for the element name which
@@ -81,13 +65,78 @@ class local_resourcelibrary_filter_testcase extends local_resourcelibrary_testca
         $this->assertCount(1, $courserow);
         $this->assertCount(1, $activityrow);
         foreach (array(reset($courserow), reset($activityrow)) as $data) {
-            $this->assertEquals('some text', $data->customfield_f1);
-            $this->assertEquals(1, $data->customfield_f2);
-            $this->assertEquals($now, $data->customfield_f3);
-            $this->assertEquals('1,2', $data->customfield_f4);
-            $this->assertEquals(2, $data->customfield_f5);
-            $this->assertEquals('test', $data->customfield_f6);
+            $this->assert_check_simple_cf_data($data);
         }
     }
 
+    /**
+     * Test that we can obtain a single row result for a set of fields for a course and course module
+     */
+    public function test_utils_get_hiddenfields_course() {
+        $this->resetAfterTest();
+        $dg = $this->getDataGenerator();
+
+        $data = ['shortname' => 'SN', 'fullname' => 'FN',
+            'summary' => 'DESC', 'summaryformat' => FORMAT_MOODLE ] + $this->get_simple_cf_data();
+        $c1 = $dg->create_course($data);
+        $handler = course_handler::create($c1->id);
+        // Set the first field as hidden.
+        set_config(utils::get_hidden_filter_config_name($handler), 'f1', 'local_resourcelibrary');
+
+        $this->assertTrue(utils::is_field_hidden_filters($handler, 'f1'));
+    }
+
+    /**
+     * Test that we can obtain a single row result for a set of fields for a course and course module
+     */
+    public function test_utils_set_get_hiddenfields_course() {
+        $this->resetAfterTest();
+        $dg = $this->getDataGenerator();
+
+        $data = ['shortname' => 'SN', 'fullname' => 'FN',
+            'summary' => 'DESC', 'summaryformat' => FORMAT_MOODLE] + $this->get_simple_cf_data();
+        $c1 = $dg->create_course($data);
+        $handler = course_handler::create($c1->id);
+
+        // Test the two ways to call this method (int and array of int).
+        utils::hide_fields_filter($handler, ['f1', 'f2']);
+        utils::hide_fields_filter($handler, 'f3');
+
+        $this->assertTrue(utils::is_field_hidden_filters($handler, 'f1'));
+        $this->assertTrue(utils::is_field_hidden_filters($handler, 'f2'));
+        $this->assertTrue(utils::is_field_hidden_filters($handler, 'f3'));
+
+        $this->assertFalse(utils::is_field_hidden_filters($handler, 'f5'));
+
+    }
+
+    /**
+     * Test that we can obtain a single row result for a set of fields for a course and course module
+     */
+    public function test_utils_show_hiddenfields_course() {
+        $this->resetAfterTest();
+        $dg = $this->getDataGenerator();
+
+        $data = ['shortname' => 'SN', 'fullname' => 'FN',
+            'summary' => 'DESC', 'summaryformat' => FORMAT_MOODLE] + $this->get_simple_cf_data();
+        $c1 = $dg->create_course($data);
+        $handler = course_handler::create($c1->id);
+        $fields = $handler->get_fields();
+        // Set the first field as hidden.
+        utils::hide_fields_filter($handler, [
+            'f1',
+            'f2',
+            'f3',
+            'f5'
+        ]);
+
+        // Test the two ways to call this method (int and array of int).
+        utils::show_fields_filter($handler, 'f1');
+        utils::show_fields_filter($handler, ['f3', 'f5']);
+        $this->assertFalse(utils::is_field_hidden_filters($handler, 'f1'));
+        $this->assertTrue(utils::is_field_hidden_filters($handler, 'f2'));
+        $this->assertFalse(utils::is_field_hidden_filters($handler, 'f3'));
+        $this->assertFalse(utils::is_field_hidden_filters($handler, 'f5'));
+
+    }
 }

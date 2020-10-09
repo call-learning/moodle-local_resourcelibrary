@@ -22,8 +22,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use local_resourcelibrary\customfield\course_handler;
-use local_resourcelibrary\customfield\coursemodule_handler;
 defined('MOODLE_INTERNAL') || die();
 use \core_privacy\local\request\writer;
 use local_resourcelibrary\privacy\provider;

@@ -57,7 +57,7 @@ class local_resourcelibrary_generator extends component_generator_base {
      */
     public function create_category($record = null) {
 
-        $type = $record && $record['area'] ? $record['area'] : 'course';
+        $type = $record && $record['area'] ? $record['area'] : 'coursemodule';
 
         $this->counts[$type]['categorycount']++;
         $i = $this->counts[$type]['categorycount'];
@@ -160,7 +160,8 @@ class local_resourcelibrary_generator extends component_generator_base {
         $instanceid = $fielddata['instanceid'];
         $value = $fielddata['value'];
         $field = core_customfield\field_controller::create($fieldid);
-        if ($field instanceof \customfield_multiselect\field_controller) {
+        if (local_resourcelibrary\locallib\utils::is_multiselect_installed()
+            && $field instanceof \customfield_multiselect\field_controller) {
             $value = explode(',', $value);
         }
         if ($field instanceof customfield_textarea\field_controller) {

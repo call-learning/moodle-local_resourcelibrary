@@ -28,6 +28,7 @@ use local_resourcelibrary\filters\customfield_utils;
 
 defined('MOODLE_INTERNAL') || die;
 
+global $CFG;
 require_once("$CFG->libdir/externallib.php");
 require_once("$CFG->dirroot/course/externallib.php");
 require_once("lib.php");
@@ -259,7 +260,7 @@ class local_resourcelibrary_external extends external_api {
         foreach ($coursefields as $cfield) {
             $additionalfields[$cfield] = "e.{$cfield} AS {$cfield}";
         }
-        $handler = local_resourcelibrary\customfield\course_handler::create();
+        $handler = \core_course\customfield\course_handler::create();
         $sortsql = self::get_sort_options_sql($sorting, array_keys($additionalfields));
 
         $courses = customfield_utils::get_records_from_handler($handler, $filters, 0, 0,

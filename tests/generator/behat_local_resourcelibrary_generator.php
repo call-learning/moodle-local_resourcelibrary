@@ -36,17 +36,18 @@ class behat_local_resourcelibrary_generator extends behat_generator_base {
 
     /**
      * Get all entities that can be created
+     *
      * @return array|array[]
      */
     protected function get_creatable_entities(): array {
         return [
             'category' => [
                 'datagenerator' => 'category',
-                'required' => ['area']
+                'required' => ['component', 'area']
             ],
             'field' => [
                 'datagenerator' => 'field',
-                'required' => ['area']
+                'required' => ['component', 'area']
             ],
             'fielddata' => [
                 'datagenerator' => 'fielddata',
@@ -66,7 +67,7 @@ class behat_local_resourcelibrary_generator extends behat_generator_base {
         global $DB;
         $elementdata['categoryid'] = $DB->get_field('customfield_category', 'id',
             ['name' => trim($elementdata['customfieldcategory']),
-                'area' => $elementdata['area']]);
+                'area' => $elementdata['area'], 'component' => $elementdata['component']]);
         return $elementdata;
     }
 

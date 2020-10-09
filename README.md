@@ -13,15 +13,11 @@ Installation
 ============
 
 Add plugin code into the moodle local folder and run an update/upgrade.  You should now see a new plugin and new menus under the Administration > Courses menu.
-If you want to edit the course resource library field directly into the course edit form, add the following to your config.php file:
-
-    $CFG->customscripts = dirname(__FILE__) . '/local/resourcelibrary/customscripts/';
 
 Usage
 =====
 
-The plugin will add a menu under Administration > Courses menu so two new types of custom fields can be added:
-* custom field for courses
+The plugin will add a menu under Administration > Courses menu, so a new type of custom fields for activities can be added:
 * custom fields for activities
 
 Those custom fields will then be taken into account in the resource library page and each field will have its related search form entry.
@@ -31,9 +27,9 @@ all available courses. If you need to make this page accessible through non logg
 you set the "autologin" to on in the Administration > Site administration > Users > Permissions > User policies 
 (See [Auto Login Guest](https://docs.moodle.org/39/en/Guest_access)). If not a login prompt will appear to see the page.
 
-If you need to hide courses regardless of the course visibility status, you can do so
-by adding the course ids in the 'hiddencoursesid' settings. The course will not appear in the
- resource library.
+If you need to hide courses regardless of the course visibility status, you can do so by adding the course ids 
+in the 'hiddencoursesid' settings. The course will not appear in the resource library.
+
 This is a temporary solution while looking at more generic solution such as hiding a course per category, tag or other.
  
 Authors

@@ -1,17 +1,15 @@
 @local @local_resourcelibrary @core @javascript
-Feature: As an admin I should be able to set and retrieve values from custom field
+Feature: As an admin I should be able filter with all custom field types
 
   Background:
     Given the following "local_resourcelibrary > field" exist:
       | area         | name                | customfieldcategory              | shortname | type        | configdata                                                                                                             |
       | course       | Test Field Text     | Resource Library: Generic fields | CF1       | text        |                                                                                                                        |
       | course       | Test Field Checkbox | Resource Library: Generic fields | CF2       | checkbox    |                                                                                                                        |
-      | course       | Test Field MSelect  | Resource Library: Generic fields | CF3       | multiselect | {"required":"1","uniquevalues":"0","options":"A\r\nB\r\nC\r\nD\nE","defaultvalue":"A,C","locked":"0","visibility":"2"} |
       | course       | Test Field Select   | Resource Library: Generic fields | CF4       | select      | {"required":"1","uniquevalues":"0","options":"A\r\nB\r\nC\r\nD\nE","defaultvalue":"A,C","locked":"0","visibility":"2"} |
       | course       | Test Field Textarea | Resource Library: Generic fields | CF5       | textarea    |                                                                                                                        |
       | coursemodule | Test Field Text     | Resource Library: Generic fields | CM1       | text        |                                                                                                                        |
       | coursemodule | Test Field Checkbox | Resource Library: Generic fields | CM2       | checkbox    |                                                                                                                        |
-      | coursemodule | Test Field MSelect  | Resource Library: Generic fields | CM3       | multiselect | {"required":"1","uniquevalues":"0","options":"A\r\nB\r\nC\r\nD\nE","defaultvalue":"A,C","locked":"0","visibility":"2"} |
       | coursemodule | Test Field Select   | Resource Library: Generic fields | CM4       | select      | {"required":"1","uniquevalues":"0","options":"A\r\nB\r\nC\r\nD\nE","defaultvalue":"A,C","locked":"0","visibility":"2"} |
       | coursemodule | Test Field Textarea | Resource Library: Generic fields | CM5       | textarea    |                                                                                                                        |
     Given the following "courses" exist:
@@ -54,18 +52,6 @@ Feature: As an admin I should be able to set and retrieve values from custom fie
       | CM2            | 0     | C1              | PAGE5            | page     |
     Given the following "local_resourcelibrary > fielddata" exist:
       | fieldshortname | value | courseshortname | activityidnumber | activity |
-      | CF3            | 0     | C1              |                  |          |
-      | CF3            | 0,1   | C2              |                  |          |
-      | CF3            | 2,3   | C3              |                  |          |
-      | CF3            | 4     | C4              |                  |          |
-      | CF3            | 0,4   | C5              |                  |          |
-      | CM3            | 0     | C1              | PAGE1            | page     |
-      | CM3            | 0,1   | C1              | PAGE2            | page     |
-      | CM3            | 2,3   | C1              | PAGE3            | page     |
-      | CM3            | 4     | C1              | PAGE4            | page     |
-      | CM3            | 0,4   | C1              | PAGE5            | page     |
-    Given the following "local_resourcelibrary > fielddata" exist:
-      | fieldshortname | value | courseshortname | activityidnumber | activity |
       | CF4            | 1     | C1              |                  |          |
       | CF4            | 2     | C2              |                  |          |
       | CF4            | 3     | C3              |                  |          |
@@ -93,7 +79,7 @@ Feature: As an admin I should be able to set and retrieve values from custom fie
     Given I am on site homepage
     And I log in as "admin"
     Given I am on homepage
-    And I follow "Resource Library"
+    And I follow "Resource library"
     Then I should see "Course 1"
     And I should see "Course 2"
     And I should see "Course 3"
@@ -104,7 +90,7 @@ Feature: As an admin I should be able to set and retrieve values from custom fie
     Given I am on site homepage
     And I log in as "admin"
     Given I am on "Course 1" course homepage
-    And I follow "Resource Library"
+    And I follow "Resource library"
     Then I should see "Page 1"
     And I should see "Page 2"
     And I should see "Page 3"
@@ -115,7 +101,7 @@ Feature: As an admin I should be able to set and retrieve values from custom fie
     Given I am on site homepage
     And I log in as "admin"
     Given I am on homepage
-    And I follow "Resource Library"
+    And I follow "Resource library"
     And I set the field "Test Field Text" to "ABCDEFC1"
     And I click on "Filter" "button"
     Then I should see "Course 1"
@@ -128,7 +114,7 @@ Feature: As an admin I should be able to set and retrieve values from custom fie
     Given I am on site homepage
     And I log in as "admin"
     Given I am on "Course 1" course homepage
-    And I follow "Resource Library"
+    And I follow "Resource library"
     And I set the field "Test Field Text" to "ABCDEFP1"
     And I click on "Filter" "button"
     Then I should see "Page 1"
@@ -141,7 +127,7 @@ Feature: As an admin I should be able to set and retrieve values from custom fie
     Given I am on site homepage
     And I log in as "admin"
     Given I am on homepage
-    And I follow "Resource Library"
+    And I follow "Resource library"
     And I set the field "Test Field Checkbox" to "1"
     And I click on "Filter" "button"
     Then I should see "Course 1"
@@ -154,7 +140,7 @@ Feature: As an admin I should be able to set and retrieve values from custom fie
     Given I am on site homepage
     And I log in as "admin"
     Given I am on "Course 1" course homepage
-    And I follow "Resource Library"
+    And I follow "Resource library"
     And I set the field "Test Field Checkbox" to "1"
     And I click on "Filter" "button"
     Then I should see "Page 1"
@@ -164,10 +150,22 @@ Feature: As an admin I should be able to set and retrieve values from custom fie
     And I should not see "Page 5"
 
   Scenario: As an admin I should be able to filter through a multi-select
+    Given multiselect field is installed
+    Given the following "local_resourcelibrary > field" exist:
+      | core_course           | course       | Test Field MSelect  | Resource Library: Generic fields | CF3       | multiselect | {"required":"1","uniquevalues":"0","options":"A\r\nB\r\nC\r\nD","defaultvalue":"A,C","locked":"0","visibility":"2"} |
+    Given the following "local_resourcelibrary > fielddata" exist:
+      | CF3            | 0           | C1              |                  |          |
+    Given the following "local_resourcelibrary > fielddata" exist:
+      | fieldshortname | value | courseshortname | activityidnumber | activity |
+      | CF3            | 0     | C1              |                  |          |
+      | CF3            | 0,1   | C2              |                  |          |
+      | CF3            | 2,3   | C3              |                  |          |
+      | CF3            | 4     | C4              |                  |          |
+      | CF3            | 0,4   | C5              |                  |          |
     Given I am on site homepage
     And I log in as "admin"
     Given I am on homepage
-    And I follow "Resource Library"
+    And I follow "Resource library"
     And I set the field "Test Field MSelect" to "A"
     And I set the field "Test Field MSelect" to "B"
     And I click on "Filter" "button"
@@ -178,10 +176,23 @@ Feature: As an admin I should be able to set and retrieve values from custom fie
     And I should not see "Course 5"
 
   Scenario: As an admin I should be able to filter through a multi-select for activities
+    Given multiselect field is installed
+    Given the following "local_resourcelibrary > field" exist:
+      | local_resourcelibrary | coursemodule | Test Field MSelect  | Resource Library: Generic fields | CM3       | multiselect | {"required":"1","uniquevalues":"0","options":"A\r\nB\r\nC\r\nD","defaultvalue":"A,C","locked":"0","visibility":"2"} |
+    Given the following "local_resourcelibrary > fielddata" exist:
+      | CM3            | 0           | C1              | PAGE1            | page     |
+    Given the following "local_resourcelibrary > fielddata" exist:
+      | fieldshortname | value | courseshortname | activityidnumber | activity |
+      | CM3            | 0     | C1              | PAGE1            | page     |
+      | CM3            | 0,1   | C1              | PAGE2            | page     |
+      | CM3            | 2,3   | C1              | PAGE3            | page     |
+      | CM3            | 4     | C1              | PAGE4            | page     |
+      | CM3            | 0,4   | C1              | PAGE5            | page     |
+
     Given I am on site homepage
     And I log in as "admin"
     Given I am on "Course 1" course homepage
-    And I follow "Resource Library"
+    And I follow "Resource library"
     And I set the field "Test Field MSelect" to "A"
     And I set the field "Test Field MSelect" to "B"
     And I click on "Filter" "button"
@@ -195,7 +206,7 @@ Feature: As an admin I should be able to set and retrieve values from custom fie
     Given I am on site homepage
     And I log in as "admin"
     Given I am on homepage
-    And I follow "Resource Library"
+    And I follow "Resource library"
     And I set the field "Test Field MSelect" to "A"
     And I click on "Filter" "button"
     Then I should see "Course 1"
@@ -208,7 +219,7 @@ Feature: As an admin I should be able to set and retrieve values from custom fie
     Given I am on site homepage
     And I log in as "admin"
     Given I am on "Course 1" course homepage
-    And I follow "Resource Library"
+    And I follow "Resource library"
     And I set the field "Test Field MSelect" to "A"
     And I click on "Filter" "button"
     Then I should see "Page 1"
@@ -221,7 +232,7 @@ Feature: As an admin I should be able to set and retrieve values from custom fie
     Given I am on site homepage
     And I log in as "admin"
     Given I am on homepage
-    And I follow "Resource Library"
+    And I follow "Resource library"
     And I set the field "Test Field Textarea" to "ABCDEF Text C2"
     And I click on "Filter" "button"
     Then I should not see "Course 1"
@@ -235,7 +246,7 @@ Feature: As an admin I should be able to set and retrieve values from custom fie
     Given I am on site homepage
     And I log in as "admin"
     Given I am on "Course 1" course homepage
-    And I follow "Resource Library"
+    And I follow "Resource library"
     And I set the field "Test Field Textarea" to "ABCDEF Text P2"
     And I click on "Filter" "button"
     Then I should not see "Page 1"
@@ -249,7 +260,7 @@ Feature: As an admin I should be able to set and retrieve values from custom fie
     Given I am on site homepage
     And I log in as "admin"
     Given I am on homepage
-    And I follow "Resource Library"
+    And I follow "Resource library"
     And I set the field "Test Field Text" to "ABCDEFC1"
     And I set the field "Test Field Checkbox" to "1"
     And I click on "Filter" "button"
@@ -259,7 +270,7 @@ Feature: As an admin I should be able to set and retrieve values from custom fie
     And I should not see "Course 4"
     And I should not see "Course 5"
     Given I am on homepage
-    And I follow "Resource Library"
+    And I follow "Resource library"
     And I set the field "Test Field Text" to "2"
     And I set the field "Test Field MSelect" to "A,B"
     And I click on "Filter" "button"
@@ -274,7 +285,7 @@ Feature: As an admin I should be able to set and retrieve values from custom fie
     Given I am on site homepage
     And I log in as "admin"
     Given I am on "Course 1" course homepage
-    And I follow "Resource Library"
+    And I follow "Resource library"
     And I set the field "Test Field Text" to "ABCDEFP1"
     And I set the field "Test Field Checkbox" to "1"
     And I click on "Filter" "button"
@@ -284,7 +295,7 @@ Feature: As an admin I should be able to set and retrieve values from custom fie
     And I should not see "Page 4"
     Given I am on site homepage
     Given I am on "Course 1" course homepage
-    And I follow "Resource Library"
+    And I follow "Resource library"
     And I set the field "Test Field Text" to "2"
     And I set the field "Test Field MSelect" to "A,B"
     And I click on "Filter" "button"
