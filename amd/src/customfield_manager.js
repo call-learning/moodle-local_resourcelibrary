@@ -1,4 +1,3 @@
-<?php
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -15,24 +14,30 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Manage course custom fields for metadata
+ * A javascript module to retrieve a course list from the server.
  *
  * @package    local_resourcelibrary
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+define(['jquery', 'core/ajax','core/notification'], function($, Ajax) {
+    return {
+        init: function(component, area, hidefilterlocator) {
+            $(hidefilterlocator).click(function(){
+                const checked = $(this).is(':checked');
 
-
-require_once('../../config.php');
-require_once($CFG->libdir . '/adminlib.php');
-
-admin_externalpage_setup('resourcelibrary_course_customfield');
-
-$output = $PAGE->get_renderer('local_resourcelibrary');
-$handler = \core_course\customfield\course_handler::create();
-$outputpage = new \local_resourcelibrary\output\customfield_management($handler);
-
-echo $output->header(),
-$output->heading(new lang_string('resourcelibrary_course_customfield', 'local_resourcelibrary')),
-$output->render($outputpage),
-$output->footer();
+                var request = {
+                    methodname: checked ?
+                        'local_resourcelibrary_hide_fields_filters'
+                        :'local_resourcelibrary_show_fields_filters',
+                    args:  {
+                        component: component,
+                        area: area,
+                        fieldshortnames: [$(this).data('field-shortname')]
+                    }
+                };
+                Ajax.call([request])[0].fail(Notification.exception);
+            });
+        },
+    };
+});

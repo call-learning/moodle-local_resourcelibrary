@@ -13,43 +13,48 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
 /**
- * Course handler for metadata fields trait
+ * Custom field management
  *
  * @package    local_resourcelibrary
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-namespace local_resourcelibrary\observer;
 
+namespace local_resourcelibrary\output;
 defined('MOODLE_INTERNAL') || die();
-use local_resourcelibrary\customfield\coursemodule_handler;
+
+use core_customfield\output\management;
+use local_resourcelibrary\locallib\utils;
 
 /**
- * Class eventmanager
+ *  Custom field management
  *
+ *  Same as usual custom field management but adds further options so
+ *  we can hide the field from the filter, ...
+ *
+ * @package    local_resourcelibrary
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class eventmanager {
+class customfield_management extends management {
     /**
-     * Course delete event observer.
-     * This will delete any attached custom fields
+     * Export for template
      *
-     * @param \core\event\course_deleted $event The course deleted event.
+     * @param \renderer_base $output
+     * @return array|object|\stdClass
      */
-    public static function course_deleted(\core\event\course_deleted $event) {
-        // Nothing happens here.
-    }
+    public function export_for_template(\renderer_base $output) {
+        $data = parent::export_for_template($output);
 
-    /**
-     * Course Module delete event observer.
-     * This will delete any attached custom fields
-     *
-     * @param \core\event\course_module_deleted $event The course deleted event.
-     */
-    public static function course_module_deleted(\core\event\course_module_deleted $event) {
-        $handler = coursemodule_handler::create();
-        $handler->delete_instance($event->objectid);
+        foreach ($data->categories as &$category) {
+            foreach ($category['fields'] as &$field) {
+                $field['hiddenstatus'] = utils::is_field_hidden_filters($this->handler, $field['shortname']) ? 'checked' : '';
+            }
+        }
+        $data->handlercomponent = $this->handler->get_component();
+        $data->handlerarea = $this->handler->get_area();
+        return $data;
     }
 }

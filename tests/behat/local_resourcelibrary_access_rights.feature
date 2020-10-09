@@ -6,19 +6,19 @@ Feature: As an admin I should be able to set and retrieve values from custom fie
       | username | firstname | lastname | email                |
       | user     | User      | 1        | user1@example.com    |
       | teacher  | Teacher   | 1        | teacher1@example.com |
-
+    Given the following "local_resourcelibrary > category" exist:
+      | component   | area   | name                             |
+      | core_course | course | Resource Library: Generic fields |
     Given the following "local_resourcelibrary > field" exist:
-      | area         | name                | customfieldcategory              | shortname | type        | configdata                                                                                                             |
-      | course       | Test Field Text     | Resource Library: Generic fields | CF1       | text        |                                                                                                                        |
-      | course       | Test Field Checkbox | Resource Library: Generic fields | CF2       | checkbox    |                                                                                                                        |
-      | course       | Test Field MSelect  | Resource Library: Generic fields | CF3       | multiselect | {"required":"1","uniquevalues":"0","options":"A\r\nB\r\nC\r\nD\nE","defaultvalue":"A,C","locked":"0","visibility":"2"} |
-      | course       | Test Field Select   | Resource Library: Generic fields | CF4       | select      | {"required":"1","uniquevalues":"0","options":"A\r\nB\r\nC\r\nD\nE","defaultvalue":"A,C","locked":"0","visibility":"2"} |
-      | course       | Test Field Textarea | Resource Library: Generic fields | CF5       | textarea    |                                                                                                                        |
-      | coursemodule | Test Field Text     | Resource Library: Generic fields | CM1       | text        |                                                                                                                        |
-      | coursemodule | Test Field Checkbox | Resource Library: Generic fields | CM2       | checkbox    |                                                                                                                        |
-      | coursemodule | Test Field MSelect  | Resource Library: Generic fields | CM3       | multiselect | {"required":"1","uniquevalues":"0","options":"A\r\nB\r\nC\r\nD\nE","defaultvalue":"A,C","locked":"0","visibility":"2"} |
-      | coursemodule | Test Field Select   | Resource Library: Generic fields | CM4       | select      | {"required":"1","uniquevalues":"0","options":"A\r\nB\r\nC\r\nD\nE","defaultvalue":"A,C","locked":"0","visibility":"2"} |
-      | coursemodule | Test Field Textarea | Resource Library: Generic fields | CM5       | textarea    |                                                                                                                        |
+      | component             | area         | name                | customfieldcategory              | shortname | type     | configdata                                                                                                          |
+      | core_course           | course       | Test Field Text     | Resource Library: Generic fields | CF1       | text     |                                                                                                                     |
+      | core_course           | course       | Test Field Checkbox | Resource Library: Generic fields | CF2       | checkbox |                                                                                                                     |
+      | core_course           | course       | Test Field Select   | Resource Library: Generic fields | CF4       | select   | {"required":"1","uniquevalues":"0","options":"A\r\nB\r\nC\r\nD","defaultvalue":"A,C","locked":"0","visibility":"2"} |
+      | core_course           | course       | Test Field Textarea | Resource Library: Generic fields | CF5       | textarea |                                                                                                                     |
+      | local_resourcelibrary | coursemodule | Test Field Text     | Resource Library: Generic fields | CM1       | text     |                                                                                                                     |
+      | local_resourcelibrary | coursemodule | Test Field Checkbox | Resource Library: Generic fields | CM2       | checkbox |                                                                                                                     |
+      | local_resourcelibrary | coursemodule | Test Field Select   | Resource Library: Generic fields | CM4       | select   | {"required":"1","uniquevalues":"0","options":"A\r\nB\r\nC\r\nD","defaultvalue":"A,C","locked":"0","visibility":"2"} |
+      | local_resourcelibrary | coursemodule | Test Field Textarea | Resource Library: Generic fields | CM5       | textarea |                                                                                                                     |
     Given the following "categories" exist:
       | name  | category | idnumber | visible |
       | Cat 1 | 0        | CAT1     | 1       |
@@ -36,7 +36,6 @@ Feature: As an admin I should be able to set and retrieve values from custom fie
       | C9        | Course 09 | CAT2     |
       | C10       | Course 10 | CAT1     |
       | C11       | Course 11 | CAT1     |
-
     And the following "activities" exist:
       | activity | name    | intro     | course | idnumber | visible |
       | page     | Page 01 | PageDesc1 | C1     | PAGE1    | 1       |
@@ -60,7 +59,8 @@ Feature: As an admin I should be able to set and retrieve values from custom fie
   Scenario: As an admin I should see all courses and activities on the resource library page
     Given I am on site homepage
     And I log in as "admin"
-    And I follow "Resource Library"
+    And I follow "Resource library"
+    And I wait until the page is ready
     Then I should see "Course 01"
     Then I should see "Course 05"
     And I should see "Course 09"
@@ -68,7 +68,8 @@ Feature: As an admin I should be able to set and retrieve values from custom fie
   Scenario: As an teacher I should see all visible course and those I am enrolled in
     Given I am on site homepage
     And I log in as "teacher"
-    And I follow "Resource Library"
+    And I follow "Resource library"
+    And I wait until the page is ready
     Then I should see "Course 01"
     Then I should see "Course 05"
     And I should not see "Course 09"
@@ -76,7 +77,8 @@ Feature: As an admin I should be able to set and retrieve values from custom fie
   Scenario: As an user I should see all visible course and those I am enrolled in
     Given I am on site homepage
     And I log in as "user"
-    And I follow "Resource Library"
+    And I follow "Resource library"
+    And I wait until the page is ready
     Then I should see "Course 01"
     Then I should not see "Course 05"
     And I should see "Course 09"
@@ -85,7 +87,8 @@ Feature: As an admin I should be able to set and retrieve values from custom fie
     Given I am on site homepage
     And I log in as "admin"
     Given I am on "Course 01" course homepage
-    And I follow "Resource Library"
+    And I wait until the page is ready
+    And I follow "Resource library"
     Then I should see "Page 01"
     Then I should see "Page 05"
     And I should see "Page 09"
@@ -94,7 +97,8 @@ Feature: As an admin I should be able to set and retrieve values from custom fie
     Given I am on site homepage
     And I log in as "teacher"
     Given I am on "Course 01" course homepage
-    And I follow "Resource Library"
+    And I wait until the page is ready
+    And I follow "Resource library"
     Then I should see "Page 01"
     Then I should see "Page 05"
     And I should see "Page 09"
@@ -103,7 +107,8 @@ Feature: As an admin I should be able to set and retrieve values from custom fie
     Given I am on site homepage
     And I log in as "user"
     Given I am on "Course 01" course homepage
-    And I follow "Resource Library"
+    And I wait until the page is ready
+    And I follow "Resource library"
     Then I should see "Page 01"
     Then I should not see "Page 05"
     And I should not see "Page 09"

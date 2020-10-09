@@ -24,9 +24,9 @@
 
 namespace local_resourcelibrary\filters;
 
-use core_customfield\data_controller;
 use core_customfield\field_controller;
 use core_customfield\handler;
+use local_resourcelibrary\locallib\utils;
 
 defined('MOODLE_INTERNAL') || die;
 
@@ -66,18 +66,13 @@ class customfield_utils {
                 $joins = array_merge($additionaljoins, $currentjoins);
                 break;
             default: // Course.
-                $rlhandler = handler::get_handler('local_resourcelibrary', 'course');
+                $rlhandler = handler::get_handler('core_course', 'course');
                 $customfieldhandler = \core_course\customfield\course_handler::create();
-                list($resourcelibraryfields, $resourcelibraryjoins) =
-                    self::get_fields_and_joins_for_cf_handler($rlhandler, 'course');
                 list($customfields, $customjoins) = self::get_fields_and_joins_for_cf_handler(
                     $customfieldhandler,
                     'course');
-                if (!empty(array_intersect_key($resourcelibraryfields, $customfields))) {
-                    throw new \moodle_exception('shortnameshouldbeunique', 'local_resourcelibrary');
-                }
-                $joinsfields = array_values(array_merge($additionalfields, $resourcelibraryfields, $customfields));
-                $joins = array_values(array_merge($additionaljoins, $resourcelibraryjoins, $customjoins));
+                $joinsfields = array_values(array_merge($additionalfields, $customfields));
+                $joins = array_values(array_merge($additionaljoins, $customjoins));
         }
 
         $sql = "SELECT e.id as id, " . implode(', ', $joinsfields) . " FROM {{$table}} e " . implode(' ', $joins);
@@ -102,16 +97,18 @@ class customfield_utils {
         $joins = [];
         $joinsfields = [];
         foreach ($handler->get_fields() as $f) {
-            $id = $f->get('id');
-            $datafieldname = self::get_field_name($prefix, $f->get('shortname'));
-            $joins[$datafieldname] = "LEFT JOIN {customfield_data} {$prefix}_{$id}
+            if (!utils::is_field_hidden_filters($handler, $f->get('shortname'))) {
+                $id = $f->get('id');
+                $datafieldname = self::get_field_name($prefix, $f->get('shortname'));
+                $joins[$datafieldname] = "LEFT JOIN {customfield_data} {$prefix}_{$id}
                 ON e.id = {$prefix}_{$id}.instanceid AND {$prefix}_{$id}.fieldid = $id";
-            $datafieldcolumn = self::get_datafieldcolumn_value_from_field_handler($f);
-            $joinfield = "{$prefix}_{$id}." . $datafieldcolumn . " AS {$datafieldname}";
-            if (!empty($joinsfields[$datafieldname])) {
-                throw new \moodle_exception('shortnameshouldbeunique', 'local_resourcelibrary');
+                $datafieldcolumn = self::get_datafieldcolumn_value_from_field_handler($f);
+                $joinfield = "{$prefix}_{$id}." . $datafieldcolumn . " AS {$datafieldname}";
+                if (!empty($joinsfields[$datafieldname])) {
+                    throw new \moodle_exception('shortnameshouldbeunique', 'local_resourcelibrary');
+                }
+                $joinsfields[$datafieldname] = $joinfield;
             }
-            $joinsfields[$datafieldname] = $joinfield;
         }
         return array($joinsfields, $joins);
     }
@@ -174,18 +171,21 @@ class customfield_utils {
         $sqlparams = [];
         $allfields = $handler->get_fields();
         foreach ($filters as $filter) {
-            if (!empty($filter['shortname'])) {
-                $matchingfields = array_filter($allfields,
-                    function($f) use ($filter) {
-                        return strtolower($f->get('shortname')) == strtolower($filter['shortname']);
-                    });
-                if ($matchingfields) {
-                    $matchingfield = reset($matchingfields);
-                    $f = self::get_filter_from_field($matchingfield);
-                    list($where, $params) = $f->get_sql_filter($filter['value']);
-                    if ($where) {
-                        $sqlwhere .= " AND $where ";
-                        $sqlparams += $params;
+            // Check if the field is marked as hidden for filters.
+            if (!utils::is_field_hidden_filters($handler, $filter['shortname'])) {
+                if (!empty($filter['shortname'])) {
+                    $matchingfields = array_filter($allfields,
+                        function($f) use ($filter) {
+                            return strtolower($f->get('shortname')) == strtolower($filter['shortname']);
+                        });
+                    if ($matchingfields) {
+                        $matchingfield = reset($matchingfields);
+                        $f = self::get_filter_from_field($matchingfield);
+                        list($where, $params) = $f->get_sql_filter($filter['value']);
+                        if ($where) {
+                            $sqlwhere .= " AND $where ";
+                            $sqlparams += $params;
+                        }
                     }
                 }
             }

@@ -37,6 +37,7 @@ $string['aria:title:desc'] = 'Titre (Descendant)';
 $string['card'] = 'Vignette';
 $string['course_metadata'] = 'Metatdata pour la Pédagothèque numérique';
 $string['mainresourcelibrary'] = 'Liste de cours';
+$string['manage:hiddenfilter'] = 'Caché pour Filtres?';
 $string['resourcelibrary'] = 'Pédagothèque numérique';
 $string['resourcelibrarycourse:name'] = 'Pédagothèque numérique ({$a})';
 $string['resourcelibraryfieldsettings'] = 'Paramètres des champs de la Pédagothèque numérique';

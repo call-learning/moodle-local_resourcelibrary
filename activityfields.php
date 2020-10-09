@@ -27,9 +27,9 @@ require_once($CFG->libdir.'/adminlib.php');
 
 admin_externalpage_setup('resourcelibrary_coursemodule_customfield');
 
-$output = $PAGE->get_renderer('core_customfield');
+$output = $PAGE->get_renderer('local_resourcelibrary');
 $handler = \local_resourcelibrary\customfield\coursemodule_handler::create();
-$outputpage = new \core_customfield\output\management($handler);
+$outputpage = new \local_resourcelibrary\output\customfield_management($handler);
 
 echo $output->header(),
      $output->heading(new lang_string('resourcelibrary_coursemodule_customfield', 'local_resourcelibrary')),

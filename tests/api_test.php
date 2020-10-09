@@ -22,8 +22,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use local_resourcelibrary\customfield\course_handler;
-use local_resourcelibrary\customfield\coursemodule_handler;
+use local_resourcelibrary\locallib\utils;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -42,6 +41,7 @@ require_once($CFG->dirroot . '/local/resourcelibrary/tests/lib.php');
  */
 class local_resourcelibrary_api_testcase extends local_resourcelibrary_testcase {
 
+
     /**
      * Test that we can obtain a single row result for a set of fields for a course and course module
      * get_filtered_courses($ids = array(), $filters = array(), $limit = 0, $offset = 0, $sorting = null) {
@@ -52,19 +52,10 @@ class local_resourcelibrary_api_testcase extends local_resourcelibrary_testcase 
 
         $dg = $this->getDataGenerator();
 
-        $now = time();
         $data = ['shortname' => 'SN', 'fullname' => 'FN',
-            'summary' => 'DESC', 'summaryformat' => FORMAT_MOODLE,
-            'customfield_f1' => 'some text',
-            'customfield_f2' => 1,
-            'customfield_f3' => $now,
-            'customfield_f4' => [1, 2],
-            'customfield_f5' => 2,
-            'customfield_f6_editor' => ['text' => 'test', 'format' => FORMAT_HTML]];
-        $c1 = $dg->create_course($data);
-
-        $data['id'] = $c1->id;
-        \local_resourcelibrary\locallib\utils::course_update_fields((object) $data);
+            'summary' => 'DESC', 'summaryformat' => FORMAT_MOODLE] +
+            $this->get_simple_cf_data();
+        $dg->create_course($data);
 
         $courses = local_resourcelibrary_external::get_filtered_courses();
 
@@ -81,15 +72,10 @@ class local_resourcelibrary_api_testcase extends local_resourcelibrary_testcase 
 
         $dg = $this->getDataGenerator();
 
-        $now = time();
-
-        $moduledata = [
-            'customfield_f1' => 'some text',
-            'customfield_f2' => 1,
-            'customfield_f3' => $now,
-            'customfield_f4' => [1, 2],
-            'customfield_f5' => 2,
-            'customfield_f6_editor' => ['text' => 'test', 'format' => FORMAT_HTML]];
+        $moduledata = $this->get_simple_cf_data();
+        if (utils::is_multiselect_installed()) {
+            $moduledata['customfield_f4'] = [1, 2];
+        }
         $c1 = $dg->create_course();
         foreach (array('page', 'label', 'page', 'label') as $modtype) {
             $dg->create_module($modtype, array_merge(
@@ -100,7 +86,6 @@ class local_resourcelibrary_api_testcase extends local_resourcelibrary_testcase 
         $modules = local_resourcelibrary_external::get_filtered_course_content($c1->id);
 
         $this->assertCount(4, $modules);
-        $moduledata = $modules[0];
     }
 
     /**
@@ -121,9 +106,11 @@ class local_resourcelibrary_api_testcase extends local_resourcelibrary_testcase 
                 'customfield_f1' => 'some text' . $index,
                 'customfield_f2' => $index % 2,
                 'customfield_f3' => $now + ((0 - $index % 2) * 20000),
-                'customfield_f4' => [1, 2],
                 'customfield_f5' => (1 + ($index % 2)),
                 'customfield_f6_editor' => ['text' => 'test', 'format' => FORMAT_HTML]];
+            if (utils::is_multiselect_installed()) {
+                $moduledata['customfield_f4'] = [1, 2];
+            }
             $dg->create_module($modtype, array_merge(
                 ['course' => $c1->id],
                 $moduledata

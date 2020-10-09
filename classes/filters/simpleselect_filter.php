@@ -49,6 +49,7 @@ abstract class simpleselect_filter extends base_filter {
     public function __construct(\core_customfield\field_controller $field) {
         parent::__construct($field);
         if (!$field instanceof \customfield_select\field_controller
+            && local_resourcelibrary\locallib\utils::is_multiselect_installed()
             && !$field instanceof \customfield_multiselect\field_controller) {
             throw new \moodle_exception('wronghandlerforfilter', 'local_resourcelibrary');
         }

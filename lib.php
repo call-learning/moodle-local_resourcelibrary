@@ -87,17 +87,18 @@ function local_resourcelibrary_coursemodule_edit_post_actions($data, $course) {
 /**
  * Hook the add/edit of the course module.
  *
- * @param stdClass $data Data from the form submission.
- * @return stdClass
+ * @param moodleform $mform Data from the form submission.
+ * @param array $data Data from the form submission.
+ * @return array  errors
  */
-function local_resourcelibrary_coursemodule_coursemodule_validation($data) {
+function local_resourcelibrary_coursemodule_validation($mform, $data) {
     global $CFG;
-    if (empty($CFG->enableresourcelibrary)) {
-        return $data;
+    if (empty($data['id'])
+        || empty($CFG->enableresourcelibrary)) {
+        return [];
     }
-    $handler = \local_resourcelibrary\customfield\coursemodule_handler::create($data->id);
-    $handler->instance_form_validation($data, array());
-
+    $handler = \local_resourcelibrary\customfield\coursemodule_handler::create($data['id']);
+    return $handler->instance_form_validation($data, array());
 }
 
 /**
@@ -113,27 +114,6 @@ function local_resourcelibrary_enable_disable_plugin_callback() {
  */
 
 /**
- * Extend course navigation setting so we can add a specific setting for course resourcelibrary data.
- * This will allow not to use the customscript trick.
- *
- * @param object $parentnode
- * @param object $course
- * @param \context $context
- * @throws coding_exception
- * @throws moodle_exception
- */
-function local_resourcelibrary_extend_navigation_course($parentnode, $course, $context) {
-    if (has_capability('local/resourcelibrary:editvalue', $context)) {
-        $str = get_string('resourcelibraryfieldsettings', 'local_resourcelibrary');
-        $url = new \moodle_url('/local/resourcelibrary/pages/courseedit.php', ['id' => $course->id]);
-        $resourcelibrarynode = \navigation_node::create($str, $url, \navigation_node::NODETYPE_LEAF,
-            'metadata', 'metadata', new \pix_icon('i/settings', $str)
-        );
-        $parentnode->add_node($resourcelibrarynode);
-    }
-}
-
-/**
  * Extends navigation for the plugin (link to the resource library).
  *
  * @param global_navigation $nav
@@ -142,25 +122,11 @@ function local_resourcelibrary_extend_navigation_course($parentnode, $course, $c
  * @throws moodle_exception
  */
 function local_resourcelibrary_extend_navigation(global_navigation $nav) {
-    global $CFG, $PAGE;
+    global $CFG;
     if (empty($CFG->enableresourcelibrary)) {
         return;
     }
-    if ($PAGE->context) {
-        $context = $PAGE->context;
-    } else {
-        $context = \context_system::instance();
-    }
-
-    $urltext = get_string('resourcelibrary', 'local_resourcelibrary');
-    $params = [];
-    if ($context instanceof context_course) {
-        global $DB;
-        $params['courseid'] = $context->instanceid;
-        $coursename = $DB->get_field('course', 'shortname', array('id' => $context->instanceid));
-        $urltext = get_string('resourcelibrarycourse:name', 'local_resourcelibrary', $coursename);
-    }
-    $url = new moodle_url($CFG->wwwroot . '/local/resourcelibrary/pages/resourcelibrary.php', $params);
+    list($urltext, $url) = \local_resourcelibrary\locallib\utils::get_catalog_url();
     $mycoursesnode = $nav->find('mycourses', null);
     if ($mycoursesnode) {
         $node = $nav->create($urltext, $url, navigation_node::NODETYPE_LEAF, null, 'resourcelibrary',
@@ -168,7 +134,6 @@ function local_resourcelibrary_extend_navigation(global_navigation $nav) {
         $node->showinflatnavigation = true;
         $nav->add_node($node, 'mycourses');
     }
-
 }
 
 /**

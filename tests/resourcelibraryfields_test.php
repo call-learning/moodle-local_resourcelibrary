@@ -22,8 +22,9 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use local_resourcelibrary\customfield\course_handler;
+use core_course\customfield\course_handler;
 use local_resourcelibrary\customfield\coursemodule_handler;
+use local_resourcelibrary\locallib\utils;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -47,33 +48,19 @@ class local_resourcelibrary_resourcelibraryfield_testcase extends local_resource
     public function test_create_course() {
         global $DB;
         $dg = $this->getDataGenerator();
-
-        $now = time();
         $data = ['shortname' => 'SN', 'fullname' => 'FN',
-            'summary' => 'DESC', 'summaryformat' => FORMAT_MOODLE,
-            'customfield_f1' => 'some text',
-            'customfield_f2' => 1,
-            'customfield_f3' => $now,
-            'customfield_f4' => [1, 2],
-            'customfield_f5' => 2,
-            'customfield_f6_editor' => ['text' => 'test', 'format' => FORMAT_HTML]];
+                'summary' => 'DESC', 'summaryformat' => FORMAT_MOODLE] + $this->get_simple_cf_data();
         $c1 = $dg->create_course($data);
-
-        $data['id'] = $c1->id;
-        \local_resourcelibrary\locallib\utils::course_update_fields((object) $data);
-        // This should be called when creating the course with data.
-        // TODO this must be part of an external API also so we can add the Resource Library field after creation.
 
         $data = course_handler::create()->export_instance_data_object($c1->id);
 
-        $this->assertEquals('some text', $data->f1);
-        $this->assertEquals('Yes', $data->f2);
-        $this->assertEquals(userdate($now, get_string('strftimedaydatetime')), $data->f3);
-        $this->assertEquals('b, c', $data->f4);
-        $this->assertEquals('b', $data->f5);
-        $this->assertEquals('test', $data->f6);
+        $this->assert_check_simple_cf_data_exported($data);
 
-        $this->assertEquals(6, count($DB->get_records('customfield_data')));
+        $expectedcount = 5;
+        if (utils::is_multiselect_installed()) {
+            $expectedcount = 6;
+        }
+        $this->assertEquals($expectedcount, count($DB->get_records('customfield_data')));
 
         delete_course($c1->id, false);
 
@@ -86,28 +73,21 @@ class local_resourcelibrary_resourcelibraryfield_testcase extends local_resource
     public function test_create_module() {
         global $DB;
         $dg = $this->getDataGenerator();
-
-        $now = time();
         $c1 = $dg->create_course(['shortname' => 'SN', 'fullname' => 'FN',
             'summary' => 'DESC', 'summaryformat' => FORMAT_MOODLE]);
 
-        $data = array('course' => $c1->id,
-            'customfield_f1' => 'some text',
-            'customfield_f2' => 1,
-            'customfield_f3' => $now,
-            'customfield_f5' => 2,
-            'customfield_f6_editor' => ['text' => 'test', 'format' => FORMAT_HTML]);
+        $data = array('course' => $c1->id) + $this->get_simple_cf_data();
         $a1 = $dg->create_module('label', (object) $data);
 
         $data = coursemodule_handler::create()->export_instance_data_object($a1->cmid);
 
-        $this->assertEquals('some text', $data->f1);
-        $this->assertEquals('Yes', $data->f2);
-        $this->assertEquals(userdate($now, get_string('strftimedaydatetime')), $data->f3);
-        $this->assertEquals('b', $data->f5);
-        $this->assertEquals('test', $data->f6);
+        $this->assert_check_simple_cf_data_exported($data);
 
-        $this->assertEquals(5, count($DB->get_records('customfield_data')));
+        $expectedcount = 5;
+        if (utils::is_multiselect_installed()) {
+            $expectedcount = 6;
+        }
+        $this->assertEquals($expectedcount, count($DB->get_records('customfield_data')));
 
         course_delete_module($a1->cmid, false);
 
@@ -120,8 +100,9 @@ class local_resourcelibrary_resourcelibraryfield_testcase extends local_resource
     public function test_create_module_multiselect() {
         global $DB;
         $dg = $this->getDataGenerator();
-
-        $now = time();
+        if (!utils::is_multiselect_installed()) {
+            $this->markTestSkipped();
+        }
         $c1 = $dg->create_course(['shortname' => 'SN', 'fullname' => 'FN',
             'summary' => 'DESC', 'summaryformat' => FORMAT_MOODLE]);
 
@@ -155,23 +136,23 @@ class local_resourcelibrary_resourcelibraryfield_testcase extends local_resource
             'customfield_f2' => 1,
             'customfield_f4' => [1, 2],
         ];
+        if (utils::is_multiselect_installed()) {
+            $data['customfield_f4'] = [1, 2];
+        }
 
         $c1 = $dg->create_course($data);
-
-        $data['id'] = $c1->id;
-        \local_resourcelibrary\locallib\utils::course_update_fields((object) $data);
-        // This should be called when creating the course with data.
-        // TODO this must be part of an external API also so we can add the Resource Library field after creation.
 
         $backupid = $this->backup_course($c1->id);
 
         // The information is restored but adapted because names are already taken.
-        $c2 = $this->restore_course($backupid, 0, $USER->id);
+        $this->restore_course($backupid, 0, $USER->id);
 
         $data = course_handler::create()->export_instance_data_object($c1->id);
         $this->assertEquals('some text to backup', $data->f1);
         $this->assertEquals('Yes', $data->f2);
-        $this->assertEquals('b, c', $data->f4);
+        if (utils::is_multiselect_installed()) {
+            $this->assertEquals('b, c', $data->f4);
+        }
     }
 
     /**
@@ -187,18 +168,13 @@ class local_resourcelibrary_resourcelibraryfield_testcase extends local_resource
             'fullname' => 'FN',
             'summary' => 'DESC',
             'summaryformat' => FORMAT_MOODLE]);
-        $data = array('course' => $c1->id,
-            'customfield_f1' => 'some text',
-            'customfield_f2' => 1,
-            'customfield_f3' => $now,
-            'customfield_f5' => 2,
-            'customfield_f6_editor' => ['text' => 'test', 'format' => FORMAT_HTML]);
-        $a1 = $dg->create_module('label', (object) $data);
+        $data = array('course' => $c1->id) + $this->get_simple_cf_data();
+        $dg->create_module('label', (object) $data);
 
         $backupid = $this->backup_course($c1->id);
 
         // The information is restored but adapted because names are already taken.
-        $c2 = $this->restore_course($backupid, 0, $USER->id);
+        $this->restore_course($backupid, 0, $USER->id);
         $labels = get_all_instances_in_course('label', $c1);
         $label = reset($labels); // First one.
         $data = coursemodule_handler::create()->export_instance_data_object($label->coursemodule);
@@ -215,9 +191,10 @@ class local_resourcelibrary_resourcelibraryfield_testcase extends local_resource
      */
     public function test_restore_module_resourcelibraryfields_multiselect() {
         global $USER;
-
+        if (!utils::is_multiselect_installed()) {
+            $this->markTestSkipped();
+        }
         $dg = $this->getDataGenerator();
-        $now = time();
         $c1 = $dg->create_course([
             'shortname' => 'SN',
             'fullname' => 'FN',
@@ -225,12 +202,12 @@ class local_resourcelibrary_resourcelibraryfield_testcase extends local_resource
             'summaryformat' => FORMAT_MOODLE]);
         $data = array('course' => $c1->id,
             'customfield_f4' => [1, 2]);
-        $a1 = $dg->create_module('label', (object) $data);
+        $dg->create_module('label', (object) $data);
 
         $backupid = $this->backup_course($c1->id);
 
         // The information is restored but adapted because names are already taken.
-        $c2 = $this->restore_course($backupid, 0, $USER->id);
+        $this->restore_course($backupid, 0, $USER->id);
         $labels = get_all_instances_in_course('label', $c1);
         $label = reset($labels); // First one.
         $data = coursemodule_handler::create()->export_instance_data_object($label->coursemodule);
@@ -268,6 +245,10 @@ class local_resourcelibrary_resourcelibraryfield_testcase extends local_resource
      * @param int $courseid The course ID to restore in, or 0.
      * @param int $userid The ID of the user performing the restore.
      * @return stdClass The updated course object.
+     * @throws base_plan_exception
+     * @throws base_setting_exception
+     * @throws dml_exception
+     * @throws restore_controller_exception
      */
     protected function restore_course($backupid, $courseid, $userid) {
         global $DB;

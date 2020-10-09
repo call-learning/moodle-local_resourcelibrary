@@ -2,18 +2,6 @@
 Feature: As an admin I should be able to set and retrieve values from custom field
 
   Background:
-    Given the following "local_resourcelibrary > field" exist:
-      | area         | name                | customfieldcategory              | shortname | type        | configdata                                                                                                             |
-      | course       | Test Field Text     | Resource Library: Generic fields | CF1       | text        |                                                                                                                        |
-      | course       | Test Field Checkbox | Resource Library: Generic fields | CF2       | checkbox    |                                                                                                                        |
-      | course       | Test Field MSelect  | Resource Library: Generic fields | CF3       | multiselect | {"required":"1","uniquevalues":"0","options":"A\r\nB\r\nC\r\nD\nE","defaultvalue":"A,C","locked":"0","visibility":"2"} |
-      | course       | Test Field Select   | Resource Library: Generic fields | CF4       | select      | {"required":"1","uniquevalues":"0","options":"A\r\nB\r\nC\r\nD\nE","defaultvalue":"A,C","locked":"0","visibility":"2"} |
-      | course       | Test Field Textarea | Resource Library: Generic fields | CF5       | textarea    |                                                                                                                        |
-      | coursemodule | Test Field Text     | Resource Library: Generic fields | CM1       | text        |                                                                                                                        |
-      | coursemodule | Test Field Checkbox | Resource Library: Generic fields | CM2       | checkbox    |                                                                                                                        |
-      | coursemodule | Test Field MSelect  | Resource Library: Generic fields | CM3       | multiselect | {"required":"1","uniquevalues":"0","options":"A\r\nB\r\nC\r\nD\nE","defaultvalue":"A,C","locked":"0","visibility":"2"} |
-      | coursemodule | Test Field Select   | Resource Library: Generic fields | CM4       | select      | {"required":"1","uniquevalues":"0","options":"A\r\nB\r\nC\r\nD\nE","defaultvalue":"A,C","locked":"0","visibility":"2"} |
-      | coursemodule | Test Field Textarea | Resource Library: Generic fields | CM5       | textarea    |                                                                                                                        |
     Given the following "courses" exist:
       | shortname | fullname |
       | C1        | Course 01 |
@@ -38,7 +26,8 @@ Feature: As an admin I should be able to set and retrieve values from custom fie
   Scenario: As an admin I should see all courses and activities on the resource library page
     Given I am on site homepage
     And I log in as "admin"
-    And I follow "Resource Library"
+    And I follow "Resource library"
+    And I wait until the page is ready
     Then I should see "Course 01"
     And I should see "Course 11"
     And I should not see "Course 13"
@@ -49,7 +38,8 @@ Feature: As an admin I should be able to set and retrieve values from custom fie
   Scenario: If Toggle the page limit between page reloads, it should keep it as it was set
     Given I am on site homepage
     Given I log in as "admin"
-    And I follow "Resource Library"
+    And I follow "Resource library"
+    And I wait until the page is ready
     When I click on "Show 12 items per page" "button"
     And I click on "24" "link"
     Then I should see "Course 18"

@@ -37,6 +37,7 @@ $string['aria:title:desc'] = 'Full name (Descending)';
 $string['card'] = 'Card';
 $string['course_metadata'] = 'Metatdata for course Resource Library';
 $string['mainresourcelibrary'] = 'Main library';
+$string['manage:hiddenfilter'] = 'Hidden in Filter?';
 $string['resourcelibrary'] = 'Resource library';
 $string['resourcelibrarycourse:name'] = 'Resource library ({$a})';
 $string['resourcelibraryfieldsettings'] = 'Resource Library Field Settings';

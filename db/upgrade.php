@@ -25,10 +25,12 @@ defined('MOODLE_INTERNAL') || die();
 
 /**
  * Upgrade script for local_resourcelibrary
+ *
  * @param string $oldversion
+ * @return bool
  * @throws coding_exception
  * @throws downgrade_exception
- * @throws upgrade_exception
+ * @throws upgrade_exception|dml_exception
  */
 function xmldb_local_resourcelibrary_upgrade($oldversion) {
 
@@ -60,6 +62,17 @@ function xmldb_local_resourcelibrary_upgrade($oldversion) {
     }
     if ($oldversion < 2020042010) {
         upgrade_plugin_savepoint(true, 2020042010, 'local', 'resourcelibrary');
+    }
+    if ($oldversion < 2020042013) {
+        global $DB;
+        // Change all specialised course custom field (old course_handler class) into usual course custom fields.
+        $coursefields =
+            $DB->get_records('customfield_category', array('area' => 'course', 'component' => 'local_resourcelibrary'));
+        foreach ($coursefields as $cf) {
+            $cf->component = 'core_course';
+            $DB->update_record('customfield_category', $cf);
+        }
+        upgrade_plugin_savepoint(true, 2020042013, 'local', 'resourcelibrary');
     }
     return true;
 }
