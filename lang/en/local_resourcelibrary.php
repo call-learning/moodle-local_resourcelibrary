@@ -58,12 +58,16 @@ $string['resourcelibrary:hiddencoursesid'] = 'Hidden courses Id';
 $string['resourcelibrary:hiddencoursesid:desc'] = 'List of comma separated
  courses identifiers (course id) that will be invisible on the catalog';
 
-$string['category:general']  = 'Resource Library: Generic fields';
+$string['category:general'] = 'Resource Library: Generic fields';
 
 $string['enableresourcelibrary'] = 'Enable Resource Library';
 $string['filters'] = 'Filters';
 $string['filter:anyvalue'] = 'Any';
 $string['filter:submit'] = 'Filter';
+$string['resourcelibrary:activateactivitylibrary'] = 'Activate Activity library';
+$string['resourcelibrary:activateactivitylibrary:desc'] =
+    'The activity library is similar to the course library but for activities';
+
 $string['resourcelibrary:managefields'] = 'Can manage Resource Library Fields';
 $string['resourcelibrary:editvalue'] = 'Can edit Resource Library Custom Field values';
 $string['resourcelibrary:configurecustomfields'] = 'Can configure Resource Library Custom Field values';

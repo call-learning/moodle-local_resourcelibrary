@@ -104,6 +104,7 @@ class local_resourcelibrary_external extends external_api {
     /**
      * Get course modules filtered
      *
+     * All returned fields are available to the template.
      * @param int $courseid course id
      * @param array $filters
      * @param int $limit
@@ -224,6 +225,7 @@ class local_resourcelibrary_external extends external_api {
     /**
      * Get courses
      *
+     * All returned fields are available to the template.
      * @param int $categoryid
      * @param array $filters
      * @param int $limit

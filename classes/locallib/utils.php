@@ -58,7 +58,8 @@ class utils {
         }
         $urltext = get_string('resourcelibrary', 'local_resourcelibrary');
         $params = [];
-        if ($context instanceof \context_course) {
+        $activities = get_config('local_resourcelibrary', 'activateactivitylibrary');
+        if ($context instanceof \context_course && $activities) {
             global $DB;
             $params['courseid'] = $context->instanceid;
             $coursename = $DB->get_field('course', 'shortname', array('id' => $context->instanceid));

@@ -49,6 +49,11 @@ if ($hassiteconfig) {
         get_string('resourcelibrary:hiddencoursesid:desc', 'local_resourcelibrary'),
         ''));
 
+    $mainsettings->add(new admin_setting_configcheckbox('local_resourcelibrary/activateactivitylibrary',
+        get_string('resourcelibrary:activateactivitylibrary', 'local_resourcelibrary'),
+        get_string('resourcelibrary:activateactivitylibrary:desc', 'local_resourcelibrary'),
+        true));
+
     $settings->add('resourcelibrary', $mainsettings);
 
     if (!empty($CFG->enableresourcelibrary) && $CFG->enableresourcelibrary) {
