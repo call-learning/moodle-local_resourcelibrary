@@ -139,7 +139,7 @@ class local_resourcelibrary_external extends external_api {
             $additionalfields,
             $sqlwhere,
             $sqlparams,
-            $sortsql);
+            'm.visible DESC ' . $sortsql);// Hidden element last of the list. So we don't have any gap.
 
         $modinfo = get_fast_modinfo($courseid);
         $context = \context_course::instance($courseid);
@@ -267,21 +267,13 @@ class local_resourcelibrary_external extends external_api {
             $additionalfields,
             $sqlwhere,
             $sqlparams,
-            $sortsql);
+            'e.visible DESC ' . $sortsql);// Hidden element last of the list. So we don't have any gap.
 
         // Create return value.
         $coursesinfo = array();
         $sequenceid = 0;
-
-        $invisiblecourseidlist = [];
-        if ($invisiblecoursesids = get_config('local_resourcelibrary', 'hiddencoursesid')) {
-            $invisiblecourseidlist = explode(',', $invisiblecoursesids);
-        }
         foreach ($courses as $course) {
 
-            if (in_array($course->id, $invisiblecourseidlist)) {
-                continue; // Skip invisible courses.
-            }
             // Now security checks.
             $context = context_course::instance($course->id, IGNORE_MISSING);
             $hasvalidatedcontext = true;
@@ -380,17 +372,17 @@ class local_resourcelibrary_external extends external_api {
      * @return string
      */
     protected static function get_sort_options_sql($sortoptions, $fields) {
-        $sortsqls = [];
+        $sortsql = " ";
         foreach ($sortoptions as $sort) {
             $order = strtoupper($sort['order']);
             $column = $sort['column'];
             if (!in_array($column, $fields) || ($order != 'ASC' && $order != 'DESC')) {
                 continue; // Invalid filter, we carry on.
             }
-            $sortsqls[] = "$column $order";
+            $sortsql .= " ,$column $order";
         }
-        $sortsql = implode(',', $sortsqls);
         return $sortsql;
+
     }
 }
 

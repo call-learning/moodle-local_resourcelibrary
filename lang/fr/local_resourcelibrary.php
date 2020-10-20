@@ -38,6 +38,7 @@ $string['card'] = 'Vignette';
 $string['course_metadata'] = 'Metatdata pour la Pédagothèque numérique';
 $string['mainresourcelibrary'] = 'Liste de cours';
 $string['resourcelibrary'] = 'Pédagothèque numérique';
+$string['resourcelibrarycourse'] = 'Pédagothèque numérique (Cours)';
 $string['resourcelibrarycourse:name'] = 'Pédagothèque numérique ({$a})';
 $string['resourcelibraryfieldsettings'] = 'Paramètres des champs de la Pédagothèque numérique';
 $string['resourcelibrary_course_customfield'] = 'Gestion des champs personalisés de cours pour la Pédagothèque numérique';
@@ -52,11 +53,7 @@ $string['resourcelibraryfield_visibility'] = 'Visibilité du champ';
 $string['resourcelibraryfield_visibility_help'] = 'Visibilité du champ';
 $string['resourcelibraryfield_notvisible'] = 'Invisible';
 $string['resourcelibraryfield_notvisible'] = 'Le champ n\'est pas visible';
-$string['resourcelibrary:hiddencoursesid'] = 'Identifiant des cours invisible sur le catalogue';
-$string['resourcelibrary:hiddencoursesid:desc'] = 'Liste des identifiants de cours séparés par des virgules qui n\'apparaîtront
- pas sur la pédagothèque numérique';
 
-$string['resourcelibrarymainsettings'] = 'Pégadothèque numérique: paramètres globaux';
 $string['category:general']  = 'Pégadothèque numérique: Champs génériques';
 
 $string['enableresourcelibrary'] = 'Activer la Pédagothèque numérique';

@@ -26,19 +26,20 @@ $string['pluginname'] = 'Resource Library';
 
 $string['activity_metadata'] = 'Metatdata for Resource Library';
 $string['aria:card'] = 'Switch to card view';
-$string['aria:controls'] = 'Display controls';
+$string['aria:controls'] = 'Display Controls';
 $string['aria:displaydropdown'] = 'Display drop-down menu';
 $string['aria:sortingdropdown'] = 'Sorting drop-down menu';
 $string['aria:list'] = 'Switch to list view';
 $string['aria:lastmodification'] = 'Sort by last modification date';
 $string['aria:lastmodification:desc'] = 'Sort by last modification date (Descending)';
 $string['aria:title'] = 'Full name';
-$string['aria:title:desc'] = 'Full name (Descending)';
+$string['aria:title:desc'] = 'Full Name (Descending)';
 $string['card'] = 'Card';
 $string['course_metadata'] = 'Metatdata for course Resource Library';
 $string['mainresourcelibrary'] = 'Main library';
-$string['resourcelibrary'] = 'Resource library';
-$string['resourcelibrarycourse:name'] = 'Resource library ({$a})';
+$string['resourcelibrary'] = 'Resource Library';
+$string['resourcelibrarycourse'] = 'Resource Library (Course)';
+$string['resourcelibrarycourse:name'] = 'Resource Library ({$a})';
 $string['resourcelibraryfieldsettings'] = 'Resource Library Field Settings';
 $string['resourcelibrary_course_customfield'] = 'Manage custom Resource Library field for course';
 $string['resourcelibrary_coursemodule_customfield'] = 'Manage custom Resource Library field for course modules';
@@ -52,10 +53,6 @@ $string['resourcelibraryfield_visibility'] = 'Resource Library Field visibility'
 $string['resourcelibraryfield_visibility_help'] = 'Resource Library Field visibility';
 $string['resourcelibraryfield_notvisible'] = 'Not visible';
 $string['resourcelibraryfield_notvisible'] = 'Resource Library Field not visible';
-$string['resourcelibrarymainsettings'] = 'Resource Library: Global Settings';
-$string['resourcelibrary:hiddencoursesid'] = 'Hidden courses Id';
-$string['resourcelibrary:hiddencoursesid:desc'] = 'List of comma separated
- courses identifiers (course id) that will be invisible on the catalog';
 
 $string['category:general']  = 'Resource Library: Generic fields';
 
@@ -73,9 +70,10 @@ $string['lastmodification'] = 'Last modification';
 $string['lastmodification:desc'] = 'Last modification (Descending)';
 $string['noentities'] = 'Nothing found ! Please select another filter.';
 $string['operator:instructions:greaterthan'] = 'Greater Than';
+$string['operator:instructions:greaterthan'] = 'Greater Than';
 $string['privacy:metadata:resourcelibrarypagingpreference'] = 'Paging preference';
 $string['privacy:metadata:resourcelibraryviewpreference'] = 'View (List/Card) preference';
 $string['privacy:metadata:resourcelibrarysortpreference'] = 'Sort preference';
 $string['title'] = 'Full name';
 $string['title:desc'] = 'Full name (Descending)';
-$string['viewitem'] = 'View';
+$string['viewitem'] = 'Voir';

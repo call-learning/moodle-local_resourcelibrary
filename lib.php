@@ -22,6 +22,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use local_resourcelibrary\filters\filter_form;
+
 defined('MOODLE_INTERNAL') || die();
 
 /**
@@ -155,10 +157,8 @@ function local_resourcelibrary_extend_navigation(global_navigation $nav) {
     $urltext = get_string('resourcelibrary', 'local_resourcelibrary');
     $params = [];
     if ($context instanceof context_course) {
-        global $DB;
         $params['courseid'] = $context->instanceid;
-        $coursename = $DB->get_field('course', 'shortname', array('id' => $context->instanceid));
-        $urltext = get_string('resourcelibrarycourse:name', 'local_resourcelibrary', $coursename);
+        $urltext = get_string('resourcelibrarycourse', 'local_resourcelibrary');
     }
     $url = new moodle_url($CFG->wwwroot . '/local/resourcelibrary/pages/resourcelibrary.php', $params);
     $mycoursesnode = $nav->find('mycourses', null);

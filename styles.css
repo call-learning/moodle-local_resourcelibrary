@@ -50,11 +50,11 @@
     right: 1em;
 }
 
-.resourcelibrary-filters-form .fdate_selector {
+.fdate_selector {
     flex-wrap: wrap;
 }
 
-.resourcelibrary-filters-form .filter-instructions {
+.filter-instructions {
     font-size: xx-small;
     font-style: italic;
 }
