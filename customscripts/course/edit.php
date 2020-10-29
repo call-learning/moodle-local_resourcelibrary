@@ -152,8 +152,11 @@ $args = array(
     'returnurl' => $returnurl
 );
 
+$context = !empty($coursecontext) ? $coursecontext : $catcontext;
+$context = !empty($context) ? $context : context_system::instance();
+
 // RESOURCELIBRARY - CHANGE.
-if (has_capability('local/resourcelibrary:editvalue', $coursecontext)) {
+if (has_capability('local/resourcelibrary:editvalue', $context)) {
     $editform = new editpage_resourcelibrary_course_edit_form(null, $args);
 }
 // END RESOURCELIBRARY - CHANGE.
@@ -205,7 +208,7 @@ if ($editform->is_cancelled()) {
 
     // RESOURCELIBRARY - CHANGE.
     // Update custom fields if there are any of them in the form.
-    if (has_capability('local/resourcelibrary:editvalue', $coursecontext)) {
+    if (has_capability('local/resourcelibrary:editvalue', $context)) {
         \local_resourcelibrary\locallib\utils::course_update_fields($data);
     }
     // END RESOURCELIBRARY - CHANGE.
