@@ -53,6 +53,9 @@ $string['resourcelibraryfield_visibility'] = 'Visibilité du champ';
 $string['resourcelibraryfield_visibility_help'] = 'Visibilité du champ';
 $string['resourcelibraryfield_notvisible'] = 'Invisible';
 $string['resourcelibraryfield_notvisible'] = 'Le champ n\'est pas visible';
+$string['resourcelibrary:coursviewbaseurl'] = 'URL de base pour voir le cours.';
+$string['resourcelibrary:coursviewbaseurl:desc'] = 'URL de base pour voir le cours. La plupart du temps: ce sera /course/view.php.'
+    .' On rajoute l\'identifiant id qui sera celui du cours.';
 $string['resourcelibrary:hiddencoursesid'] = 'Identifiant des cours invisible sur le catalogue';
 $string['resourcelibrary:hiddencoursesid:desc'] = 'Liste des identifiants de cours séparés par des virgules qui n\'apparaîtront
  pas sur la pédagothèque numérique';

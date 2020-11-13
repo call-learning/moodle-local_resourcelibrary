@@ -49,6 +49,11 @@ if ($hassiteconfig) {
         get_string('resourcelibrary:hiddencoursesid:desc', 'local_resourcelibrary'),
         ''));
 
+    $mainsettings->add(new admin_setting_configtext('local_resourcelibrary/courseviewbaseurl',
+        get_string('resourcelibrary:courseviewbaseurl', 'local_resourcelibrary'),
+        get_string('resourcelibrary:courseviewbaseurl:desc', 'local_resourcelibrary'),
+        '/course/view.php'));
+
     $mainsettings->add(new admin_setting_configcheckbox('local_resourcelibrary/activateactivitylibrary',
         get_string('resourcelibrary:activateactivitylibrary', 'local_resourcelibrary'),
         get_string('resourcelibrary:activateactivitylibrary:desc', 'local_resourcelibrary'),

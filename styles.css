@@ -64,3 +64,11 @@
     width: 40px;
     height: 40px;
 }
+
+.local-resourcelibrary .card .entityame {
+    /* Line clamping */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}

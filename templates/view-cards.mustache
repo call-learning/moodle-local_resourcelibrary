@@ -53,7 +53,7 @@
             </a>
             <div class="card-body pr-1 entity-info-container" id="entity-info-container-{{id}}-{{uniqid}}">
                 <div class="d-flex align-items-start">
-                    <div class="w-100 text-truncate">
+                    <div class="w-100 text-wrap">
                         <div class="text-muted muted d-flex mb-1 flex-wrap">
                             {{$category}}{{category}}{{/category}}
                             {{#showshortname}}
@@ -66,7 +66,7 @@
                                 </div>
                             {{/showshortname}}
                         </div>
-                        <a href="{{viewurl}}" class="entityame mr-2">
+                        <a href="{{viewurl}}" class="entityame m-2">
                             {{$fullname}}{{fullname}}{{/fullname}}
                         </a>
                         {{^visible}}

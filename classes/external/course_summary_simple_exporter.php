@@ -23,6 +23,7 @@
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 namespace local_resourcelibrary\external;
 defined('MOODLE_INTERNAL') || die();
 
@@ -37,6 +38,11 @@ use moodle_url;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class course_summary_simple_exporter extends course_summary_exporter {
+
+    /**
+     * COURSE_VIEW_DEFAULT_URL
+     */
+    const COURSE_VIEW_DEFAULT_URL = '/course/view.php';
 
     /**
      * Define related context
@@ -56,13 +62,16 @@ class course_summary_simple_exporter extends course_summary_exporter {
      * @throws \moodle_exception
      */
     protected function get_other_values(renderer_base $output) {
-        global $CFG;
         $courseimage = self::get_course_image($this->data);
         if (!$courseimage) {
             $courseimage = $output->get_generated_image_for_id($this->data->id);
         }
+        $courseviewurl = get_config('local_resourcelibrary', 'courseviewbaseurl');
+        if (!$courseviewurl) {
+            $courseviewurl = self::COURSE_VIEW_DEFAULT_URL;
+        }
         return array(
-            'viewurl' => (new moodle_url('/course/view.php', array('id' => $this->data->id)))->out(false),
+            'viewurl' => (new moodle_url($courseviewurl, array('id' => $this->data->id)))->out(false),
             'image' => $courseimage,
         );
     }
