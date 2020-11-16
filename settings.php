@@ -54,6 +54,20 @@ if ($hassiteconfig) {
         get_string('resourcelibrary:courseviewbaseurl:desc', 'local_resourcelibrary'),
         '/course/view.php'));
 
+    $samplemenutext = '';
+    $stringmanager = get_string_manager();
+    foreach (array('en', 'fr') as $lang) {
+        $text = $stringmanager->get_string('resourcelibrary', 'local_resourcelibrary', null, 'en');
+        $samplemenutext .= \html_writer::tag('p', "\"{$text}\"|{$lang}\n");
+    }
+    $mainsettings->add(
+        new admin_setting_configtextarea('local_resourcelibrary/menutextoverride',
+            get_string('resourcelibrary:menutextoverride', 'local_resourcelibrary'),
+            get_string('resourcelibrary:menutextoverride:desc', 'local_resourcelibrary', $samplemenutext),
+            ''
+        )
+    );
+
     $mainsettings->add(new admin_setting_configcheckbox('local_resourcelibrary/activateactivitylibrary',
         get_string('resourcelibrary:activateactivitylibrary', 'local_resourcelibrary'),
         get_string('resourcelibrary:activateactivitylibrary:desc', 'local_resourcelibrary'),

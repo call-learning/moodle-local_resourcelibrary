@@ -28,10 +28,7 @@ defined('MOODLE_INTERNAL') || die();
 
 use core_customfield\field_controller;
 use core_customfield\handler;
-use local_resourcelibrary\filters\customfield_utils;
-use renderable;
 use renderer_base;
-use templatable;
 
 /**
  * Class to display a series of filters depending on the handler.

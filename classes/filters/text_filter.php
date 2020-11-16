@@ -32,17 +32,16 @@ defined('MOODLE_INTERNAL') || die;
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class text_filter extends simpletext_filter {
+class text_filter extends basetext_filter {
     /**
      * Check if this is the right type for this handler
      *
      * @param \core_customfield\field_controller $field
+     * @return bool
      * @throws \moodle_exception
      */
-    protected function check_is_righttype(\core_customfield\field_controller $field) {
-        if (!$field instanceof \customfield_text\field_controller) {
-            throw new \moodle_exception('wronghandlerforfilter', 'local_resourcelibrary');
-        }
+    public static function check_is_righttype(\core_customfield\field_controller $field) {
+        return $field instanceof \customfield_text\field_controller;
     }
 }
 

@@ -23,6 +23,8 @@
 
 namespace local_resourcelibrary\filters;
 
+use local_resourcelibrary\locallib\customfield_utils;
+
 defined('MOODLE_INTERNAL') || die;
 
 /**
@@ -31,7 +33,7 @@ defined('MOODLE_INTERNAL') || die;
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-abstract class base_filter implements resourcelibrary_filter_interface {
+abstract class base implements resourcelibrary_filter_interface {
 
     /**
      * Name of the filter in the form
@@ -69,6 +71,10 @@ abstract class base_filter implements resourcelibrary_filter_interface {
         $this->_operator = self::OPERATOR_EQUAL; // Equal by default.
         $this->_label = $field->get_formatted_name();
         $this->_field = $field;
+        if (!static::check_is_righttype($field)) {
+            throw new \moodle_exception('wronghandlerforfilter', 'local_resourcelibrary',
+                $link = '', array('handlername' => self::class, 'fieldname' => $field->get('name')));
+        }
     }
 
     /**
@@ -102,12 +108,23 @@ abstract class base_filter implements resourcelibrary_filter_interface {
         if ($opinstructions) {
             $mform->addElement('static',
                 $this->_name . 'instructions',
-                \html_writer::span("(".
+                \html_writer::span("(" .
                     get_string('operator:instructions:' . $opinstructions, 'local_resourcelibrary')
-                    ."*)",
+                    . "*)",
                     'filter-instructions')
             );
         }
+    }
+
+    /**
+     * Check if this is the right type for this handler
+     *
+     * @param \core_customfield\field_controller $field
+     * @return bool
+     * @throws \moodle_exception
+     */
+    public static function check_is_righttype(\core_customfield\field_controller $field) {
+        return false;
     }
 
     /**

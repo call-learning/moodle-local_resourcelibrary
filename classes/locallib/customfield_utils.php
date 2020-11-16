@@ -22,7 +22,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_resourcelibrary\filters;
+namespace local_resourcelibrary\locallib;
 
 use core_customfield\field_controller;
 use core_customfield\handler;
@@ -150,7 +150,7 @@ class customfield_utils {
      * @return mixed|null
      */
     public static function get_filter_from_field($field) {
-        $filterclass = '\local_resourcelibrary\filters\\' . $field->get('type') . '_filter';
+        $filterclass = \local_resourcelibrary\filters\utils::get_first_matching_filter($field);
         if (class_exists($filterclass)) {
             $filter = new $filterclass($field);
             return $filter;

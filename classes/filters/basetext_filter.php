@@ -32,33 +32,7 @@ defined('MOODLE_INTERNAL') || die;
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-abstract class simpletext_filter extends base_filter {
-    /**
-     * options for the list values
-     *
-     * @var array
-     */
-    protected $_options;
-
-    /**
-     * Constructor
-     *
-     * @param \core_customfield\field_controller $field user table filed name
-     * @throws \moodle_exception
-     */
-    public function __construct(\core_customfield\field_controller $field) {
-        parent::__construct($field);
-        $this->check_is_righttype($field);
-    }
-
-    /**
-     * Check if this is the right type for this handler
-     *
-     * @param \core_customfield\field_controller $field
-     * @throws \moodle_exception
-     */
-    abstract protected function check_is_righttype(\core_customfield\field_controller $field);
-
+abstract class basetext_filter extends base {
     /**
      * Adds controls specific to this filter in the form.
      *

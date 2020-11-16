@@ -32,7 +32,19 @@ defined('MOODLE_INTERNAL') || die;
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class multiselect_filter extends simpleselect_filter {
+class multiselect_filter extends baseselect_filter {
+
+    /**
+     * Check if this is the right type for this handler
+     *
+     * @param \core_customfield\field_controller $field
+     * @return bool
+     * @throws \moodle_exception
+     */
+    public static function check_is_righttype(\core_customfield\field_controller $field) {
+        return \local_resourcelibrary\locallib\utils::is_multiselect_installed()
+                && $field instanceof \customfield_multiselect\field_controller;
+    }
     /**
      * Adds controls specific to this filter in the form.
      *
@@ -47,7 +59,7 @@ class multiselect_filter extends simpleselect_filter {
             $this->_label,
             $choices,
             array('multiple' => true));
-        base_filter::add_to_form($mform);
+        base::add_to_form($mform);
     }
 
     /**

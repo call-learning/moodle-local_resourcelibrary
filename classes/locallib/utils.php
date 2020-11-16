@@ -27,6 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 
 use core_customfield\handler;
 use local_resourcelibrary\customfield\course_handler;
+use Matrix\Exception;
 
 /**
  * Class utils
@@ -56,23 +57,23 @@ class utils {
         } else {
             $context = \context_system::instance();
         }
-        $urltext = get_string('resourcelibrary', 'local_resourcelibrary');
+        $urltext = static::get_resource_library_menu_text();
         $params = [];
         $activities = get_config('local_resourcelibrary', 'activateactivitylibrary');
         if ($context instanceof \context_course && $activities) {
             global $DB;
             $params['courseid'] = $context->instanceid;
             $coursename = $DB->get_field('course', 'shortname', array('id' => $context->instanceid));
-            $urltext = get_string('resourcelibrarycourse:name', 'local_resourcelibrary', $coursename);
+            $urltext = static::get_resource_library_menu_text($coursename);
         }
         return [
             $urltext,
             new \moodle_url($CFG->wwwroot . '/local/resourcelibrary/pages/resourcelibrary.php', $params)];
     }
 
-
     /**
      * Check if multiselect installed
+     *
      * @return bool
      */
     public static function is_multiselect_installed() {
@@ -169,5 +170,48 @@ class utils {
         $hiddenfieldslist = array_diff($hiddenfieldslist, $fieldstoremove);
         $configname = static::get_hidden_filter_config_name($handler);
         set_config($configname, implode(',', $hiddenfieldslist), 'local_resourcelibrary');
+    }
+
+    /**
+     * Global function to get the ressource library link/menu text.
+
+     * This allow to override the menu in other plugin or just by adjusting
+     * this setting.
+     * The usual language string is returned if the setting is left empty.
+     *
+     * @param string $coursename
+     * @return false|\lang_string|mixed|object|string|null
+     * @throws \coding_exception
+     * @throws \dml_exception
+     */
+    public static function get_resource_library_menu_text($coursename = "") {
+        $rsmenutext = get_config('local_resourcelibrary', 'menutextoverride');
+        $generictext = get_string('resourcelibrary', 'local_resourcelibrary');
+        $currentlang = current_language();
+        $courseref = "";
+
+        if ($coursename) {
+            $courseref = " ({$coursename})";
+        }
+        if (!trim($rsmenutext)) {
+            return $generictext . $courseref;
+        }
+        try {
+            $alllangs = array_map(
+                function($value) {
+                    return explode('|', $value);
+                },
+                explode('\n', $rsmenutext)
+            );
+
+            foreach ($alllangs as $lang) {
+                if ($lang && !empty($lang[1] && $lang[1] == $currentlang)) {
+                    return $lang[0] . $courseref;
+                }
+            }
+            return $generictext . $courseref;
+        } catch (Exception $e) {
+            return $generictext . $courseref;
+        }
     }
 }

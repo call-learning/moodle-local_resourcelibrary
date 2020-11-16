@@ -27,10 +27,8 @@ namespace local_resourcelibrary\output;
 defined('MOODLE_INTERNAL') || die();
 
 use core_customfield\field_controller;
-use local_resourcelibrary\filters\customfield_utils;
-use renderable;
+use local_resourcelibrary\locallib\customfield_utils;
 use renderer_base;
-use templatable;
 
 /**
  * Class to display a filter.
@@ -65,7 +63,7 @@ class filter {
      * @return array Context variables for the template
      */
     public function export_for_template(renderer_base $output) {
-        $filterclass = '\local_resourcelibrary\filters\\' . $this->field->get('type') . '_filter';
+        $filterclass = \local_resourcelibrary\filters\utils::get_first_matching_filter($this->field);
         $data = [];
         if (class_exists($filterclass)) {
             $name = customfield_utils::get_field_name('customfield_', $this->field->get('shortname'));

@@ -38,8 +38,12 @@ $string['card'] = 'Vignette';
 $string['course_metadata'] = 'Metatdata pour la Pédagothèque numérique';
 $string['mainresourcelibrary'] = 'Liste de cours';
 $string['manage:hiddenfilter'] = 'Caché pour Filtres?';
+
 $string['resourcelibrary'] = 'Pédagothèque numérique';
-$string['resourcelibrarycourse:name'] = 'Pédagothèque numérique ({$a})';
+$string['resourcelibrary:menutextoverride'] = 'Texte pour le menu/lien';
+$string['resourcelibrary:menutextoverride:desc'] = 'Texte pour le menu/lien, si vide, ce sera la valeur de "ressourcelibrary".
+ On définit une chaine par langue par exemple {$a}';
+
 $string['resourcelibraryfieldsettings'] = 'Paramètres des champs de la Pédagothèque numérique';
 $string['resourcelibrary_course_customfield'] = 'Gestion des champs personalisés de cours pour la Pédagothèque numérique';
 $string['resourcelibrary_coursemodule_customfield'] = 'Gestion des champs personalisés d\'activité pour la Pédagothèque numérique';
@@ -86,3 +90,4 @@ $string['privacy:metadata:resourcelibrarysortpreference'] = 'Préférences d\'or
 $string['title'] = 'Titre';
 $string['title:desc'] = 'Titre (Descendant)';
 $string['viewitem'] = 'Voir';
+$string['wronghandlerforfilter'] = 'Mauvais handler {$a->handlername} pour le filtre {$a->filtername}';

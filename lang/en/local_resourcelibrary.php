@@ -38,8 +38,12 @@ $string['card'] = 'Card';
 $string['course_metadata'] = 'Metatdata for course Resource Library';
 $string['mainresourcelibrary'] = 'Main library';
 $string['manage:hiddenfilter'] = 'Hidden in Filter?';
+
 $string['resourcelibrary'] = 'Resource library';
-$string['resourcelibrarycourse:name'] = 'Resource library ({$a})';
+$string['resourcelibrary:menutextoverride'] = 'Text for menu/link';
+$string['resourcelibrary:menutextoverride:desc'] = 'Text for ressource library menu/link, defaults to "ressourcelibrary". We define
+ one for each language for example {$a}';
+
 $string['resourcelibraryfieldsettings'] = 'Resource Library Field Settings';
 $string['resourcelibrary_course_customfield'] = 'Manage custom Resource Library field for course';
 $string['resourcelibrary_coursemodule_customfield'] = 'Manage custom Resource Library field for course modules';
@@ -87,3 +91,4 @@ $string['privacy:metadata:resourcelibrarysortpreference'] = 'Sort preference';
 $string['title'] = 'Full name';
 $string['title:desc'] = 'Full name (Descending)';
 $string['viewitem'] = 'View';
+$string['wronghandlerforfilter'] = 'Wrong handler {$a->handlername} for filter {$a->filtername}';

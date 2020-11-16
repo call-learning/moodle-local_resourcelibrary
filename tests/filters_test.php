@@ -58,8 +58,8 @@ class local_resourcelibrary_filter_testcase extends local_resourcelibrary_testca
         // But the datacontroller for each class (checkbox) will answer customfield_xx for the element name which
         // makes it impossible to prefix the Resource Library field by anything else than 'customfield_'.
         $dg->create_module('label', (object) $activitydata);
-        $sqlcourse = \local_resourcelibrary\filters\customfield_utils::get_sql_for_entity_customfields('course');
-        $sqlcm = \local_resourcelibrary\filters\customfield_utils::get_sql_for_entity_customfields('coursemodule');
+        $sqlcourse = \local_resourcelibrary\locallib\customfield_utils::get_sql_for_entity_customfields('course');
+        $sqlcm = \local_resourcelibrary\locallib\customfield_utils::get_sql_for_entity_customfields('coursemodule');
         $courserow = $DB->get_records_sql($sqlcourse . ' WHERE e.id =' . $c1->id);
         $activityrow = $DB->get_records_sql($sqlcm);
         $this->assertCount(1, $courserow);

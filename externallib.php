@@ -24,7 +24,7 @@
 
 use core_course\external\course_module_summary_exporter;
 use local_resourcelibrary\external\course_summary_simple_exporter;
-use local_resourcelibrary\filters\customfield_utils;
+use local_resourcelibrary\locallib\customfield_utils;
 
 defined('MOODLE_INTERNAL') || die;
 

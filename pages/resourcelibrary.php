@@ -22,7 +22,7 @@
  */
 
 require_once('../../../config.php');
-global $CFG;
+global $CFG, $PAGE, $DB, $OUTPUT;
 require_once($CFG->dirroot . '/course/lib.php');
 
 $courseid = optional_param('courseid', SITEID, PARAM_INT);
@@ -43,7 +43,7 @@ if ($courseid != SITEID) {
 
 $site = get_site();
 
-$strresourcelibrary = get_string('resourcelibrary', 'local_resourcelibrary');
+$strresourcelibrary = \local_resourcelibrary\locallib\utils::get_resource_library_menu_text();
 
 $pagedesc = $strresourcelibrary;
 $title = $strresourcelibrary;
@@ -66,7 +66,7 @@ if ($courseid != SITEID) {
     );
     $course = $DB->get_record('course', array('id' => $courseid));
     $PAGE->navbar->add(
-        get_string('resourcelibrarycourse:name', 'local_resourcelibrary', course_format_name($course)
+        \local_resourcelibrary\locallib\utils::get_resource_library_menu_text(course_format_name($course)
         ));
 }
 

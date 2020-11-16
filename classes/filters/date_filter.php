@@ -34,14 +34,7 @@ defined('MOODLE_INTERNAL') || die;
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class date_filter extends base_filter {
-    /**
-     * Options for the list values
-     *
-     * @var array
-     */
-    protected $_options;
-
+class date_filter extends base {
     /**
      * Constructor
      *
@@ -51,9 +44,17 @@ class date_filter extends base_filter {
     public function __construct(\core_customfield\field_controller $field) {
         parent::__construct($field);
         $this->_operator = self::OPERATOR_GREATERTHAN;
-        if (!$field instanceof \customfield_date\field_controller) {
-            throw new \moodle_exception('wronghandlerforfilter', 'local_resourcelibrary');
-        }
+    }
+
+    /**
+     * Check if this is the right type for this handler
+     *
+     * @param \core_customfield\field_controller $field
+     * @return bool
+     * @throws \moodle_exception
+     */
+    public static function check_is_righttype(\core_customfield\field_controller $field) {
+        return $field instanceof \customfield_date\field_controller;
     }
 
     /**
