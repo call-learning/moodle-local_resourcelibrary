@@ -9,15 +9,15 @@ Feature: As an admin I should be able to set and retrieve values from custom fie
       | component   | area   | name                             |
       | core_course | course | Resource Library: Generic fields |
     Given the following "local_resourcelibrary > field" exist:
-      | component             | area         | name                | customfieldcategory              | shortname | type        | configdata                                                                                                          |
-      | core_course           | course       | Test Field Text     | Resource Library: Generic fields | CF1       | text        |                                                                                                                     |
-      | core_course           | course       | Test Field Checkbox | Resource Library: Generic fields | CF2       | checkbox    |                                                                                                                     |
-      | core_course           | course       | Test Field Select   | Resource Library: Generic fields | CF4       | select      | {"required":"1","uniquevalues":"0","options":"A\r\nB\r\nC\r\nD","defaultvalue":"A,C","locked":"0","visibility":"2"} |
-      | core_course           | course       | Test Field Textarea | Resource Library: Generic fields | CF5       | textarea    |                                                                                                                     |
-      | local_resourcelibrary | coursemodule | Test Field Text     | Resource Library: Generic fields | CM1       | text        |                                                                                                                     |
-      | local_resourcelibrary | coursemodule | Test Field Checkbox | Resource Library: Generic fields | CM2       | checkbox    |                                                                                                                     |
-      | local_resourcelibrary | coursemodule | Test Field Select   | Resource Library: Generic fields | CM4       | select      | {"required":"1","uniquevalues":"0","options":"A\r\nB\r\nC\r\nD","defaultvalue":"A,C","locked":"0","visibility":"2"} |
-      | local_resourcelibrary | coursemodule | Test Field Textarea | Resource Library: Generic fields | CM5       | textarea    |                                                                                                                     |
+      | component             | area         | name                | customfieldcategory              | shortname | type     | configdata                                                                                                          |
+      | core_course           | course       | Test Field Text     | Resource Library: Generic fields | CF1       | text     |                                                                                                                     |
+      | core_course           | course       | Test Field Checkbox | Resource Library: Generic fields | CF2       | checkbox |                                                                                                                     |
+      | core_course           | course       | Test Field Select   | Resource Library: Generic fields | CF4       | select   | {"required":"1","uniquevalues":"0","options":"A\r\nB\r\nC\r\nD","defaultvalue":"A,C","locked":"0","visibility":"2"} |
+      | core_course           | course       | Test Field Textarea | Resource Library: Generic fields | CF5       | textarea |                                                                                                                     |
+      | local_resourcelibrary | coursemodule | Test Field Text     | Resource Library: Generic fields | CM1       | text     |                                                                                                                     |
+      | local_resourcelibrary | coursemodule | Test Field Checkbox | Resource Library: Generic fields | CM2       | checkbox |                                                                                                                     |
+      | local_resourcelibrary | coursemodule | Test Field Select   | Resource Library: Generic fields | CM4       | select   | {"required":"1","uniquevalues":"0","options":"A\r\nB\r\nC\r\nD","defaultvalue":"A,C","locked":"0","visibility":"2"} |
+      | local_resourcelibrary | coursemodule | Test Field Textarea | Resource Library: Generic fields | CM5       | textarea |                                                                                                                     |
     And the following "activities" exist:
       | activity | name      | intro     | course | idnumber |
       | page     | PageName1 | PageDesc1 | C1     | PAGE1    |
@@ -60,7 +60,6 @@ Feature: As an admin I should be able to set and retrieve values from custom fie
     And the field "Test Field Select" matches value "C"
     And the field "Test Field Textarea" matches value "ACDBE Text"
 
-    @runonly
   Scenario: As an admin if I set a value for a course custom field, then I should be able to retrieve it after.
     Given I am on site homepage
     And I log in as "admin"
@@ -89,11 +88,13 @@ Feature: As an admin I should be able to set and retrieve values from custom fie
   Scenario: As an admin if I set a value for a course module custom field, then I should be able to retrieve it after (Multiselect).
     Given multiselect field is installed
     Given the following "local_resourcelibrary > field" exist:
-      | core_course           | course       | Test Field MSelect  | Resource Library: Generic fields | CF3       | multiselect | {"required":"1","uniquevalues":"0","options":"A\r\nB\r\nC\r\nD","defaultvalue":"A,C","locked":"0","visibility":"2"} |
-      | local_resourcelibrary | coursemodule | Test Field MSelect  | Resource Library: Generic fields | CM3       | multiselect | {"required":"1","uniquevalues":"0","options":"A\r\nB\r\nC\r\nD","defaultvalue":"A,C","locked":"0","visibility":"2"} |
+      | component             | area         | name               | customfieldcategory              | shortname | type        | configdata                                                                                                          |
+      | core_course           | course       | Test Field MSelect | Resource Library: Generic fields | CF3       | multiselect | {"required":"1","uniquevalues":"0","options":"A\r\nB\r\nC\r\nD","defaultvalue":"A,C","locked":"0","visibility":"2"} |
+      | local_resourcelibrary | coursemodule | Test Field MSelect | Resource Library: Generic fields | CM3       | multiselect | {"required":"1","uniquevalues":"0","options":"A\r\nB\r\nC\r\nD","defaultvalue":"A,C","locked":"0","visibility":"2"} |
     Given the following "local_resourcelibrary > fielddata" exist:
-      | CF3            | 0           | C1              |                  |          |
-      | CM3            | 0           | C1              | PAGE1            | page     |
+      | fieldshortname | value | courseshortname | activityidnumber | activity |
+      | CF3            | 0     | C1              |                  |          |
+      | CM3            | 0     | C1              | PAGE1            | page     |
     Given I am on site homepage
     And I log in as "admin"
     Given I am on "Course 1" course homepage
@@ -113,21 +114,25 @@ Feature: As an admin I should be able to set and retrieve values from custom fie
   Scenario: As an admin if I set a value for a course custom field, then I should be able to retrieve it after (Multiselect).
     Given multiselect field is installed
     Given the following "local_resourcelibrary > field" exist:
-      | core_course           | course       | Test Field MSelect  | Resource Library: Generic fields | CF3       | multiselect | {"required":"1","uniquevalues":"0","options":"A\r\nB\r\nC\r\nD","defaultvalue":"A,C","locked":"0","visibility":"2"} |
-      | local_resourcelibrary | coursemodule | Test Field MSelect  | Resource Library: Generic fields | CM3       | multiselect | {"required":"1","uniquevalues":"0","options":"A\r\nB\r\nC\r\nD","defaultvalue":"A,C","locked":"0","visibility":"2"} |
+      | component             | area         | name               | customfieldcategory              | shortname | type        | configdata                                                                                                          |
+      | core_course           | course       | Test Field MSelect | Resource Library: Generic fields | CF3       | multiselect | {"required":"1","uniquevalues":"0","options":"A\r\nB\r\nC\r\nD","defaultvalue":"A,C","locked":"0","visibility":"2"} |
+      | local_resourcelibrary | coursemodule | Test Field MSelect | Resource Library: Generic fields | CM3       | multiselect | {"required":"1","uniquevalues":"0","options":"A\r\nB\r\nC\r\nD","defaultvalue":"A,C","locked":"0","visibility":"2"} |
     Given the following "local_resourcelibrary > fielddata" exist:
-      | CF3            | 0           | C1              |                  |          |
-      | CM3            | 0           | C1              | PAGE1            | page     |
+      | fieldshortname | value | courseshortname | activityidnumber | activity |
+      | CF3            | 0     | C1              |                  |          |
+      | CM3            | 0     | C1              | PAGE1            | page     |
     Given I am on site homepage
     And I log in as "admin"
     Given I am on "Course 1" course homepage
     And I navigate to "Edit settings" in current page administration
     And I expand all fieldsets
     Then I should see "Resource Library: Generic fields"
-    And the field "Test Field MSelect" matches value "A"
-    Then I set the field "Test Field MSelect" to "A,B"
+    Then I should see "A" in the "Test Field MSelect" "autocomplete"
+    Then I set the field "Test Field MSelect" to "A"
+    Then I set the field "Test Field MSelect" to "B"
     And I click on "Save" "button"
     Given I am on "Course 1" course homepage
     And I navigate to "Edit settings" in current page administration
     And I expand all fieldsets
-    And the field "Test Field MSelect" matches value "A,B"
+    Then I should see "A" in the "Test Field MSelect" "autocomplete"
+    Then I should see "B" in the "Test Field MSelect" "autocomplete"

@@ -41,7 +41,7 @@ $string['manage:hiddenfilter'] = 'Hidden in Filter?';
 
 $string['resourcelibrary'] = 'Resource library';
 $string['resourcelibrary:menutextoverride'] = 'Text for menu/link';
-$string['resourcelibrary:menutextoverride:desc'] = 'Text for ressource library menu/link, defaults to "ressourcelibrary". We define
+$string['resourcelibrary:menutextoverride:desc'] = 'Text for ressource library menu/link, defaults to "resourcelibrary". We define
  one for each language for example {$a}';
 
 $string['resourcelibraryfieldsettings'] = 'Resource Library Field Settings';

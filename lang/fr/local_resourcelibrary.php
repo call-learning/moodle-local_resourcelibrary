@@ -41,7 +41,7 @@ $string['manage:hiddenfilter'] = 'Caché pour Filtres?';
 
 $string['resourcelibrary'] = 'Pédagothèque numérique';
 $string['resourcelibrary:menutextoverride'] = 'Texte pour le menu/lien';
-$string['resourcelibrary:menutextoverride:desc'] = 'Texte pour le menu/lien, si vide, ce sera la valeur de "ressourcelibrary".
+$string['resourcelibrary:menutextoverride:desc'] = 'Texte pour le menu/lien, si vide, ce sera la valeur de "resourcelibrary".
  On définit une chaine par langue par exemple {$a}';
 
 $string['resourcelibraryfieldsettings'] = 'Paramètres des champs de la Pédagothèque numérique';

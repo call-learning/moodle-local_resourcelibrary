@@ -70,7 +70,7 @@ class utils {
      * Get matching class. Send a debug message if several similar class
      * matches the same field type.
      *
-     * In general we will take the one out of the local_ressourcelibrary namespace
+     * In general we will take the one out of the local_resourcelibrary namespace
      * as having the most priority.
      * @param \core_customfield\field_controller $field
      * @return mixed
