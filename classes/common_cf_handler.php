@@ -153,34 +153,4 @@ trait common_cf_handler  {
         $PAGE->navbar->add($title);
         return $title;
     }
-
-    /**
-     * Get raw data associated with all fields current user can view or edit
-     *
-     * @param int $instanceid
-     * @return array
-     */
-    public function get_instance_data_for_backup(int $instanceid): array {
-        $finalfields = [];
-        $data = $this->get_instance_data($instanceid, true);
-        foreach ($data as $d) {
-            if ($d->get('id') && $this->can_backup($d->get_field(), $instanceid)) {
-
-                $finalfield = [
-                    'id' => $d->get('id'),
-                    'shortname' => $d->get_field()->get('shortname'),
-                    'type' => $d->get_field()->get('type'),
-                    'valueformat' => $d->get('valueformat')];
-                $value = $d->get_value();
-                if (is_array($value)) {
-                    $value = implode(',', $value); // Special case for multiselect.
-                }
-                $finalfield['value'] = $value;
-                $finalfields[] = $finalfield;
-            }
-
-        }
-        return $finalfields;
-    }
-
 }

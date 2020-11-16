@@ -33,15 +33,6 @@ defined('MOODLE_INTERNAL') || die;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class checkbox_filter extends base {
-    /**
-     * Constructor
-     *
-     * @param \core_customfield\field_controller $field user table filed name
-     * @throws \moodle_exception
-     */
-    public function __construct(\core_customfield\field_controller $field) {
-        parent::__construct($field);
-    }
 
     /**
      * Check if this is the right type for this handler

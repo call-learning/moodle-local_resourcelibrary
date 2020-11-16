@@ -318,29 +318,6 @@ class local_resourcelibrary_external extends external_api {
     }
 
     /**
-     * Export field values (not used now)
-     *
-     * @param array $fieldarray
-     * @param string $component
-     * @param string $area
-     * @param int $courseid
-     * @throws moodle_exception
-     */
-    protected static function export_fields(&$fieldarray, $component, $area, $courseid) {
-        $rlfieldhandler = \core_customfield\handler::get_handler($component, $area);
-        if ($rlfields = $rlfieldhandler->export_instance_data($courseid, true)) {
-            foreach ($rlfields as $data) {
-                $fieldarray[] = [
-                    'type' => $data->get_type(),
-                    'value' => $data->get_value(),
-                    'name' => $data->get_name(),
-                    'shortname' => $data->get_shortname()
-                ];
-            }
-        }
-    }
-
-    /**
      * Returns description of method result value
      *
      * @return external_description

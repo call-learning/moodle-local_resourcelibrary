@@ -27,6 +27,14 @@ use ReflectionClass;
 
 defined('MOODLE_INTERNAL') || die;
 
+/**
+ * Class utils
+ *
+ * Generic function to find the filter plugins.
+ *
+ * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class utils {
     /**
      * Get all syllabus display classes
@@ -61,8 +69,11 @@ class utils {
     /**
      * Get matching class. Send a debug message if several similar class
      * matches the same field type.
+     *
      * In general we will take the one out of the local_ressourcelibrary namespace
      * as having the most priority.
+     * @param \core_customfield\field_controller $field
+     * @return mixed
      */
     public static function get_first_matching_filter(\core_customfield\field_controller $field) {
         static $allfilterclasses = null; // We cache this in subsequent calls.
