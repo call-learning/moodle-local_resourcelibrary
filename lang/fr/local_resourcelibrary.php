@@ -43,6 +43,8 @@ $string['resourcelibrary'] = 'Pédagothèque numérique';
 $string['resourcelibrary:menutextoverride'] = 'Texte pour le menu/lien';
 $string['resourcelibrary:menutextoverride:desc'] = 'Texte pour le menu/lien, si vide, ce sera la valeur de "resourcelibrary".
  On définit une chaine par langue par exemple {$a}';
+$string['resourcelibrary:replacecourseindex'] = 'Remplacer la page de liste de cours par la page de pédagothèque numérique.';
+$string['resourcelibrary:replacecourseindex:desc'] = 'Remplacer la page de liste de cours par la page de pédagothèque numérique.';
 
 $string['resourcelibraryfieldsettings'] = 'Paramètres des champs de la Pédagothèque numérique';
 $string['resourcelibrary_course_customfield'] = 'Gestion des champs personalisés de cours pour la Pédagothèque numérique';

@@ -43,6 +43,8 @@ $string['resourcelibrary'] = 'Resource library';
 $string['resourcelibrary:menutextoverride'] = 'Text for menu/link';
 $string['resourcelibrary:menutextoverride:desc'] = 'Text for ressource library menu/link, defaults to "resourcelibrary". We define
  one for each language for example {$a}';
+$string['resourcelibrary:replacecourseindex'] = 'Replace course index with the Ressource Library page.';
+$string['resourcelibrary:replacecourseindex:desc'] = 'Replace course index with the Ressourcelibrary page.';
 
 $string['resourcelibraryfieldsettings'] = 'Resource Library Field Settings';
 $string['resourcelibrary_course_customfield'] = 'Manage custom Resource Library field for course';

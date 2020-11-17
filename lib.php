@@ -116,6 +116,7 @@ function local_resourcelibrary_enable_disable_plugin_callback() {
 /**
  * Extends navigation for the plugin (link to the resource library).
  *
+ * Also replace navigation so go directly to the course catalog from the breadcrumb.
  * @param global_navigation $nav
  * @throws coding_exception
  * @throws dml_exception
@@ -133,6 +134,11 @@ function local_resourcelibrary_extend_navigation(global_navigation $nav) {
             new pix_icon('i/course', 'resourcelibrary'));
         $node->showinflatnavigation = true;
         $nav->add_node($node, 'mycourses');
+    }
+    $replacenavigation = get_config('local_resourcelibrary', 'replacecourseindex');
+    if ($replacenavigation) {
+        $coursenav = $nav->find('courses', global_navigation::TYPE_ROOTNODE);
+        $coursenav->action = new moodle_url('/local/resourcelibrary/pages/resourcelibrary.php');
     }
 }
 

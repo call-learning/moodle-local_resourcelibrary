@@ -68,6 +68,11 @@ if ($hassiteconfig) {
         )
     );
 
+    $mainsettings->add(new admin_setting_configcheckbox('local_resourcelibrary/replacecourseindex',
+        get_string('resourcelibrary:replacecourseindex', 'local_resourcelibrary'),
+        get_string('resourcelibrary:replacecourseindex:desc', 'local_resourcelibrary'),
+        true));
+
     $mainsettings->add(new admin_setting_configcheckbox('local_resourcelibrary/activateactivitylibrary',
         get_string('resourcelibrary:activateactivitylibrary', 'local_resourcelibrary'),
         get_string('resourcelibrary:activateactivitylibrary:desc', 'local_resourcelibrary'),
