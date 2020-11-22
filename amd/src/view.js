@@ -324,9 +324,9 @@ define(
             }
         };
         var init = function (root) {
-            this.refresh(root);
+            // Only init the view when filters are initialised.
             // Reset the views when we receive a change in filters.
-            $(document).on('resourcelibrary-filters-change',
+            $(document).on('resourcelibrary-filters-inited resourcelibrary-filters-change',
                 function(e, formdata) {
                     currentFilters = formdata;
                     this.refresh(root);

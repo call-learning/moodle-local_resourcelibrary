@@ -52,9 +52,20 @@ class select_filter extends baseselect_filter {
      * @throws \coding_exception
      */
     public function add_to_form(\MoodleQuickForm &$mform) {
+        $elementname = $this->get_form_value_item_name();
         $choices = array('' => get_string('filter:anyvalue', 'local_resourcelibrary')) + $this->_options;
-        $mform->addElement('select', $this->get_form_value_item_name(), $this->_label, $choices);
+        $mform->addElement('select', $elementname, $this->_label, $choices);
+        $mform->setType($elementname, $this->get_param_type());
         parent::add_to_form($mform);
+    }
+
+    /**
+     * Return the expected param type for cleaning up the value.
+     *
+     * @return mixed
+     */
+    public function get_param_type() {
+        return PARAM_INT;
     }
 
     /**

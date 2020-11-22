@@ -57,8 +57,17 @@ class checkbox_filter extends base {
         $elementname = $this->get_form_value_item_name();
         $mform->addElement( 'checkbox', $elementname, $this->_label);
         $mform->setDefault($elementname, $this->_field->get_configdata_property('checkbydefault'));
-        $mform->setType($elementname, PARAM_BOOL);
+        $mform->setType($elementname, $this->get_param_type());
         parent::add_to_form($mform);
+    }
+
+
+    /**
+     * Return the expected param type for cleaning up the value.
+     * @return mixed
+     */
+    public function get_param_type() {
+        return PARAM_BOOL;
     }
 
     /**

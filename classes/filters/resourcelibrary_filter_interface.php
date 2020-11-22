@@ -97,5 +97,4 @@ interface resourcelibrary_filter_interface {
      */
     const OPERATOR_GREATERTHAN = 8;
 
-
 }

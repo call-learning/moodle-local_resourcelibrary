@@ -44,8 +44,16 @@ abstract class basetext_filter extends base {
         $elementname = $this->get_form_value_item_name();
         $mform->addElement( 'text', $elementname, $this->_label, 'size=' . (int)
             $this->_field->get_configdata_property('displaysize'));
-        $mform->setType($elementname, PARAM_TEXT);
+        $mform->setType($elementname, $this->get_param_type());
         parent::add_to_form($mform);
+    }
+
+    /**
+     * Return the expected param type for cleaning up the value.
+     * @return mixed
+     */
+    public function get_param_type() {
+        return PARAM_TEXT;
     }
 
     /**

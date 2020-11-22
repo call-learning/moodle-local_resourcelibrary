@@ -62,4 +62,34 @@ class filter_form extends \moodleform {
         $mform->addGroup($buttonarray, 'buttonar', '', array(' '), false);
         $mform->closeHeaderBefore('buttonar');
     }
+
+    /**
+     * Retrieve values passed as GET (to go directly to the search page)
+     */
+    public function after_definition() {
+        global $_GET;
+        parent::after_definition();
+        // Get custom field presets.
+        $submission = $_GET;
+        merge_query_params($submission, $_POST);
+        $prefilters = [];
+
+        // Filter out non relevant values.
+        $handler = $this->_customdata['handler'];
+        foreach ($handler->get_fields() as $field) {
+            $shortname = $field->get('shortname');
+            if (!utils::is_field_hidden_filters($handler, $shortname)) {
+                $filter = customfield_utils::get_filter_from_field($field);
+                foreach ($submission as $key => $value) {
+                    if ($key == 'customfield_' . $shortname) {
+                        $prefilters[$key]['operator'] = clean_param($value['operator'], PARAM_INT);
+                        $prefilters[$key]['type'] = clean_param($value['type'], PARAM_ALPHANUMEXT);
+                        $prefilters[$key]['value'] = clean_param($value['value'], $filter->get_param_type());
+                    }
+                }
+            }
+        }
+        // Set predefined values.
+        $this->_form->updateSubmission($prefilters, null);
+    }
 }

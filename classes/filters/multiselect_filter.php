@@ -54,12 +54,22 @@ class multiselect_filter extends baseselect_filter {
      */
     public function add_to_form(\MoodleQuickForm &$mform) {
         $choices = $this->_options;
+        $elementname = $this->get_form_value_item_name();
         $mform->addElement('searchableselector',
-            $this->get_form_value_item_name(),
+            $elementname,
             $this->_label,
             $choices,
             array('multiple' => true));
+        $mform->setType($elementname, $this->get_param_type());
         base::add_to_form($mform);
+    }
+
+    /**
+     * Return the expected param type for cleaning up the value.
+     * @return mixed
+     */
+    public function get_param_type() {
+        return PARAM_INT;
     }
 
     /**

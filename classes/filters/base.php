@@ -172,5 +172,11 @@ abstract class base implements resourcelibrary_filter_interface {
     public function get_label() {
         return $this->_label;
     }
+
+    /**
+     * Return the expected param type for cleaning up the value.
+     * @return mixed
+     */
+    public abstract function get_param_type();
 }
 

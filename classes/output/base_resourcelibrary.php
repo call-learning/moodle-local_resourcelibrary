@@ -200,8 +200,11 @@ abstract class base_resourcelibrary implements renderable, templatable {
      * @return string|string[]|null
      */
     public function get_filters_content($handler) {
-        $filterscontent = (new filter_form(null, ['handler' => $handler],
-            'post', '', array('class' => 'resourcelibrary-filters-form')))->render();
+        global $_GET;
+        $filterform = new filter_form(null, ['handler' => $handler],
+            'post', '', array('class' => 'resourcelibrary-filters-form'));
+
+        $filterscontent = $filterform->render();
         // Now this is still a hack, but impossible to cleanly override the renderers in a local plugin.
         // We will strip the mb.
         return preg_replace('/col-md-[0-9]+/', '', $filterscontent);

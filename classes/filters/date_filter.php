@@ -66,9 +66,18 @@ class date_filter extends base {
     public function add_to_form(\MoodleQuickForm &$mform) {
         $elementname = $this->get_form_value_item_name();
         $mform->addElement('date_selector', $elementname, $this->_label, ['optional' => true]);
-        $mform->setType($elementname, PARAM_INT);
+        $mform->setType($elementname, $this->get_param_type());
         parent::add_to_form($mform);
     }
+
+    /**
+     * Return the expected param type for cleaning up the value.
+     * @return mixed
+     */
+    public function get_param_type() {
+        return PARAM_INT;
+    }
+
 
     /**
      * Retrieves data from the form data
