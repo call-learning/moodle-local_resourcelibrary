@@ -84,7 +84,13 @@ class filter_form extends \moodleform {
                     if ($key == 'customfield_' . $shortname) {
                         $prefilters[$key]['operator'] = clean_param($value['operator'], PARAM_INT);
                         $prefilters[$key]['type'] = clean_param($value['type'], PARAM_ALPHANUMEXT);
-                        $prefilters[$key]['value'] = clean_param($value['value'], $filter->get_param_type());
+                        if (is_array($value['value'])) {
+                            foreach($value['value'] as $k=>$v) {
+                                $prefilters[$key]['value'][$k] = clean_param($v, $filter->get_param_type());
+                            }
+                        } else {
+                            $prefilters[$key]['value'] = clean_param($value['value'], $filter->get_param_type());
+                        }
                     }
                 }
             }

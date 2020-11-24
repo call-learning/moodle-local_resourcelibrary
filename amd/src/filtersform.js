@@ -87,12 +87,12 @@ define(['jquery', 'core/config'], function ($, config) {
         return false;
     }
     FiltersForm.init = function (selector) {
-        var target = $(selector).children('form');
+        var target = $(selector);
         // Remove any attempt to submit the form for real.
         target.on('submit', 'form', function (e) {
             e.preventDefault();
             // Now we get all the current values from the form.
-            var filterdataarray = get_filter_data(target, false);
+            var filterdataarray = get_filter_data(target.children('form'), false);
             if (filterdataarray) {
                 $(document).trigger('resourcelibrary-filters-change', [filterdataarray]);
             }
@@ -100,7 +100,7 @@ define(['jquery', 'core/config'], function ($, config) {
         $('#id_resetbutton').on('click', function () {
             $(target).children('form.resourcelibrary-filters-form')[0].reset();
         });
-        var filterdataarray = get_filter_data(target, true);
+        var filterdataarray = get_filter_data(target.children('form'), true);
         $(document).trigger('resourcelibrary-filters-inited', [filterdataarray]); // Filter are now initialised.
     };
     return FiltersForm;
