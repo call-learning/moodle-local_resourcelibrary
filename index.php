@@ -21,7 +21,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once('../../../config.php');
+require_once('../../config.php');
 global $CFG, $PAGE, $DB, $OUTPUT;
 require_once($CFG->dirroot . '/course/lib.php');
 
@@ -48,7 +48,7 @@ $strresourcelibrary = \local_resourcelibrary\locallib\utils::get_resource_librar
 $pagedesc = $strresourcelibrary;
 $title = $strresourcelibrary;
 
-$pageurl = new moodle_url('/local/resourcelibrary/pages/resourcelibrary.php', $pageparams);
+$pageurl = new moodle_url('/local/resourcelibrary/index.php', $pageparams);
 
 $PAGE->set_context($context);
 $PAGE->set_url($pageurl);
@@ -57,7 +57,7 @@ $PAGE->set_heading($pagedesc);
 
 if ($courseid != SITEID) {
     $PAGE->navbar->ignore_active();
-    $mainlibrarypage = new moodle_url('/local/resourcelibrary/pages/resourcelibrary.php');
+    $mainlibrarypage = new moodle_url('/local/resourcelibrary/index.php');
     $PAGE->navbar->add(get_string('mainresourcelibrary', 'local_resourcelibrary'),
         $mainlibrarypage,
         navigation_node::TYPE_CUSTOM,

@@ -138,7 +138,7 @@ function local_resourcelibrary_extend_navigation(global_navigation $nav) {
     $replacenavigation = get_config('local_resourcelibrary', 'replacecourseindex');
     if ($replacenavigation) {
         $coursenav = $nav->find('courses', global_navigation::TYPE_ROOTNODE);
-        $coursenav->action = new moodle_url('/local/resourcelibrary/pages/resourcelibrary.php');
+        $coursenav->action = new moodle_url('/local/resourcelibrary/index.php');
     }
 }
 

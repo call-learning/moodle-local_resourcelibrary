@@ -68,7 +68,7 @@ class utils {
         }
         return [
             $urltext,
-            new \moodle_url($CFG->wwwroot . '/local/resourcelibrary/pages/resourcelibrary.php', $params)];
+            new \moodle_url($CFG->wwwroot . '/local/resourcelibrary/index.php', $params)];
     }
 
     /**
