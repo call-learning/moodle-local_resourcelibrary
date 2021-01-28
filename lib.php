@@ -117,6 +117,7 @@ function local_resourcelibrary_enable_disable_plugin_callback() {
  * Extends navigation for the plugin (link to the resource library).
  *
  * Also replace navigation so go directly to the course catalog from the breadcrumb.
+ *
  * @param global_navigation $nav
  * @throws coding_exception
  * @throws dml_exception

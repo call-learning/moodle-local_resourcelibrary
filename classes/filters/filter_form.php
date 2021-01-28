@@ -85,7 +85,7 @@ class filter_form extends \moodleform {
                         $prefilters[$key]['operator'] = clean_param($value['operator'], PARAM_INT);
                         $prefilters[$key]['type'] = clean_param($value['type'], PARAM_ALPHANUMEXT);
                         if (is_array($value['value'])) {
-                            foreach($value['value'] as $k=>$v) {
+                            foreach ($value['value'] as $k => $v) {
                                 $prefilters[$key]['value'][$k] = clean_param($v, $filter->get_param_type());
                             }
                         } else {

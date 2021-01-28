@@ -84,36 +84,10 @@ abstract class base implements resourcelibrary_filter_interface {
      * @throws \coding_exception
      */
     public function add_to_form(\MoodleQuickForm &$mform) {
-        $typename = $this->_name . '[type]';
-        $operatorname = $this->_name . '[operator]';
-        $mform->addElement('hidden', $typename, $this->_field->get('type'));
-        $mform->setType($typename, PARAM_ALPHANUMEXT);
-        $mform->addElement('hidden', $operatorname, $this->_operator);
-        $mform->setType($operatorname, PARAM_INT);
-        $opinstructions = '';
-        switch ($this->_operator) {
-            case self::OPERATOR_LESSTHAN:
-                $opinstructions = 'lessthan';
-                break;
-            case self::OPERATOR_GREATERTHAN:
-                $opinstructions = 'greaterthan';
-                break;
-            case self::OPERATOR_EMPTY:
-                $opinstructions = 'empty';
-                break;
-            case self::OPERATOR_NOTEMPTY:
-                $opinstructions = 'notempty';
-                break;
-        }
-        if ($opinstructions) {
-            $mform->addElement('static',
-                $this->_name . 'instructions',
-                \html_writer::span("(" .
-                    get_string('operator:instructions:' . $opinstructions, 'local_resourcelibrary')
-                    . "*)",
-                    'filter-instructions')
-            );
-        }
+        utils::add_filter_operators_to_form($mform,
+            $this->_name,
+            $this->_field->get('type'),
+            $this->_operator);
     }
 
     /**

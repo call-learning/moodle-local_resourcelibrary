@@ -72,6 +72,7 @@ class utils {
      *
      * In general we will take the one out of the local_resourcelibrary namespace
      * as having the most priority.
+     *
      * @param \core_customfield\field_controller $field
      * @return mixed
      */
@@ -105,5 +106,50 @@ class utils {
             return reset($externalfilters);
         }
         return reset($rootfilters);
+    }
+
+    /**
+     * Add filter operator to form
+     *
+     * @param \moodleform $mform
+     * @param string $name
+     * @param string $type
+     * @param int $operator
+     * @throws \coding_exception
+     */
+    public static function add_filter_operators_to_form(&$mform,
+        $name,
+        $type,
+        $operator) {
+        $typename = $name . '[type]';
+        $operatorname = $name . '[operator]';
+        $mform->addElement('hidden', $typename, $type);
+        $mform->setType($typename, PARAM_ALPHANUMEXT);
+        $mform->addElement('hidden', $operatorname, $operator);
+        $mform->setType($operatorname, PARAM_INT);
+        $opinstructions = '';
+        switch ($operator) {
+            case resourcelibrary_filter_interface::OPERATOR_LESSTHAN:
+                $opinstructions = 'lessthan';
+                break;
+            case resourcelibrary_filter_interface::OPERATOR_GREATERTHAN:
+                $opinstructions = 'greaterthan';
+                break;
+            case resourcelibrary_filter_interface::OPERATOR_EMPTY:
+                $opinstructions = 'empty';
+                break;
+            case resourcelibrary_filter_interface::OPERATOR_NOTEMPTY:
+                $opinstructions = 'notempty';
+                break;
+        }
+        if ($opinstructions) {
+            $mform->addElement('static',
+                $name . 'instructions',
+                \html_writer::span("(" .
+                    get_string('operator:instructions:' . $opinstructions, 'local_resourcelibrary')
+                    . "*)",
+                    'filter-instructions')
+            );
+        }
     }
 }
