@@ -116,7 +116,7 @@ abstract class base implements resourcelibrary_filter_interface {
      * @param object $formdata data submited with the form
      * @return mixed array filter data or false when filter not set
      */
-    public abstract function check_data($formdata);
+    abstract public function check_data($formdata);
 
     /**
      * Returns the condition to be used with SQL where
@@ -124,7 +124,7 @@ abstract class base implements resourcelibrary_filter_interface {
      * @param array $data filter settings
      * @return array sql string and $params
      */
-    public abstract function get_sql_filter($data);
+    abstract public function get_sql_filter($data);
 
     /**
      * Get field name
@@ -149,8 +149,9 @@ abstract class base implements resourcelibrary_filter_interface {
 
     /**
      * Return the expected param type for cleaning up the value.
+     *
      * @return mixed
      */
-    public abstract function get_param_type();
+    abstract public function get_param_type();
 }
 

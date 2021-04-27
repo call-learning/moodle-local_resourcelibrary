@@ -180,7 +180,7 @@ class local_resourcelibrary_resourcelibraryfield_testcase extends local_resource
         $data = coursemodule_handler::create()->export_instance_data_object($label->coursemodule);
         $this->assertEquals('some text', $data->f1);
         $this->assertEquals('Yes', $data->f2);
-        $this->assertEquals(userdate($now, get_string('strftimedaydatetime')), $data->f3);
+        $this->assertEquals(userdate($this->now, get_string('strftimedaydatetime')), $data->f3);
         $this->assertEquals('b', $data->f5);
         $this->assertEquals('test', $data->f6);
 

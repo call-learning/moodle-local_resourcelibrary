@@ -191,7 +191,7 @@ abstract class base_resourcelibrary implements renderable, templatable {
      * @param \renderer_base $output
      * @return array Context variables for the template
      */
-    public abstract function export_for_template(renderer_base $output);
+    abstract public function export_for_template(renderer_base $output);
 
     /**
      * Get filters to be displayed
