@@ -98,7 +98,7 @@ class multiselect_filter extends baseselect_filter {
         static $counter = 0;
         $likes = array(
             (object) array('operator' => ' = :%s ', 'value' => '%s'),
-            (object) array('operator' => ' LIKE(:%s)', 'value' => 's,%%'),
+            (object) array('operator' => ' LIKE(:%s)', 'value' => '%s,%%'),
             (object) array('operator' => ' LIKE(:%s)', 'value' => '%%,%s'),
             (object) array('operator' => ' LIKE(:%s)', 'value' => '%%,%s,%%')
         );
