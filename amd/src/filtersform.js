@@ -24,10 +24,10 @@
 define(['jquery', 'core/config'], function ($, config) {
 
     /**
-     * GradingPanel class.
+     * FilterForm class.
      *
-     * @class GradingPanel
-     * @param {String} selector The selector for the page region containing the user navigation.
+     * @class FilterForm
+     * @param {String} selector The selector for the form
      */
     var FiltersForm = {};
 

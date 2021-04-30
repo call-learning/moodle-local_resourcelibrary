@@ -90,6 +90,7 @@ $string['operator:instructions:greaterthan'] = 'Greater Than';
 $string['privacy:metadata:resourcelibrarypagingpreference'] = 'Paging preference';
 $string['privacy:metadata:resourcelibraryviewpreference'] = 'View (List/Card) preference';
 $string['privacy:metadata:resourcelibrarysortpreference'] = 'Sort preference';
+$string['permalink:copy'] = 'Copy';
 $string['title'] = 'Full name';
 $string['title:desc'] = 'Full name (Descending)';
 $string['viewitem'] = 'View';

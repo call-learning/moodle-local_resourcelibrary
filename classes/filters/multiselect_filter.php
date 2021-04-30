@@ -69,7 +69,7 @@ class multiselect_filter extends baseselect_filter {
      * @return mixed
      */
     public function get_param_type() {
-        return PARAM_INT;
+        return PARAM_RAW;
     }
 
     /**

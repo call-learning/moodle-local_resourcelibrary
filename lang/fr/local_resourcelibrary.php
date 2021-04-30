@@ -89,6 +89,7 @@ $string['operator:instructions:greaterthan'] = 'Plus grand que';
 $string['privacy:metadata:resourcelibrarypagingpreference'] = 'Préférences sur la pagination';
 $string['privacy:metadata:resourcelibraryviewpreference'] = 'Préférences de vue (Liste/Carte)';
 $string['privacy:metadata:resourcelibrarysortpreference'] = 'Préférences d\'ordre d\'affichage';
+$string['permalink:copy'] = 'Copier';
 $string['title'] = 'Titre';
 $string['title:desc'] = 'Titre (Descendant)';
 $string['viewitem'] = 'Voir';
