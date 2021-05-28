@@ -81,7 +81,7 @@ define(
             var entityRegion = root.find(Selectors.entityView.region);
             return {
                 display: entityRegion.attr('data-display'),
-                sort: { column: entityRegion.attr('data-sort-column'), order: entityRegion.attr('data-sort-order') },
+                sort: {column: entityRegion.attr('data-sort-column'), order: entityRegion.attr('data-sort-order')},
                 displaycategories: entityRegion.attr('data-displaycategories'),
             };
         };
@@ -106,7 +106,7 @@ define(
             if (entityType === 'course') {
                 return Repository.getFilteredCourseList({
                     categoryid: 0,
-                    sorting: [{ column: modifiers.sort.column, order: modifiers.sort.order}],
+                    sorting: [{column: modifiers.sort.column, order: modifiers.sort.order}],
                     filters: filters,
                     limit: limit,
                     offset: offset
@@ -114,7 +114,7 @@ define(
             } else {
                 return Repository.getFilteredModulesList({
                     courseid: courseId,
-                    sorting: [{ column: modifiers.sort.column, order: modifiers.sort.order}],
+                    sorting: [{column: modifiers.sort.column, order: modifiers.sort.order}],
                     filters: filters,
                     limit: limit,
                     offset: offset
@@ -292,7 +292,32 @@ define(
             pagedContentPromise.then(function (html, js) {
                 registerPagedEventHandlers(root, namespace);
                 return Templates.replaceNodeContents(root.find(Selectors.entityView.region), html, js);
-            }).catch(Notification.exception);
+            }).done(
+                () => {
+                    const rootNode = document.querySelector(Selectors.entityView.region + ' .paged-content-page-container');
+                    const waitForNodeReplacement = (mutationsList) => {
+                        if (mutationsList) {
+                            mutationsList.forEach(
+                                (mutation) => {
+                                    if (mutation.type === 'childList') {
+                                        const event = new CustomEvent('resource_library_card_rendered', {
+                                            'rootNode': rootNode
+                                        });
+                                        // This is when we remove the upper layer that we are finished.
+                                        if (mutation.removedNodes?.length >0) {
+                                            document.dispatchEvent(event);
+                                        }
+                                    }
+                                }
+                            );
+                        }
+                    };
+                    const observer = new MutationObserver(waitForNodeReplacement);
+                    const config = { childList: true };
+                    observer.observe(rootNode, config);
+                    return true;
+                })
+                .catch(Notification.exception);
         };
 
         /**

@@ -22,10 +22,11 @@
  */
 
 require_once('../../config.php');
-global $CFG, $PAGE, $DB, $OUTPUT;
+global $CFG, $PAGE, $DB, $OUTPUT, $USER;
 require_once($CFG->dirroot . '/course/lib.php');
 
 $courseid = optional_param('courseid', SITEID, PARAM_INT);
+$edit = optional_param('edit', null, PARAM_BOOL);    // Turn editing on and off.
 require_login($courseid, true); // We make sure the course exists and we can access it.
 
 $PAGE->set_pagelayout('standard');
@@ -37,8 +38,11 @@ if ($courseid != SITEID) {
     $pageparams['courseid'] = $courseid;
     $context = context_course::instance($courseid);
     $renderable = new local_resourcelibrary\output\activity_resourcelibrary($courseid);
+    $PAGE->set_pagetype('course');
+    $PAGE->add_body_class('resource-library-activities');
 } else {
     $renderable = new local_resourcelibrary\output\course_resourcelibrary();
+    $PAGE->add_body_class('resource-library-courses');
 }
 
 $site = get_site();
@@ -54,6 +58,26 @@ $PAGE->set_context($context);
 $PAGE->set_url($pageurl);
 $PAGE->set_title($title);
 $PAGE->set_heading($pagedesc);
+
+// Toggle the editing state and switches.
+if ($PAGE->user_allowed_editing()) {
+    if ($edit !== null) {             // Editing state was specified.
+        $USER->editing = $edit;       // Change editing state.
+    }
+    if (!empty($USER->editing)) {
+        $edit = 1;
+    } else {
+        $edit = 0;
+    }
+    // Add button for editing page.
+    $params['edit'] = !$edit;
+    $url = new moodle_url($pageurl, $params);
+    $editactionstring = !$edit ? get_string('turneditingon') : get_string('turneditingoff');
+    $editbutton = $OUTPUT->single_button($url, $editactionstring);
+    $PAGE->set_button( $editbutton);
+} else {
+    $USER->editing = $edit = 0;
+}
 
 if ($courseid != SITEID) {
     $PAGE->navbar->ignore_active();
