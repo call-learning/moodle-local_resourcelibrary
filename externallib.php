@@ -70,7 +70,7 @@ class local_resourcelibrary_external extends external_api {
                             'type' => new external_value(PARAM_ALPHANUM,
                                 'Filter type as per customfield/fields/ type class or another value like
                                 globalsearch, ...'),
-                            'shortname' => new external_value(PARAM_ALPHANUM,
+                            'shortname' => new external_value(PARAM_ALPHANUMEXT,
                                 'Matching customfield shortname if it is a customfield filter',
                                 VALUE_OPTIONAL),
                             'operator' => new external_value(PARAM_INT,
