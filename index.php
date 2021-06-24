@@ -38,7 +38,7 @@ if ($courseid != SITEID) {
     $pageparams['courseid'] = $courseid;
     $context = context_course::instance($courseid);
     $renderable = new local_resourcelibrary\output\activity_resourcelibrary($courseid);
-    $PAGE->set_pagetype('course');
+    $PAGE->set_pagetype('resource-library-activities');
     $PAGE->add_body_class('resource-library-activities');
 } else {
     $renderable = new local_resourcelibrary\output\course_resourcelibrary();
@@ -89,6 +89,13 @@ if ($courseid != SITEID) {
         'mainlibrary'
     );
     $course = $DB->get_record('course', array('id' => $courseid));
+    $PAGE->navbar->add(course_format_name($course),
+        new moodle_url('/course/view.php', array('id'=>$course->id)),
+        navigation_node::TYPE_CUSTOM,
+        'course',
+        'course'
+    );
+
     $PAGE->navbar->add(
         \local_resourcelibrary\locallib\utils::get_resource_library_menu_text(course_format_name($course)
         ));

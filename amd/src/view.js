@@ -294,7 +294,8 @@ define(
                 return Templates.replaceNodeContents(root.find(Selectors.entityView.region), html, js);
             }).done(
                 () => {
-                    const rootNode = document.querySelector(Selectors.entityView.region + ' .paged-content-page-container');
+                    const rootNode = document.querySelector(Selectors.entityView.region
+                        + ' .paged-content-page-container');
                     const waitForNodeReplacement = (mutationsList) => {
                         if (mutationsList) {
                             mutationsList.forEach(
@@ -303,8 +304,9 @@ define(
                                         const event = new CustomEvent('resource_library_card_rendered', {
                                             'rootNode': rootNode
                                         });
-                                        // This is when we remove the upper layer that we are finished.
-                                        if (mutation.removedNodes?.length >0) {
+                                        const  haspagecontent = document.querySelector(Selectors.entityView.region
+                                            + ' .paged-content-page-container [data-region="paged-content-page"]');
+                                        if (haspagecontent) {
                                             document.dispatchEvent(event);
                                         }
                                     }
@@ -313,7 +315,7 @@ define(
                         }
                     };
                     const observer = new MutationObserver(waitForNodeReplacement);
-                    const config = { childList: true };
+                    const config = { childList: true , subtree: true };
                     observer.observe(rootNode, config);
                     return true;
                 })
