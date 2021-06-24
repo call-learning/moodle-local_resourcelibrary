@@ -47,8 +47,8 @@ $string['resourcelibrary:replacecourseindex'] = 'Remplacer la page de liste de c
 $string['resourcelibrary:replacecourseindex:desc'] = 'Remplacer la page de liste de cours par la page de pédagothèque numérique.';
 
 $string['resourcelibraryfieldsettings'] = 'Paramètres des champs de la Pédagothèque numérique';
-$string['resourcelibrary_course_customfield'] = 'Gestion des champs personalisés de cours pour la Pédagothèque numérique';
-$string['resourcelibrary_coursemodule_customfield'] = 'Gestion des champs personalisés d\'activité pour la Pédagothèque numérique';
+$string['resourcelibrary_course_customfield'] = 'Gestion des champs personnalisés de cours pour la Pédagothèque numérique';
+$string['resourcelibrary_coursemodule_customfield'] = 'Gestion des champs personnalisés d\'activité pour la Pédagothèque numérique';
 $string['resourcelibraryfield_islocked'] = 'Le champ est vérouillé';
 $string['resourcelibraryfield_islocked_help'] = 'Le champ est vérouillé et ne peut être changé';
 $string['resourcelibraryfield_visibletoall'] = 'Le champ est visible pour tous';
@@ -73,7 +73,7 @@ $string['enableresourcelibrary'] = 'Activer la Pédagothèque numérique';
 $string['filters'] = 'Filtres';
 $string['filter:anyvalue'] = 'Tous';
 $string['filter:submit'] = 'Filtrer';
-$string['resourcelibrary:activateactivitylibrary'] = 'Activer la bibliothèque d\'activitités';
+$string['resourcelibrary:activateactivitylibrary'] = 'Activer la bibliothèque d\'activités';
 $string['resourcelibrary:activateactivitylibrary:desc'] =
     'La bibliothèque d\'activités est similaire à la pédagothèque numérique mais pour les activités de cours';
 $string['resourcelibrary:managefields'] = 'Peut gérer les champs de la  Pédagothèque numérique';
