@@ -110,7 +110,7 @@ class manage_customfields extends external_api {
                 'area' => new external_value(PARAM_ALPHANUMEXT,
                     'customfield handler area'),
                 'fieldshortnames' => new external_multiple_structure(
-                    new external_value(PARAM_ALPHANUM, 'ccustomfield shortname')
+                    new external_value(PARAM_ALPHANUMEXT, 'ccustomfield shortname')
                 )
             )
         );
@@ -157,7 +157,7 @@ class manage_customfields extends external_api {
                 'area' => new external_value(PARAM_ALPHANUMEXT,
                     'customfield handler area'),
                 'fieldshortnames' => new external_multiple_structure(
-                    new external_value(PARAM_ALPHANUM, 'ccustomfield shortname')
+                    new external_value(PARAM_ALPHANUMEXT, 'ccustomfield shortname')
                 )
             )
         );

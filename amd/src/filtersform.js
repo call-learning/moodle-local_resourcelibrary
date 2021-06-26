@@ -79,6 +79,11 @@ define(['jquery', 'core/config'], function ($, config) {
             }
         });
         var filterdataarray = Object.values(filterdata).filter(function (v) {
+            // For date type there is a fourth parameter which should be equal to 1
+            // whenever the box is checked.
+            if (v.type == 'date' && v.value !== undefined) {
+                return v.value.split(",").length > 3; // We have 3 commas: there should be a 1 at the end (enabled).
+            }
             return v.value !== undefined || (v.value === null);
         }); // Remove filters for which value is undefined or null.
         if (sesskeyconfirmed || ignoresesskey) {

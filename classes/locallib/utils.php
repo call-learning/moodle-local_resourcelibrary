@@ -108,13 +108,18 @@ class utils {
      * @throws \coding_exception
      */
     public static function get_hidden_fields_filters($handler) {
+        static $hiddenfields = null;
+        if ($hiddenfields) {
+            return $hiddenfields;
+        }
         $configname = static::get_hidden_filter_config_name($handler);
         $hiddenfieldslist =
             get_config('local_resourcelibrary', $configname);
         if (!$hiddenfieldslist) {
             return [];
         }
-        return explode(',', $hiddenfieldslist);
+        $hiddenfields = explode(',', $hiddenfieldslist);
+        return $hiddenfields;
     }
 
     /**
@@ -141,7 +146,7 @@ class utils {
             $hiddenfieldslist[] = $fieldshortname;
         } else {
             if (is_array($fieldshortname)) {
-                $hiddenfieldslist += $fieldshortname;
+                $hiddenfieldslist = array_merge($hiddenfieldslist, $fieldshortname);
             }
         }
         $configname = static::get_hidden_filter_config_name($handler);
