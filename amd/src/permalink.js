@@ -22,7 +22,7 @@
 define(['jquery', 'core/config', 'core/templates'], function ($, config, Templates) {
 
     var Permalink = {};
-
+    Permalink.catalogURL = null;
     Permalink.setupCopyLink = function (triggerid, targetid) {
         document.querySelector("#" + triggerid).addEventListener("click",
             function () {
@@ -32,18 +32,18 @@ define(['jquery', 'core/config', 'core/templates'], function ($, config, Templat
     };
 
     Permalink.init = function () {
+        Permalink.catalogURL = new URL(window.location.href);
         $(document).on('resourcelibrary-filters-change', function (e, filterarray) {
-                let catalogURL = new URL(config.wwwroot + '/local/resourcelibrary/index.php');
                 filterarray.forEach(function (f) {
                     const fieldname = 'customfield_' + f.shortname;
                     if (f.value) {
-                        catalogURL.searchParams.append(fieldname + '[operator]', f.operator);
-                        catalogURL.searchParams.append(fieldname + '[value]', f.value);
-                        catalogURL.searchParams.append(fieldname + '[type]', f.type);
+                        Permalink.catalogURL.searchParams.append(fieldname + '[operator]', f.operator);
+                        Permalink.catalogURL.searchParams.append(fieldname + '[value]', f.value);
+                        Permalink.catalogURL.searchParams.append(fieldname + '[type]', f.type);
                     }
                 });
                 Templates.render('local_resourcelibrary/permalink',
-                    {url: catalogURL.toString()}).then(
+                    {url: Permalink.catalogURL.toString()}).then(
                     function (html, js) {
                         Templates.replaceNodeContents('#resourcelibrary-permalink', html, js);
                     }
