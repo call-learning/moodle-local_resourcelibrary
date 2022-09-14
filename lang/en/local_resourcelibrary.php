@@ -36,6 +36,7 @@ $string['aria:title'] = 'Full name';
 $string['aria:title:desc'] = 'Full name (Descending)';
 $string['card'] = 'Card';
 $string['course_metadata'] = 'Metatdata for course Resource Library';
+$string['hiddenfromstudents'] = 'Closed';
 $string['mainresourcelibrary'] = 'Main library';
 $string['manage:hiddenfilter'] = 'Hidden in Filter?';
 

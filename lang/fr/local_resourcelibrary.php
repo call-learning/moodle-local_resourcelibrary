@@ -36,6 +36,7 @@ $string['aria:title'] = 'Titre';
 $string['aria:title:desc'] = 'Titre (Descendant)';
 $string['card'] = 'Vignette';
 $string['course_metadata'] = 'Metatdata pour la Pédagothèque numérique';
+$string['hiddenfromstudents'] = 'Cours fermé';
 $string['mainresourcelibrary'] = 'Liste de cours';
 $string['manage:hiddenfilter'] = 'Caché pour Filtres?';
 
