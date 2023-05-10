@@ -77,6 +77,7 @@ $string['filter:submit'] = 'Filtrer';
 $string['resourcelibrary:activateactivitylibrary'] = 'Activer la bibliothèque d\'activités';
 $string['resourcelibrary:activateactivitylibrary:desc'] =
     'La bibliothèque d\'activités est similaire à la pédagothèque numérique mais pour les activités de cours';
+$string['resourcelibrary:manage'] = 'Peut gérer la pédagothèque numérique';
 $string['resourcelibrary:managefields'] = 'Peut gérer les champs de la  Pédagothèque numérique';
 $string['resourcelibrary:editvalue'] = 'Peut éditer les valeurs des champs de la  Pédagothèque numérique';
 $string['resourcelibrary:configurecustomfields'] = 'Peut configurer les champs de la  Pédagothèque numérique';
