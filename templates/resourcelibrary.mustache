@@ -20,51 +20,51 @@
     This template renders the main content area for the Resource Library.
 
     Example context (json):
-    {}
+    {
+        "entitytype": "resource",
+        "parentid": 0,
+        "view": "cards",
+        "sortcolumn": "name",
+        "sortorder": "asc",
+        "paging": 10,
+        "noentitiesimg": "https://moodle.org/theme/image.php/boost/core/1602669996/i/empty",
+        "displaycategories": true,
+        "filtersformcontent": "<form>...</form>"
+    }
 }}
 
 <div id="local-resourcelibrary-{{uniqid}}" class="local-resourcelibrary block-cards" data-entity-type="{{entitytype}}" data-region="resourcelibrary" role="navigation"
      data-parent-id="{{parentid}}">
 
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-2">
-                <div class="d-flex flex-column">
-                    <div class="bg-secondary text-white mb-1 pb-1 pt-1 pb-1 text-center w-100">
-                        <button class="btn btn-secondary w-100" data-toggle="collapse" href="#resourcelibrary-filter-{{uniqid}}" role="button"
-                           aria-expanded="true" aria-controls="resourcelibrary-filter-{{uniqid}}">
-                            {{#str}} filters, local_resourcelibrary {{/str}}
-                        </button>
-                    </div>
-                    <div id="resourcelibrary-filter-{{uniqid}}" class="w-100 collapse show">
-                        {{{ filtersformcontent }}}
-                        <div id="resourcelibrary-permalink"></div>
-                    </div>
+        <div class="row no-gutters">
+            <div class="col-12">
+                <div id="resourcelibrary-filter-{{uniqid}}">
+                    {{{ filtersformcontent }}}
+                    <div id="resourcelibrary-permalink"></div>
                 </div>
             </div>
-            <div class="col-lg-10">
-                <div class="container-fluid resourcelibrary-content">
-                    <div data-region="display-modifiers" class="d-flex align-items-right flex-wrap justify-content-end"
-                         aria-label="{{#str}} aria:controls, local_resourcelibrary {{/str}}">
-                        {{> local_resourcelibrary/nav-sort-selector }}
-                        {{> local_resourcelibrary/nav-display-selector }}
-                    </div>
+        </div>
+    </div>
+    <div class="container-fluid resourcelibrary-content">
+        <div data-region="display-modifiers" class="d-flex align-items-right flex-wrap justify-content-end"
+                aria-label="{{#str}} aria:controls, local_resourcelibrary {{/str}}">
+            {{> local_resourcelibrary/nav-sort-selector }}
+            {{> local_resourcelibrary/nav-display-selector }}
+        </div>
 
-                    <div class="container-fluid p-0">
-                        <div id="entities-view-{{uniqid}}"
-                             data-region="resourcelibrary-view"
-                             data-display="{{view}}"
-                             data-sort-column="{{sortcolumn}}"
-                             data-sort-order="{{sortorder}}"
-                             data-prev-display="{{view}}"
-                             data-paging="{{paging}}"
-                             data-noentitiesimg="{{noentitiesimg}}"
-                             data-displaycategories="{{displaycategories}}">
-                            <div data-region="resourcelibrary-view-content">
-                                {{> local_resourcelibrary/placeholders }}
-                            </div>
-                        </div>
-                    </div>
+        <div class="container-fluid p-0">
+            <div id="entities-view-{{uniqid}}"
+                    data-region="resourcelibrary-view"
+                    data-display="{{view}}"
+                    data-sort-column="{{sortcolumn}}"
+                    data-sort-order="{{sortorder}}"
+                    data-prev-display="{{view}}"
+                    data-paging="{{paging}}"
+                    data-noentitiesimg="{{noentitiesimg}}"
+                    data-displaycategories="{{displaycategories}}">
+                <div data-region="resourcelibrary-view-content">
+                    {{> local_resourcelibrary/placeholders }}
                 </div>
             </div>
         </div>

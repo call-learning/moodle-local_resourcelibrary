@@ -45,7 +45,8 @@ class filter_form extends \moodleform {
     public function definition() {
         $mform =& $this->_form;
         $handler = $this->_customdata['handler'];
-
+        $mform->addElement('header', 'miscellaneoussettingshdr', get_string('filters', 'local_resourcelibrary'));
+        $mform->setAdvanced('miscellaneoussettingshdr');
         foreach ($handler->get_fields() as $field) {
             if (!utils::is_field_hidden_filters($handler, $field->get('shortname'))) {
                 $filter = customfield_utils::get_filter_from_field($field);
@@ -61,6 +62,7 @@ class filter_form extends \moodleform {
         $buttonarray[] = $mform->createElement('submit', 'resetbutton', get_string('clear'));
         $mform->addGroup($buttonarray, 'buttonar', '', array(' '), false);
         $mform->closeHeaderBefore('buttonar');
+        $this->set_display_vertical();
     }
 
     /**
