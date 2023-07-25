@@ -105,8 +105,8 @@ class date_filter extends base {
         static $counter = 0;
         $name = 'ex_date' . $counter++;
 
-        $value = substr($data, 0, -2);
-        // The provided value is day,month,year,1 (1 is for enabled).
+        $value = substr($data, 2);
+        // The provided value is 1,day,month,year (1 is for enabled).
         $timestamp = DateTime::createFromFormat('j,m,Y', $value)->getTimestamp();
         $field = $this->get_sql_field_name();
         $sqloperator = '>';
