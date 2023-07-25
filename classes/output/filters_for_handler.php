@@ -24,8 +24,6 @@
 
 namespace local_resourcelibrary\output;
 
-defined('MOODLE_INTERNAL') || die();
-
 use core_customfield\field_controller;
 use core_customfield\handler;
 use renderer_base;
@@ -73,5 +71,4 @@ class filters_for_handler {
         }
         return $data;
     }
-
 }

@@ -92,7 +92,7 @@ if ($courseid != SITEID) {
     );
     $course = $DB->get_record('course', array('id' => $courseid));
     $PAGE->navbar->add(course_format_name($course),
-        new moodle_url('/course/view.php', array('id'=>$course->id)),
+        new moodle_url('/course/view.php', array('id' => $course->id)),
         navigation_node::TYPE_CUSTOM,
         'course',
         'course'

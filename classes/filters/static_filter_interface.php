@@ -24,8 +24,6 @@
 
 namespace local_resourcelibrary\filters;
 
-defined('MOODLE_INTERNAL') || die;
-
 /**
  * Interface used as a marker for static filters.
  *

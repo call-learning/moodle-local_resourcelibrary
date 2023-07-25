@@ -24,8 +24,6 @@
 
 namespace local_resourcelibrary\filters;
 
-defined('MOODLE_INTERNAL') || die;
-
 /**
  * Generic fulltext filter for any entity.
  *
@@ -89,8 +87,4 @@ class fulltext_filter implements resourcelibrary_filter_interface, static_filter
             $DB->sql_like('fullname', ":fulltext", false),
             array('fulltext' => "%$data%"));
     }
-
-
-
 }
-

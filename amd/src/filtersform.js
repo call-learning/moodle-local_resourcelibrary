@@ -20,7 +20,7 @@
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-define(['jquery', 'core/config'], function ($, config) {
+define(['jquery', 'core/config'], function($, config) {
 
     /**
      * FilterForm class.
@@ -36,12 +36,12 @@ define(['jquery', 'core/config'], function ($, config) {
      * @param {Bool} ignoresesskey Ignore the sesskey in the form.
      * @return {Object|Bool} Filter data or false if sesskey is not confirmed.
      */
-    function get_filter_data(target, ignoresesskey) {
+    function getFilterData(target, ignoresesskey) {
         var data = $(target).serializeArray();
         var filterdata = {};
         // Check sesskey (if not ignore request).
         var sesskeyconfirmed = false;
-        data.forEach(function (d) {
+        data.forEach(function(d) {
             if (d.name === 'sesskey') {
                 sesskeyconfirmed = d.value === config.sesskey;
             } else {
@@ -63,8 +63,7 @@ define(['jquery', 'core/config'], function ($, config) {
                             value: rootname
                         });
                     }
-                    if (d.value != "_qf__force_multiselect_submission") // Specific case for multiselect
-                    {
+                    if (d.value != "_qf__force_multiselect_submission") { // Specific case for multiselect
                         if (typeof filterdata[rootname].value == "undefined"
                         ) {
                             Object.defineProperty(filterdata[rootname], type, {
@@ -79,7 +78,7 @@ define(['jquery', 'core/config'], function ($, config) {
                 }
             }
         });
-        var filterdataarray = Object.values(filterdata).filter(function (v) {
+        var filterdataarray = Object.values(filterdata).filter(function(v) {
             // For date type there is a fourth parameter which should be equal to 1
             // whenever the box is checked.
             if (v.type == 'date' && v.value !== undefined) {
@@ -92,21 +91,21 @@ define(['jquery', 'core/config'], function ($, config) {
         }
         return false;
     }
-    FiltersForm.init = function (selector) {
+    FiltersForm.init = function(selector) {
         var target = $(selector);
         // Remove any attempt to submit the form for real.
-        target.on('submit', 'form', function (e) {
+        target.on('submit', 'form', function(e) {
             e.preventDefault();
             // Now we get all the current values from the form.
-            var filterdataarray = get_filter_data(target.children('form'), false);
+            var filterdataarray = getFilterData(target.children('form'), false);
             if (filterdataarray) {
                 $(document).trigger('resourcelibrary-filters-change', [filterdataarray]);
             }
         });
-        $('#id_resetbutton').on('click', function () {
+        $('#id_resetbutton').on('click', function() {
             $(target).children('form.resourcelibrary-filters-form')[0].reset();
         });
-        var filterdataarray = get_filter_data(target.children('form'), true);
+        var filterdataarray = getFilterData(target.children('form'), true);
         $(document).trigger('resourcelibrary-filters-inited', [filterdataarray]); // Filter are now initialised.
     };
     return FiltersForm;

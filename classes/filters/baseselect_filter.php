@@ -24,8 +24,6 @@
 
 namespace local_resourcelibrary\filters;
 
-defined('MOODLE_INTERNAL') || die;
-
 /**
  * Generic filter based on a list of values.
  *
@@ -57,4 +55,3 @@ abstract class baseselect_filter extends base {
         }
     }
 }
-

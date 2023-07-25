@@ -23,7 +23,6 @@
  */
 
 namespace local_resourcelibrary\locallib;
-defined('MOODLE_INTERNAL') || die();
 
 use core_customfield\handler;
 use local_resourcelibrary\customfield\course_handler;

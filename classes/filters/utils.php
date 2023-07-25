@@ -25,8 +25,6 @@ namespace local_resourcelibrary\filters;
 
 use ReflectionClass;
 
-defined('MOODLE_INTERNAL') || die;
-
 /**
  * Class utils
  *

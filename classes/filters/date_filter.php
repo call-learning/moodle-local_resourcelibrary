@@ -26,8 +26,6 @@ namespace local_resourcelibrary\filters;
 
 use DateTime;
 
-defined('MOODLE_INTERNAL') || die;
-
 /**
  * Date filter
  *
@@ -113,4 +111,3 @@ class date_filter extends base {
         return empty($value) ? array(null, null) : array("$field $sqloperator :$name", array($name => $timestamp));
     }
 }
-

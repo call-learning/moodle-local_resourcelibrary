@@ -24,8 +24,6 @@
 
 namespace local_resourcelibrary\output;
 
-defined('MOODLE_INTERNAL') || die();
-
 use core_customfield\handler;
 use local_resourcelibrary\filters\filter_form;
 use renderable;

@@ -24,8 +24,6 @@
 
 namespace local_resourcelibrary\filters;
 
-defined('MOODLE_INTERNAL') || die;
-
 /**
  * Generic filter based on a text content
  *
@@ -44,4 +42,3 @@ class textarea_filter extends basetext_filter {
         return $field instanceof \customfield_textarea\field_controller;
     }
 }
-

@@ -22,7 +22,6 @@
  */
 namespace local_resourcelibrary\observer;
 
-defined('MOODLE_INTERNAL') || die();
 use local_resourcelibrary\customfield\coursemodule_handler;
 
 /**

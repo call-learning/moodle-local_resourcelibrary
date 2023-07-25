@@ -24,8 +24,6 @@
 
 namespace local_resourcelibrary\output;
 
-defined('MOODLE_INTERNAL') || die();
-
 use local_resourcelibrary\filters\filter_form;
 use renderable;
 use renderer_base;
@@ -51,6 +49,5 @@ class course_resourcelibrary extends base_resourcelibrary {
         $defaultvariables['parentid'] = 0;
         $preferences = $this->get_preferences();
         return array_merge($defaultvariables, $preferences);
-
     }
 }

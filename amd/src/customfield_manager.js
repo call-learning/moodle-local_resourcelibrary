@@ -19,15 +19,15 @@
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-define(['jquery', 'core/ajax','core/notification'], function($, Ajax, Notification) {
+define(['jquery', 'core/ajax', 'core/notification'], function($, Ajax, Notification) {
     return {
         init: function(component, area, hidefilterlocator) {
-            $(hidefilterlocator).click(function(){
+            $(hidefilterlocator).click(function() {
                 const checked = $(this).is(':checked');
                 var request = {
                     methodname: checked ?
                         'local_resourcelibrary_hide_fields_filters'
-                        :'local_resourcelibrary_show_fields_filters',
+                        : 'local_resourcelibrary_show_fields_filters',
                     args:  {
                         component: component,
                         area: area,

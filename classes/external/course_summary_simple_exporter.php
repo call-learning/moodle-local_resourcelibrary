@@ -25,7 +25,6 @@
  */
 
 namespace local_resourcelibrary\external;
-defined('MOODLE_INTERNAL') || die();
 
 use core_course\external\course_summary_exporter;
 use renderer_base;

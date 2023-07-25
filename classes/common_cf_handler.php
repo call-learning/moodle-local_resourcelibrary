@@ -23,12 +23,10 @@
  */
 namespace local_resourcelibrary;
 
-defined('MOODLE_INTERNAL') || die;
-
 use core_customfield\api;
 use core_customfield\field_controller;
 
-trait common_cf_handler  {
+trait common_cf_handler {
     /**
      * @var common_cf_handler
      */

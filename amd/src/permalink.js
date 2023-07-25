@@ -18,23 +18,24 @@
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-define(['jquery', 'core/config', 'core/templates', 'core/toast', 'core/str'], function ($, config, Templates, Toast, Str) {
+define(['jquery', 'core/config', 'core/templates', 'core/toast', 'core/str', 'core/notification'],
+    function($, config, Templates, Toast, Str, Notification) {
 
     var Permalink = {};
     Permalink.catalogURL = null;
-    Permalink.setupCopyLink = function (triggerid, targetid) {
+    Permalink.setupCopyLink = function(triggerid, targetid) {
         document.querySelector("#" + triggerid).addEventListener("click",
-            function () {
+            function() {
                 document.getElementById(targetid).select();
                 document.execCommand("copy");
                 Toast.add(Str.get_string('copied', 'local_resourcelibrary'), null, 'success');
             });
     };
 
-    Permalink.init = function () {
+    Permalink.init = function() {
         Permalink.catalogURL = new URL(window.location.href);
-        $(document).on('resourcelibrary-filters-change', function (e, filterarray) {
-                filterarray.forEach(function (f) {
+        $(document).on('resourcelibrary-filters-change', function(e, filterarray) {
+                filterarray.forEach(function(f) {
                     const fieldname = 'customfield_' + f.shortname;
                     if (f.value) {
                         Permalink.catalogURL.searchParams.append(fieldname + '[operator]', f.operator);
@@ -44,10 +45,10 @@ define(['jquery', 'core/config', 'core/templates', 'core/toast', 'core/str'], fu
                 });
                 Templates.render('local_resourcelibrary/permalink',
                     {url: Permalink.catalogURL.toString()}).then(
-                    function (html, js) {
-                        Templates.replaceNodeContents('#resourcelibrary-permalink', html, js);
+                    function(html, js) {
+                        return Templates.replaceNodeContents('#resourcelibrary-permalink', html, js);
                     }
-                );
+                ).catch(Notification.exception);
             }
         );
     };

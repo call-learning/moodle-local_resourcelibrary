@@ -1,5 +1,5 @@
 @local @local_resourcelibrary @core @javascript
-Feature: As an admin I should be able to set and retrieve values from custom field
+Feature: As an admin I should be able to set and retrieve values from basic custom field
 
   Background:
     Given the following "courses" exist:

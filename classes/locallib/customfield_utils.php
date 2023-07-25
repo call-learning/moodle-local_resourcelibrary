@@ -28,8 +28,6 @@ use core_customfield\field_controller;
 use core_customfield\handler;
 use local_resourcelibrary\locallib\utils;
 
-defined('MOODLE_INTERNAL') || die;
-
 /**
  * Class customfield_utils
  *
@@ -238,5 +236,4 @@ class customfield_utils {
         );
         return $DB->get_records_sql("{$sql}  {$sqlwhere} {$sqlorderby} {$sqllimit}", $sqlparams);
     }
-
 }

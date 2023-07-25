@@ -24,8 +24,6 @@
 
 use local_resourcelibrary\locallib\utils;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Generate basic custom fields
  *
