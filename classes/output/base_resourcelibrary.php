@@ -202,7 +202,7 @@ abstract class base_resourcelibrary implements renderable, templatable {
     public function get_filters_content($handler) {
         global $_GET;
         $filterform = new filter_form(null, ['handler' => $handler],
-            'post', '', array('class' => 'resourcelibrary-filters-form'));
+            'post', '', array('class' => 'resourcelibrary-filters-form p-0'));
 
         $filterscontent = $filterform->render();
         return $filterscontent;
