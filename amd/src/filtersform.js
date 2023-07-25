@@ -17,7 +17,6 @@
  * A javascript module to retrieve the filter form and put it in the right location.
  * This will also make sure that submit of this form will be sent to the filter form.
  *
- * @package    local_resourcelibrary
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -33,7 +32,9 @@ define(['jquery', 'core/config'], function ($, config) {
 
     /**
      * Refresh after
-     * @param target
+     * @param {String} target selector The selector for the form
+     * @param {Bool} ignoresesskey Ignore the sesskey in the form.
+     * @return {Object|Bool} Filter data or false if sesskey is not confirmed.
      */
     function get_filter_data(target, ignoresesskey) {
         var data = $(target).serializeArray();

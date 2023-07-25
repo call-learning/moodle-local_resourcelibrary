@@ -17,7 +17,6 @@
  * Manage the courses or course modules view for the Resource Library.
  *
  * Inspired from the Course overview block.
- * @package    local_resourcelibrary
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -198,8 +197,8 @@ define(
 
         /**
          * Get the maximum item per page
-         * @param rootNode
-         * @returns {number[]}
+         * @param {DomNode} rootNode
+         * @returns {array} of items per page
          */
         var getItemPerPage = function(rootNode) {
             var itemsPerPage = NUMCOURSES_PERPAGE;
@@ -224,7 +223,6 @@ define(
          * Intialise the entities list and cards views on page load.
          *
          * @param {object} root The root element for the entities view.
-         * @param {object} content The content element for the entities view.
          */
         var initializePagedContent = function (root) {
             namespace = "local_resourcelibrary" + root.attr('id') + "_" + Math.random();
