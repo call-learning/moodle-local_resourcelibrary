@@ -48,7 +48,7 @@ abstract class baseselect_filter extends base {
      */
     public function __construct(\core_customfield\field_controller $field) {
         parent::__construct($field);
-        $options = $field->get_options_array($field); // TODO: this could be a non static method.
+        $options = $field->get_options(); // TODO: this could be a non static method.
         $this->_options = [];
         $context = $field->get_handler()->get_configuration_context();
         foreach ($options as $key => $option) {

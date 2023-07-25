@@ -38,6 +38,11 @@ use Matrix\Exception;
 class utils {
 
     /**
+     * @var array $hiddenfields
+     */
+    static private $hiddenfields = null;
+
+    /**
      * Get Resource library URL and text description for the current page
      *
      * @param null $page
@@ -108,9 +113,8 @@ class utils {
      * @throws \coding_exception
      */
     public static function get_hidden_fields_filters($handler) {
-        static $hiddenfields = null;
-        if ($hiddenfields) {
-            return $hiddenfields;
+        if (self::$hiddenfields) {
+            self::$hiddenfields;
         }
         $configname = static::get_hidden_filter_config_name($handler);
         $hiddenfieldslist =
@@ -118,8 +122,8 @@ class utils {
         if (!$hiddenfieldslist) {
             return [];
         }
-        $hiddenfields = explode(',', $hiddenfieldslist);
-        return $hiddenfields;
+        self::$hiddenfields = explode(',', $hiddenfieldslist);
+        return self::$hiddenfields;
     }
 
     /**
