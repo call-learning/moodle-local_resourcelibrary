@@ -62,7 +62,6 @@ class filter_form extends \moodleform {
         $buttonarray[] = $mform->createElement('submit', 'resetbutton', get_string('clear'));
         $mform->addGroup($buttonarray, 'buttonar', '', array(' '), false);
         $mform->closeHeaderBefore('buttonar');
-        $this->set_display_vertical();
     }
 
     /**

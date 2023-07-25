@@ -41,7 +41,6 @@
             <div class="col-12">
                 <div id="resourcelibrary-filter-{{uniqid}}">
                     {{{ filtersformcontent }}}
-                    <div id="resourcelibrary-permalink"></div>
                 </div>
             </div>
         </div>
@@ -49,6 +48,8 @@
     <div class="container-fluid resourcelibrary-content">
         <div data-region="display-modifiers" class="d-flex align-items-right flex-wrap justify-content-end"
                 aria-label="{{#str}} aria:controls, local_resourcelibrary {{/str}}">
+            <div id="resourcelibrary-permalink"></div>
+
             {{> local_resourcelibrary/nav-sort-selector }}
             {{> local_resourcelibrary/nav-display-selector }}
         </div>

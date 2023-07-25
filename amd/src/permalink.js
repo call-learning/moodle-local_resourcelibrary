@@ -18,7 +18,7 @@
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-define(['jquery', 'core/config', 'core/templates'], function ($, config, Templates) {
+define(['jquery', 'core/config', 'core/templates', 'core/toast', 'core/str'], function ($, config, Templates, Toast, Str) {
 
     var Permalink = {};
     Permalink.catalogURL = null;
@@ -27,6 +27,7 @@ define(['jquery', 'core/config', 'core/templates'], function ($, config, Templat
             function () {
                 document.getElementById(targetid).select();
                 document.execCommand("copy");
+                Toast.add(Str.get_string('copied', 'local_resourcelibrary'), null, 'success');
             });
     };
 
