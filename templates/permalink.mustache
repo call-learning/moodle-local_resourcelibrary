@@ -24,13 +24,15 @@
         'url' : 'myurl'
     }
 }}
-<div class="resourcelibrary_permalink input-group w-100">
-    <div class="input-group-prepend">
-    <button class="btn btn-secondary" id="resourcelibrary_permalink-t-{{uniqid}}">
-        {{#pix}}fp/link_sm, theme, {{#str}}permalink:copy, local_resourcelibrary{{/str}}{{/pix}}
-    </button>
+<div class="resourcelibrary_permalink">
+    <div class="input-group w-auto">
+        <div class="input-group-prepend">
+        <button class="btn btn-outline-secondary bnt-sm icon-no-margin d-flex justify-content-center align-items-center" id="resourcelibrary_permalink-t-{{uniqid}}">
+            {{#pix}}fp/link_sm, theme, {{#str}}permalink:copy, local_resourcelibrary{{/str}}{{/pix}}
+        </button>
+        </div>
+        <input id="resourcelibrary_permalink-i-{{uniqid}}" type="text" disabled value="{{url}}" class="form-control form-control-sm">
     </div>
-    <input id="resourcelibrary_permalink-i-{{uniqid}}" type="text" value="{{url}}" class="form-control">
 </div>
 {{#js}}
     require(['local_resourcelibrary/permalink'], function(Permalink) {

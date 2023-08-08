@@ -70,11 +70,13 @@ if ($PAGE->user_allowed_editing()) {
         $edit = 0;
     }
     // Add button for editing page.
-    $params['edit'] = !$edit;
-    $url = new moodle_url($pageurl, $params);
-    $editactionstring = !$edit ? get_string('turneditingon') : get_string('turneditingoff');
-    $editbutton = $OUTPUT->single_button($url, $editactionstring);
-    $PAGE->set_button( $editbutton);
+    if (!$PAGE->theme->haseditswitch) {
+        $params['edit'] = !$edit;
+        $url = new moodle_url($pageurl, $params);
+        $editactionstring = !$edit ? get_string('turneditingon') : get_string('turneditingoff');
+        $editbutton = $OUTPUT->single_button($url, $editactionstring);
+        $PAGE->set_button( $editbutton);
+    }
 } else {
     $USER->editing = $edit = 0;
 }
@@ -90,7 +92,7 @@ if ($courseid != SITEID) {
     );
     $course = $DB->get_record('course', array('id' => $courseid));
     $PAGE->navbar->add(course_format_name($course),
-        new moodle_url('/course/view.php', array('id'=>$course->id)),
+        new moodle_url('/course/view.php', array('id' => $course->id)),
         navigation_node::TYPE_CUSTOM,
         'course',
         'course'

@@ -24,8 +24,6 @@
 
 namespace local_resourcelibrary\customfield;
 
-defined('MOODLE_INTERNAL') || die;
-
 use core_customfield\handler;
 use local_resourcelibrary\common_cf_handler;
 use core_customfield\field_controller;

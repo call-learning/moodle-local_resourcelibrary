@@ -24,8 +24,6 @@
 
 namespace local_resourcelibrary\filters;
 
-defined('MOODLE_INTERNAL') || die;
-
 /**
  * Generic filter based on a list of values.
  *
@@ -98,4 +96,3 @@ class select_filter extends baseselect_filter {
         return empty($data) ? array(null, null) : array("$field=:$name", array($name => $data));
     }
 }
-

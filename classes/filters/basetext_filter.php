@@ -24,8 +24,6 @@
 
 namespace local_resourcelibrary\filters;
 
-defined('MOODLE_INTERNAL') || die;
-
 /**
  * Generic filter based on a text content
  *
@@ -87,4 +85,3 @@ abstract class basetext_filter extends base {
             array($name => "%$data%"));
     }
 }
-

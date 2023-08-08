@@ -23,6 +23,7 @@
  */
 
 defined('MOODLE_INTERNAL') || die;
+
 $functions = array(
     'local_resourcelibrary_get_filtered_courses' => array(
         'classname' => 'local_resourcelibrary_external',

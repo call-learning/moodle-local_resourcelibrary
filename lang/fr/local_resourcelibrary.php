@@ -35,6 +35,7 @@ $string['aria:lastmodification:desc'] = 'Trier par dernière modification (Desce
 $string['aria:title'] = 'Titre';
 $string['aria:title:desc'] = 'Titre (Descendant)';
 $string['card'] = 'Vignette';
+$string['copied'] = 'Copié dans le presse-papier';
 $string['course_metadata'] = 'Metatdata pour la Pédagothèque numérique';
 $string['hiddenfromstudents'] = 'Cours fermé';
 $string['mainresourcelibrary'] = 'Liste de cours';

@@ -35,6 +35,7 @@ $string['aria:lastmodification:desc'] = 'Sort by last modification date (Descend
 $string['aria:title'] = 'Full name';
 $string['aria:title:desc'] = 'Full name (Descending)';
 $string['card'] = 'Card';
+$string['copied'] = 'Copied to clipboard';
 $string['course_metadata'] = 'Metatdata for course Resource Library';
 $string['hiddenfromstudents'] = 'Closed';
 $string['mainresourcelibrary'] = 'Main library';

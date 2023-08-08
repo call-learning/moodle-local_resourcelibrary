@@ -17,7 +17,6 @@
  * Manage the courses or course modules view for the Resource Library.
  *
  * Inspired from the Course overview block.
- * @package    local_resourcelibrary
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -30,7 +29,7 @@ define(
         'local_resourcelibrary/view',
         'local_resourcelibrary/selectors'
     ],
-    function (
+    function(
         $,
         CustomEvents,
         Repository,
@@ -50,7 +49,7 @@ define(
          * @param {String} filter The type of filter: display/sort.
          * @param {String} value The current preferred value.
          */
-        var updatePreferences = function (filter, value) {
+        var updatePreferences = function(filter, value) {
             var type = null;
             if (filter === 'display') {
                 type = 'local_resourcelibrary_user_view_preference';
@@ -74,7 +73,7 @@ define(
          *
          * @param {object} root The root element for the overview block
          */
-        var registerSelector = function (root) {
+        var registerSelector = function(root) {
 
             var Selector = root.find(SELECTORS.MODIFIERS);
 
@@ -82,7 +81,7 @@ define(
             Selector.on(
                 CustomEvents.events.activate,
                 SELECTORS.SORT_OPTION,
-                function (e, data) {
+                function(e, data) {
                     var option = $(e.target);
 
                     if (option.hasClass('active')) {
@@ -98,7 +97,7 @@ define(
                     updatePreferences('sort', sortcolumn + ',' + sortoption);
 
                     // Reset the views.
-                    View.init(root);
+                    View.refresh(root);
                     data.originalEvent.preventDefault();
                 }
             );
@@ -106,7 +105,7 @@ define(
             Selector.on(
                 CustomEvents.events.activate,
                 SELECTORS.DISPLAY_OPTION,
-                function (e, data) {
+                function(e, data) {
                     var option = $(e.target);
 
                     if (option.hasClass('active')) {
@@ -132,7 +131,7 @@ define(
          *
          * @param {object} root The root element for the Resource Library
          */
-        var init = function (root) {
+        var init = function(root) {
             root = $(root);
             registerSelector(root);
         };

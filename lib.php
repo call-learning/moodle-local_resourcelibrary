@@ -22,8 +22,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Inject the competencies elements into all moodle module settings forms.
  *
@@ -183,4 +181,3 @@ function local_resourcelibrary_user_preferences() {
 
     return $preferences;
 }
-

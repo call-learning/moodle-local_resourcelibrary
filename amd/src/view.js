@@ -17,7 +17,6 @@
  * Manage the courses or course modules view for the Resource Library.
  *
  * Inspired from the Course overview block.
- * @package    local_resourcelibrary
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -35,7 +34,7 @@ define(
         'local_resourcelibrary/selectors',
         'core/paged_content_events',
     ],
-    function (
+    function(
         $,
         Repository,
         PagedContentFactory,
@@ -77,7 +76,7 @@ define(
          * @param {object} root The root element for the entities view.
          * @return {object} display modifier Set.
          */
-        var getDisplayModifierValues = function (root) {
+        var getDisplayModifierValues = function(root) {
             var entityRegion = root.find(Selectors.entityView.region);
             return {
                 display: entityRegion.attr('data-display'),
@@ -102,7 +101,7 @@ define(
          * @param {int} offset to start with The number of entities to show.
          * @return {promise} Resolved with an array of entities.
          */
-        var getEntities = function (modifiers, filters, limit, offset) {
+        var getEntities = function(modifiers, filters, limit, offset) {
             if (entityType === 'course') {
                 return Repository.getFilteredCourseList({
                     categoryid: 0,
@@ -129,7 +128,7 @@ define(
          * @param  {Number} index Rendered page index.
          * @return {Object} The rendered paged container.
          */
-        var getPagedContentContainer = function (root, index) {
+        var getPagedContentContainer = function(root, index) {
             return root.find('[data-region="paged-content-page"][data-page="' + index + '"]');
         };
 
@@ -140,7 +139,7 @@ define(
          * @param {array} pageData containing the page data as setup in LoadPage
          * @return {promise} jQuery promise resolved after rendering is complete.
          */
-        var renderEntities = function (root, pageData) {
+        var renderEntities = function(root, pageData) {
 
             var entities = [];
             if (pageData.entities !== undefined) {
@@ -157,7 +156,7 @@ define(
 
             // Delete the entity category if it is not to be displayed.
             if (filters.displaycategories !== 'on') {
-                entities = entities.map(function (entity) {
+                entities = entities.map(function(entity) {
                     delete entity.category;
                     return entity;
                 });
@@ -180,7 +179,7 @@ define(
          *
          * @param {Number} limit The paged limit that is passed through the event
          */
-        var setLimit = function (limit) {
+        var setLimit = function(limit) {
             this.find(Selectors.entityView.region).attr('data-paging', limit);
         };
 
@@ -191,21 +190,21 @@ define(
          * @param {object} root The root element for the entities view
          * @param {string} namespace The namespace for all the events attached
          */
-        var registerPagedEventHandlers = function (root, namespace) {
+        var registerPagedEventHandlers = function(root, namespace) {
             var event = namespace + PagedContentEvents.SET_ITEMS_PER_PAGE_LIMIT;
             PubSub.subscribe(event, setLimit.bind(root));
         };
 
         /**
          * Get the maximum item per page
-         * @param rootNode
-         * @returns {number[]}
+         * @param {DomNode} rootNode
+         * @returns {array} of items per page
          */
         var getItemPerPage = function(rootNode) {
             var itemsPerPage = NUMCOURSES_PERPAGE;
             var pagingLimit = parseInt(rootNode.find(Selectors.entityView.region).attr('data-paging'), 10);
             if (pagingLimit) {
-                itemsPerPage = NUMCOURSES_PERPAGE.map(function (value) {
+                itemsPerPage = NUMCOURSES_PERPAGE.map(function(value) {
                     var active = false;
                     if (value === pagingLimit) {
                         active = true;
@@ -224,9 +223,8 @@ define(
          * Intialise the entities list and cards views on page load.
          *
          * @param {object} root The root element for the entities view.
-         * @param {object} content The content element for the entities view.
          */
-        var initializePagedContent = function (root) {
+        var initializePagedContent = function(root) {
             namespace = "local_resourcelibrary" + root.attr('id') + "_" + Math.random();
 
             var itemsPerPage = getItemPerPage(root);
@@ -238,10 +236,10 @@ define(
 
             var pagedContentPromise = PagedContentFactory.createWithLimit(
                 itemsPerPage,
-                function (pagesData, actions) {
+                function(pagesData, actions) {
                     var promises = [];
 
-                    pagesData.forEach(function (pageData) {
+                    pagesData.forEach(function(pageData) {
                         var currentPage = pageData.pageNumber;
                         var limit = pageData.limit;
 
@@ -260,7 +258,7 @@ define(
                         lastLimit = limit;
                         var additionalValues = {};
                         if (entityType !== 'course') {
-                            additionalValues =  courseId;
+                            additionalValues = courseId;
                         }
                         var pagePromise = getEntities(
                             modifiers,
@@ -268,7 +266,7 @@ define(
                             limit,
                             limit * (currentPage - 1),
                             additionalValues
-                        ).then(function (entities) {
+                        ).then(function(entities) {
                             // Finished setting up the current page.
                             loadedPages[currentPage] = {
                                 entities: entities
@@ -289,7 +287,7 @@ define(
                 config
             );
 
-            pagedContentPromise.then(function (html, js) {
+            pagedContentPromise.then(function(html, js) {
                 registerPagedEventHandlers(root, namespace);
                 return Templates.replaceNodeContents(root.find(Selectors.entityView.region), html, js);
             }).done(
@@ -304,7 +302,7 @@ define(
                                         const event = new CustomEvent('resource_library_card_rendered', {
                                             'rootNode': rootNode
                                         });
-                                        const  haspagecontent = document.querySelector(Selectors.entityView.region
+                                        const haspagecontent = document.querySelector(Selectors.entityView.region
                                             + ' .paged-content-page-container [data-region="paged-content-page"]');
                                         if (haspagecontent) {
                                             document.dispatchEvent(event);
@@ -315,7 +313,7 @@ define(
                         }
                     };
                     const observer = new MutationObserver(waitForNodeReplacement);
-                    const config = { childList: true , subtree: true };
+                    const config = {childList: true, subtree: true};
                     observer.observe(rootNode, config);
                     return true;
                 })
@@ -327,7 +325,7 @@ define(
          *
          * @param {Object} root resourcelibrary page
          */
-        var registerEventListeners = function (root) {
+        var registerEventListeners = function(root) {
             CustomEvents.define(root, [
                 CustomEvents.events.activate
             ]);
@@ -338,7 +336,7 @@ define(
          *
          * @param {object} root The root element for the entities view.
          */
-        var refresh = function (root) {
+        var refresh = function(root) {
             root = $(root);
             loadedPages = [];
             lastPage = 0;
@@ -350,7 +348,7 @@ define(
                 root.attr('data-init', true);
             }
         };
-        var init = function (root) {
+        var init = function(root) {
             // Only init the view when filters are initialised.
             // Reset the views when we receive a change in filters.
             $(document).on('resourcelibrary-filters-inited resourcelibrary-filters-change',
@@ -363,7 +361,6 @@ define(
 
 
         /**
-
          * Reset the entities views to their original
          * state on first page load.entityOffset
          *
@@ -372,11 +369,11 @@ define(
          *
          * @param {Object} root The root element for the timeline view.
          */
-        var reset = function (root) {
+        var reset = function(root) {
             if (loadedPages.length > 0) {
-                loadedPages.forEach(function (entityList, index) {
+                loadedPages.forEach(function(entityList, index) {
                     var pagedContentPage = getPagedContentContainer(root, index);
-                    renderEntities(root, entityList).then(function (html, js) {
+                    renderEntities(root, entityList).then(function(html, js) {
                         return Templates.replaceNodeContents(pagedContentPage, html, js);
                     }).catch(Notification.exception);
                 });

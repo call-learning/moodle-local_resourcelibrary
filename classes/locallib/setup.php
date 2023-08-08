@@ -29,8 +29,6 @@ use core_customfield\category;
 use core_customfield\category_controller;
 use stdClass;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Class setup
  *

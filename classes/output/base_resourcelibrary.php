@@ -24,8 +24,6 @@
 
 namespace local_resourcelibrary\output;
 
-defined('MOODLE_INTERNAL') || die();
-
 use core_customfield\handler;
 use local_resourcelibrary\filters\filter_form;
 use renderable;
@@ -202,11 +200,9 @@ abstract class base_resourcelibrary implements renderable, templatable {
     public function get_filters_content($handler) {
         global $_GET;
         $filterform = new filter_form(null, ['handler' => $handler],
-            'post', '', array('class' => 'resourcelibrary-filters-form'));
+            'post', '', array('class' => 'resourcelibrary-filters-form p-0'));
 
         $filterscontent = $filterform->render();
-        // Now this is still a hack, but impossible to cleanly override the renderers in a local plugin.
-        // We will strip the mb.
-        return preg_replace('/col-md-[0-9]+/', '', $filterscontent);
+        return $filterscontent;
     }
 }

@@ -1,5 +1,5 @@
 @local @local_resourcelibrary @core @javascript
-Feature: As an admin I should be able to set and retrieve values from custom field
+Feature: As an admin I should be able to navigate through the resource library
 
   Background:
     Given the following "courses" exist:

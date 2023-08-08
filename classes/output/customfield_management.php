@@ -23,7 +23,6 @@
  */
 
 namespace local_resourcelibrary\output;
-defined('MOODLE_INTERNAL') || die();
 
 use core_customfield\output\management;
 use local_resourcelibrary\locallib\utils;

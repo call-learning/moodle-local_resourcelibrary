@@ -265,7 +265,6 @@ Feature: As an admin I should be able filter with all custom field types
     And I should not see "Course 4"
     And I should not see "Course 5"
 
-
   Scenario: As an admin I should be able to filter through a textarea for activities
     Given I am on site homepage
     And I log in as "admin"
@@ -327,7 +326,6 @@ Feature: As an admin I should be able filter with all custom field types
     And I should see "Page 2"
     And I should not see "Page 3"
     And I should not see "Page 4"
-
 
   Scenario: As an admin I should be able to filter through a multicriteria search for courses (Multiselect)
     Given multiselect field is installed
@@ -401,4 +399,3 @@ Feature: As an admin I should be able filter with all custom field types
     And I should see "Page 2"
     And I should not see "Page 3"
     And I should not see "Page 4"
-

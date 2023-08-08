@@ -25,8 +25,6 @@ namespace local_resourcelibrary\filters;
 
 use local_resourcelibrary\locallib\customfield_utils;
 
-defined('MOODLE_INTERNAL') || die;
-
 /**
  * Generic base filter for all other filters.
  *

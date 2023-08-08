@@ -16,7 +16,6 @@
 /**
  * Javascript to initialise the selectors for the Resource Library
  *
- * @package    local_resourcelibrary
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
