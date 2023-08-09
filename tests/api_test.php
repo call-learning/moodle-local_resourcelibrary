@@ -21,8 +21,10 @@
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
+namespace local_resourcelibrary;
 use local_resourcelibrary\locallib\utils;
+use local_resourcelibrary_external;
+use local_resourcelibrary_testcase;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -39,12 +41,13 @@ require_once($CFG->dirroot . '/local/resourcelibrary/tests/lib.php');
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class local_resourcelibrary_api_testcase extends local_resourcelibrary_testcase {
+class api_test extends local_resourcelibrary_testcase {
 
 
     /**
      * Test that we can obtain a single row result for a set of fields for a course and course module
      * get_filtered_courses($ids = array(), $filters = array(), $limit = 0, $offset = 0, $sorting = null) {
+     * @covers \local_resourcelibrary\local_resourcelibrary_external::get_filtered_courses
      */
     public function test_get_filtered_courses_simple() {
         global $CFG;
@@ -64,7 +67,8 @@ class local_resourcelibrary_api_testcase extends local_resourcelibrary_testcase 
 
     /**
      * Test that we can obtain a single row result for a set of fields for a course and course module
-     * get_filtered_courses($ids = array(), $filters = array(), $limit = 0, $offset = 0, $sorting = null) {
+     * get_filtered_courses($ids = array(), $filters = array(), $limit = 0, $offset = 0, $sorting = null)
+     * @covers \local_resourcelibrary\local_resourcelibrary_external::get_filtered_courses
      */
     public function test_get_filtered_modules_simple() {
         global $CFG;
@@ -91,6 +95,7 @@ class local_resourcelibrary_api_testcase extends local_resourcelibrary_testcase 
     /**
      * Test that we can obtain a single row result for a set of fields for a course and course module
      * get_filtered_courses($ids = array(), $filters = array(), $limit = 0, $offset = 0, $sorting = null) {
+     * @covers \local_resourcelibrary\local_resourcelibrary_external::get_filtered_courses
      */
     public function test_get_filtered_modules_single_criteria() {
         global $CFG;

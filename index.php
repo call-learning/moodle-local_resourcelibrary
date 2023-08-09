@@ -57,7 +57,9 @@ $pageurl = new moodle_url('/local/resourcelibrary/index.php', $pageparams);
 $PAGE->set_context($context);
 $PAGE->set_url($pageurl);
 $PAGE->set_title($title);
-$PAGE->set_heading($pagedesc);
+if ($courseid != SITEID) {
+    $PAGE->set_heading($pagedesc);
+}
 
 // Toggle the editing state and switches.
 if ($PAGE->user_allowed_editing()) {

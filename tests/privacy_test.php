@@ -21,7 +21,7 @@
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
+namespace local_resourcelibrary;
 use \core_privacy\local\request\writer;
 use local_resourcelibrary\privacy\provider;
 
@@ -32,10 +32,10 @@ use local_resourcelibrary\privacy\provider;
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class local_resourcelibrary_privacy_testcase extends \core_privacy\tests\provider_testcase {
+class privacy_test extends \core_privacy\tests\provider_testcase {
     /**
      * Ensure that export_user_preferences returns no data if the user has not visited the library page.
-     * @throws dml_exception
+     * @covers \local_resourcelibrary\privacy\provider::export_user_preferences
      */
     public function test_export_user_preferences_no_pref() {
         $this->resetAfterTest();
@@ -52,9 +52,8 @@ class local_resourcelibrary_privacy_testcase extends \core_privacy\tests\provide
      * @param string $value The value you are storing
      *
      * @param string $expected
-     * @throws coding_exception
-     * @throws dml_exception
      * @dataProvider user_preference_provider
+     * @covers \local_resourcelibrary\privacy\provider::export_user_preferences
      */
     public function test_export_user_preferences($type, $value, $expected) {
         $this->resetAfterTest();

@@ -21,9 +21,10 @@
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
+namespace local_resourcelibrary;
 use core_course\customfield\course_handler;
 use local_resourcelibrary\locallib\utils;
+use local_resourcelibrary_testcase;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -39,10 +40,11 @@ require_once($CFG->dirroot . '/local/resourcelibrary/tests/lib.php');
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class local_resourcelibrary_filter_testcase extends local_resourcelibrary_testcase {
+class filters_test extends local_resourcelibrary_testcase {
 
     /**
      * Test that we can obtain a single row result for a set of fields for a course and course module
+     * @covers \local_resourcelibrary\locallib\customfield_utils::get_sql_for_entity_customfields
      */
     public function test_flat_sql_course() {
         global $DB;
@@ -71,6 +73,7 @@ class local_resourcelibrary_filter_testcase extends local_resourcelibrary_testca
 
     /**
      * Test that we can obtain a single row result for a set of fields for a course and course module
+     * @covers \local_resourcelibrary\locallib\customfield_utils::get_sql_for_entity_customfields
      */
     public function test_utils_get_hiddenfields_course() {
         $this->resetAfterTest();
@@ -88,6 +91,7 @@ class local_resourcelibrary_filter_testcase extends local_resourcelibrary_testca
 
     /**
      * Test that we can obtain a single row result for a set of fields for a course and course module
+     * @covers \local_resourcelibrary\locallib\customfield_utils::set_hiddenfields_course
      */
     public function test_utils_set_get_hiddenfields_course() {
         $this->resetAfterTest();
@@ -112,6 +116,7 @@ class local_resourcelibrary_filter_testcase extends local_resourcelibrary_testca
 
     /**
      * Test that we can obtain a single row result for a set of fields for a course and course module
+     * @covers \local_resourcelibrary\locallib\customfield_utils::show_hiddenfields_course
      */
     public function test_utils_show_hiddenfields_course() {
         $this->resetAfterTest();

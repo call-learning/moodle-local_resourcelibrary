@@ -23,33 +23,33 @@ Feature: As an admin I should be able to set and retrieve values from basic cust
   Scenario: As an admin if I set a value for a course custom field, then I should be able to retrieve it after.
     Given I am on site homepage
     And I log in as "admin"
-    Given I am on "Course 1" course homepage
-    And I navigate to "Edit settings" in current page administration
+    And I am on "Course 1" course homepage
+    And I navigate to "Settings" in current page administration
     And I expand all fieldsets
-    Then I wait until the page is ready
-    Then I should see "Resource Library: Generic fields"
-    Then I should see "Test Field"
+    And I wait until the page is ready
+    And I should see "Resource Library: Generic fields"
+    And I should see "Test Field"
     And the field "Test Field" matches value "ABCDEF"
-    Then I set the field "Test Field" to "ACDBE"
+    And I set the field "Test Field" to "ACDBE"
     And I click on "Save" "button"
-    Given I am on "Course 1" course homepage
-    And I navigate to "Edit settings" in current page administration
-    And I expand all fieldsets
-    And the field "Test Field" matches value "ACDBE"
+    And I am on "Course 1" course homepage
+    And I navigate to "Settings" in current page administration
+    When I expand all fieldsets
+    Then the field "Test Field" matches value "ACDBE"
 
   Scenario: As an admin if I set a value for a course custom field, then I should be able to retrieve it after.
     Given I am on site homepage
     And I log in as "admin"
-    Given I am on "Course 1" course homepage
-    And I navigate to "Edit settings" in current page administration
+    And I am on "Course 1" course homepage
+    And I navigate to "Settings" in current page administration
     And I expand all fieldsets
-    Then I wait until the page is ready
-    Then I should see "Resource Library: Generic fields"
-    Then I should see "Test Field"
+    And I wait until the page is ready
+    And I should see "Resource Library: Generic fields"
+    And I should see "Test Field"
     And the field "Test Field" matches value "ABCDEF"
-    Then I set the field "Test Field" to "ACDBE"
+    And I set the field "Test Field" to "ACDBE"
     And I click on "Save" "button"
-    Given I am on "Course 1" course homepage
-    And I navigate to "Edit settings" in current page administration
-    And I expand all fieldsets
-    And the field "Test Field" matches value "ACDBE"
+    And I am on "Course 1" course homepage
+    And I navigate to "Settings" in current page administration
+    When I expand all fieldsets
+    Then the field "Test Field" matches value "ACDBE"

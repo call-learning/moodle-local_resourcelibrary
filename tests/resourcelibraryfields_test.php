@@ -21,10 +21,17 @@
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
+namespace local_resourcelibrary;
+use backup;
+use backup_controller;
+use base_plan_exception;
 use core_course\customfield\course_handler;
 use local_resourcelibrary\customfield\coursemodule_handler;
 use local_resourcelibrary\locallib\utils;
+use local_resourcelibrary_testcase;
+use restore_controller;
+use restore_dbops;
+use stdClass;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -40,10 +47,11 @@ require_once($CFG->dirroot . '/local/resourcelibrary/tests/lib.php');
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class local_resourcelibrary_resourcelibraryfield_testcase extends local_resourcelibrary_testcase {
+class resourcelibraryfields_test extends local_resourcelibrary_testcase {
 
     /**
      * Test creating course with resourcelibrary custom fields and retrieving them
+     * @covers \delete_course
      */
     public function test_create_course() {
         global $DB;
@@ -69,6 +77,7 @@ class local_resourcelibrary_resourcelibraryfield_testcase extends local_resource
 
     /**
      * Test creating module with resourcelibrary custom fields and retrieving them
+     * @covers \course_delete_module
      */
     public function test_create_module() {
         global $DB;
@@ -96,6 +105,7 @@ class local_resourcelibrary_resourcelibraryfield_testcase extends local_resource
 
     /**
      * Test creating module with resourcelibrary custom fields and retrieving them
+     * @covers \course_delete_module
      */
     public function test_create_module_multiselect() {
         global $DB;
@@ -123,6 +133,7 @@ class local_resourcelibrary_resourcelibraryfield_testcase extends local_resource
 
     /**
      * Test backup and restore of custom fields
+     * @covers \backup_controller
      */
     public function test_restore_course_resourcelibraryfields() {
         global $USER;
@@ -157,6 +168,7 @@ class local_resourcelibrary_resourcelibraryfield_testcase extends local_resource
 
     /**
      * Test backup and restore of custom fields
+     * @covers \backup_controller
      */
     public function test_restore_module_resourcelibraryfields_simple() {
         global $USER;
@@ -188,6 +200,7 @@ class local_resourcelibrary_resourcelibraryfield_testcase extends local_resource
 
     /**
      * Test backup and restore of custom fields
+     * @covers \backup_controller
      */
     public function test_restore_module_resourcelibraryfields_multiselect() {
         global $USER;
@@ -244,11 +257,7 @@ class local_resourcelibrary_resourcelibraryfield_testcase extends local_resource
      * @param int $backupid The backup ID.
      * @param int $courseid The course ID to restore in, or 0.
      * @param int $userid The ID of the user performing the restore.
-     * @return stdClass The updated course object.
-     * @throws base_plan_exception
-     * @throws base_setting_exception
-     * @throws dml_exception
-     * @throws restore_controller_exception
+     * @return stdClass The updated course object.n
      */
     protected function restore_course($backupid, $courseid, $userid) {
         global $DB;

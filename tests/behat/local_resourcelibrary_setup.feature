@@ -23,14 +23,15 @@ Feature: As an admin I want to be able to turn on and off the plugin and custom 
     And I should see "Enable Resource Library"
     And I set the field "Enable Resource Library" to "0"
     And I click on "Save changes" "button"
-    And I navigate to "Courses" in site administration
-    Then I should not see "Resource Library"
-    Given I am on "Course 1" course homepage
+    And I click on "Site administration" "link"
+    And I click on "Courses" "link"
+    And I should not see "Resource Library"
+    And I am on "Course 1" course homepage
     And I turn editing mode on
     And I open "PageName1" actions menu
     And I click on "Edit settings" "link" in the "PageName1" activity
     And I expand all fieldsets
-    Then I wait until the page is ready
+    When I wait until the page is ready
     Then I should not see "Test Field"
 
   Scenario: As an admin if I turn on the plugin feature, I should a catalog related field in the activity edit form
@@ -40,12 +41,13 @@ Feature: As an admin I want to be able to turn on and off the plugin and custom 
     And I should see "Enable Resource Library"
     And I set the field "Enable Resource Library" to "1"
     And I click on "Save changes" "button"
-    And I navigate to "Courses" in site administration
-    Then I should see "Resource Library"
-    Given I am on "Course 1" course homepage
+    And I click on "Site administration" "link"
+    And I click on "Courses" "link"
+    And I should see "Resource Library"
+    And I am on "Course 1" course homepage
     And I turn editing mode on
     And I open "PageName1" actions menu
     And I click on "Edit settings" "link" in the "PageName1" activity
     And I expand all fieldsets
-    Then I wait until the page is ready
+    When I wait until the page is ready
     Then I should see "Test Field"

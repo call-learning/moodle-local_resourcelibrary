@@ -56,59 +56,18 @@ Feature: As an admin I should be able to access values from custom field
       | user    | C9     | student        |
       | user    | C1     | student        |
 
-  Scenario: As an admin I should see all courses and activities on the resource library page
+  Scenario Outline: As a user I should see all visible course and activities I usually have access to.
     Given I am on site homepage
-    And I log in as "admin"
-    And I follow "Resource library"
-    And I wait until the page is ready
-    Then I should see "Course 01"
-    Then I should see "Course 05"
-    And I should see "Course 09"
-
-  Scenario: As an teacher I should see all visible course and those I am enrolled in
-    Given I am on site homepage
-    And I log in as "teacher"
-    And I follow "Resource library"
-    And I wait until the page is ready
-    Then I should see "Course 01"
-    Then I should see "Course 05"
-    And I should not see "Course 09"
-
-  Scenario: As an user I should see all visible course and those I am enrolled in
-    Given I am on site homepage
-    And I log in as "user"
-    And I follow "Resource library"
-    And I wait until the page is ready
-    Then I should see "Course 01"
-    Then I should not see "Course 05"
-    And I should see "Course 09"
-
-  Scenario: As an admin I should see all activities on the resource library page
-    Given I am on site homepage
-    And I log in as "admin"
-    Given I am on "Course 01" course homepage
-    And I wait until the page is ready
-    And I follow "Resource library"
-    Then I should see "Page 01"
-    Then I should see "Page 05"
-    And I should see "Page 09"
-
-  Scenario: As an teacher I should see all activities on the resource library page for course I can access
-    Given I am on site homepage
-    And I log in as "teacher"
-    Given I am on "Course 01" course homepage
-    And I wait until the page is ready
-    And I follow "Resource library"
-    Then I should see "Page 01"
-    Then I should see "Page 05"
-    And I should see "Page 09"
-
-  Scenario: As an user I should see all activities marked as visible only
-    Given I am on site homepage
-    And I log in as "user"
-    Given I am on "Course 01" course homepage
-    And I wait until the page is ready
-    And I follow "Resource library"
-    Then I should see "Page 01"
-    Then I should not see "Page 05"
-    And I should not see "Page 09"
+    And I log in as "<user>"
+    When I navigate to resource library "<page>" page
+    Then I wait until the page is ready
+    Then I should see the texts "<see>"
+    Then I should not see the texts "<notsee>"
+    Examples:
+      | page      | see                             | notsee           | user    |
+      | Home      | Course 01, Course 05, Course 09 |                  | admin   |
+      | Home      | Course 01, Course 05            | Course 09        | teacher |
+      | Home      | Course 01, Course 09            | Course 05        | user    |
+      | Course 01 | Page 01, Page 05, Page 09       |                  | admin   |
+      | Course 01 | Page 01, Page 05, Page 09       |                  | teacher |
+      | Course 01 | Page 01                         | Page 05, Page 09 | user    |

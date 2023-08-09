@@ -79,7 +79,7 @@ class multiselect_filter extends baseselect_filter {
     public function check_data($formdata) {
         $field = $this->_name;
 
-        if (array_key_exists($field, (array) $formdata) and $formdata->$field !== '') {
+        if (array_key_exists($field, (array) $formdata) && $formdata->$field !== '') {
             return array('value' => (string) $formdata->$field);
         }
 

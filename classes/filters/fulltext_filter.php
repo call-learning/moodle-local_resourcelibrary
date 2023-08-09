@@ -59,7 +59,7 @@ class fulltext_filter implements resourcelibrary_filter_interface, static_filter
      */
     public function check_data($formdata) {
         $field = 'fulltext';
-        if (array_key_exists($field, (array) $formdata) and $formdata->$field !== '') {
+        if (array_key_exists($field, (array) $formdata) && $formdata->$field !== '') {
             return array('value' => (string) $formdata->$field);
         }
         return false;

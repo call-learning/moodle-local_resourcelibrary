@@ -22,6 +22,9 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use local_resourcelibrary\locallib\utils;
+use Moodle\BehatExtension\Exception\SkippedException;
+
 require_once(__DIR__ . '/../../../../lib/behat/behat_base.php');
 
 /**
@@ -41,8 +44,56 @@ class behat_local_resourcelibrary extends behat_base {
      */
     public function multiselect_field_is_installed() {
 
-        if (!\local_resourcelibrary\locallib\utils::is_multiselect_installed()) {
-            throw new \Moodle\BehatExtension\Exception\SkippedException;
+        if (!utils::is_multiselect_installed()) {
+            throw new SkippedException;
         }
     }
+
+    /**
+     * Add a step to navigate to /local/resourcelibrary/index.php
+     *
+     * @Given /^I navigate to resource library "(?P<coursefullname_string>(?:[^"]|\\")*)" page$/
+     */
+    public function i_navigate_to_resource_librar_course_content(string $coursefullname) {
+        $url = new moodle_url('/local/resourcelibrary/index.php');
+        if ($coursefullname != "Home") {
+            $courseid = $this->get_course_id($coursefullname);
+            $url->param('courseid', $courseid);
+        }
+        $this->execute('behat_general::i_visit', [$url]);
+    }
+
+    /**
+     * Check that a page contains a list of texts (separated by commas)
+     *
+     * @param string $texts
+     *
+     * @Given /^I should see the texts "(?P<texts>(?:[^"]|\\")*)"$/
+     */
+    public function i_should_see_the_texts(string $texts) {
+        $textarray = array_map('trim', explode(',', $texts));
+        foreach ($textarray as $text) {
+            $text = str_replace('\\"', '"', $text);
+            $this->assertSession()->pageTextContains($text);
+        }
+    }
+
+    /**
+     * Check that a page does not contains a list of texts (separated by commas)
+     *
+     * @param string $texts
+     *
+     * @Given /^I should not see the texts "(?P<texts>(?:[^"]|\\")*)"$/
+     */
+    public function i_should_not_see_the_texts(string $texts) {
+        if (trim($texts) == '') {
+            return;
+        }
+        $textarray = array_map('trim', explode(',', $texts));
+        foreach ($textarray as $text) {
+            $text = str_replace('\\"', '"', $text);
+            $this->assertSession()->pageTextNotContains($text);
+        }
+    }
+
 }
