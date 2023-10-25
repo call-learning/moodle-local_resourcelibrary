@@ -22,6 +22,13 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+
+define("LOCAL_RESOURCELIBRARY_ITEMTYPE_CATEGORY", 1);
+define("LOCAL_RESOURCELIBRARY_ITEMTYPE_COURSE", 2);
+
+define("LOCAL_RESOURCELIBRARY_ITEM_VISIBLE", 0);
+define("LOCAL_RESOURCELIBRARY_ITEM_HIDDEN", 1);
+
 /**
  * Inject the competencies elements into all moodle module settings forms.
  *

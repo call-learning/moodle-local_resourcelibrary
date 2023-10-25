@@ -69,4 +69,12 @@ $capabilities = array(
             'guest' => CAP_ALLOW
         )
     ),
+    'local/resourcelibrary:setitemsvisibility' => array(
+        'riskbitmask' => RISK_SPAM | RISK_XSS,
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_COURSE,
+        'archetypes' => array(
+            'manager' => CAP_ALLOW
+        )
+    ),
 );

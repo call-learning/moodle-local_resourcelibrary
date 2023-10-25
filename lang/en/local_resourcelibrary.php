@@ -65,10 +65,6 @@ $string['resourcelibrary:courseviewbaseurl'] = 'Base URL for course view.';
 $string['resourcelibrary:courseviewbaseurl:desc'] = 'Base URL for course view. Most of the time it will be /course/view.php.'
     .' We add the identifier \'id\' to the URL with the id of the course.';
 $string['resourcelibrarymainsettings'] = 'Resource Library: Global Settings';
-$string['resourcelibrary:hiddencoursesid'] = 'Hidden courses Id';
-$string['resourcelibrary:hiddencoursesid:desc'] = 'List of comma separated
- courses identifiers (course id) that will be invisible on the catalog';
-
 $string['category:general'] = 'Resource Library: Generic fields';
 
 $string['enableresourcelibrary'] = 'Enable Resource Library';
@@ -83,7 +79,11 @@ $string['resourcelibrary:managefields'] = 'Can manage Resource Library Fields';
 $string['resourcelibrary:editvalue'] = 'Can edit Resource Library Custom Field values';
 $string['resourcelibrary:configurecustomfields'] = 'Can configure Resource Library Custom Field values';
 $string['resourcelibrary:changelockedcustomfields'] = 'Can change locked Resource Library Custom Field values';
+$string['resourcelibrary:setitemsvisibility'] = 'Can set items visibility';
+$string['settingvisibilitynotallowed'] = 'Setting visibility is not allowed';
 $string['resourcelibrary:view'] = 'Can view locked Resource Library Custom Field values';
+$string['showincatalogue'] = 'Show in catalogue';
+$string['hidefromcatalogue'] = 'Hide from catalogue';
 $string['list'] = 'List';
 $string['lastmodification'] = 'Last modification';
 $string['lastmodification:desc'] = 'Last modification (Descending)';

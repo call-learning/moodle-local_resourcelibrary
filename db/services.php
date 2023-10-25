@@ -72,4 +72,13 @@ $functions = array(
         'ajax' => true,
         'loginrequired' => true
     ),
+    'local_resourcelibrary_set_items_visibility' => array(
+        'classname' => '\\local_resourcelibrary\\external\\item_visibility',
+        'methodname' => 'set_items_visibility',
+        'description' => 'Set the visibility status for items in the catalogue',
+        'type' => 'write',
+        'capabilities' => 'local/resourcelibrary:setitemsvisibility',
+        'ajax' => true,
+        'loginrequired' => true
+    ),
 );
