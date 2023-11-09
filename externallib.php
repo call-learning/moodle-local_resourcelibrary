@@ -280,6 +280,9 @@ class local_resourcelibrary_external extends external_api {
         if ($invisiblecoursesids = get_config('local_resourcelibrary', 'hiddencoursesid')) {
             $invisiblecourseidlist = explode(',', $invisiblecoursesids);
         }
+        if ($managementhiddenlist = self::get_hidden_items()) {
+            $invisiblecourseidlist = array_merge($invisiblecourseidlist, $managementhiddenlist);
+        }
         foreach ($courses as $course) {
 
             if (in_array($course->id, $invisiblecourseidlist)) {
@@ -315,6 +318,22 @@ class local_resourcelibrary_external extends external_api {
         }
 
         return array_slice($coursesinfo, $offset, $limit ? $limit : null);
+    }
+
+    /**
+     * Get the catalogue items that are hidden from the catalogue.
+     * @return array of course ids that are hidden.
+     */
+    public static function get_hidden_items() {
+        GLOBAL $DB;
+        $sql = "SELECT itemid FROM {local_resourcelibrary} WHERE itemtype = :itemtype AND visibility = :visibility";
+        $params = ['itemtype' => LOCAL_RESOURCELIBRARY_ITEMTYPE_COURSE, 'visibility' => LOCAL_RESOURCELIBRARY_ITEM_HIDDEN];
+        $records = $DB->get_records_sql($sql, $params);
+        $hiddenitems = [];
+        foreach ($records as $record) {
+            $hiddenitems[] = $record->itemid;
+        }
+        return $hiddenitems;
     }
 
     /**
