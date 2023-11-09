@@ -22,7 +22,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace local_resourcelibrary;
-use \core_privacy\local\request\writer;
+use core_privacy\local\request\writer;
 use local_resourcelibrary\privacy\provider;
 
 /**
@@ -73,12 +73,12 @@ class privacy_test extends \core_privacy\tests\provider_testcase {
      *
      * @return array Array of valid user preferences.
      */
-    public function user_preference_provider() {
-        return array(
-            array('local_resourcelibrary_user_sort_preference', 'title', ''),
-            array('local_resourcelibrary_user_view_preference', 'card', ''),
-            array('local_resourcelibrary_user_view_preference', 'list', ''),
-            array('local_resourcelibrary_user_paging_preference', 12, 12)
-        );
+    public static function user_preference_provider() {
+        return [
+            ['local_resourcelibrary_user_sort_preference', 'title', ''],
+            ['local_resourcelibrary_user_view_preference', 'card', ''],
+            ['local_resourcelibrary_user_view_preference', 'list', ''],
+            ['local_resourcelibrary_user_paging_preference', 12, 12],
+        ];
     }
 }

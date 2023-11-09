@@ -50,7 +50,7 @@ class course_summary_simple_exporter extends course_summary_exporter {
      */
     protected static function define_related() {
         // We cache the context so it does not need to be retrieved from the course.
-        return array('context' => '\\context', 'isfavourite' => 'bool?');
+        return ['context' => '\\context', 'isfavourite' => 'bool?'];
     }
 
     /**
@@ -69,10 +69,10 @@ class course_summary_simple_exporter extends course_summary_exporter {
         if (!$courseviewurl) {
             $courseviewurl = self::COURSE_VIEW_DEFAULT_URL;
         }
-        return array(
-            'viewurl' => (new moodle_url($courseviewurl, array('id' => $this->data->id)))->out(false),
+        return [
+            'viewurl' => (new moodle_url($courseviewurl, ['id' => $this->data->id]))->out(false),
             'image' => $courseimage,
-        );
+        ];
     }
 
     /**
@@ -81,35 +81,35 @@ class course_summary_simple_exporter extends course_summary_exporter {
      * @return array|array[]
      */
     public static function define_properties() {
-        return array(
-            'id' => array(
+        return [
+            'id' => [
                 'type' => PARAM_INT,
-            ),
-            'fullname' => array(
+            ],
+            'fullname' => [
                 'type' => PARAM_TEXT,
-            ),
-            'shortname' => array(
+            ],
+            'shortname' => [
                 'type' => PARAM_TEXT,
-            ),
-            'idnumber' => array(
+            ],
+            'idnumber' => [
                 'type' => PARAM_RAW,
-            ),
-            'startdate' => array(
+            ],
+            'startdate' => [
                 'type' => PARAM_INT,
-            ),
-            'enddate' => array(
+            ],
+            'enddate' => [
                 'type' => PARAM_INT,
-            ),
-            'visible' => array(
+            ],
+            'visible' => [
                 'type' => PARAM_BOOL,
-            ),
-            'timecreated' => array(
+            ],
+            'timecreated' => [
                 'type' => PARAM_INT,
-            ),
-            'timemodified' => array(
+            ],
+            'timemodified' => [
                 'type' => PARAM_INT,
-            )
-        );
+            ],
+        ];
     }
 
     /**
@@ -130,13 +130,13 @@ class course_summary_simple_exporter extends course_summary_exporter {
      * @return array|array[]
      */
     public static function define_other_properties() {
-        return array(
-            'viewurl' => array(
+        return [
+            'viewurl' => [
                 'type' => PARAM_URL,
-            ),
-            'image' => array(
+            ],
+            'image' => [
                 'type' => PARAM_RAW,
-            ),
-        );
+            ],
+        ];
     }
 }

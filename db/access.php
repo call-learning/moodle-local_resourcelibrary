@@ -25,56 +25,56 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$capabilities = array(
+$capabilities = [
     // Manage Fields.
-    'local/resourcelibrary:manage' => array(
+    'local/resourcelibrary:manage' => [
         'riskbitmask' => RISK_SPAM | RISK_XSS,
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
-        'archetypes' => array(
-            'manager' => CAP_ALLOW
-        )
-    ),
-    'local/resourcelibrary:editvalue' => array(
-        'riskbitmask' => RISK_SPAM | RISK_XSS,
-        'captype' => 'write',
-        'contextlevel' => CONTEXT_COURSE,
-        'archetypes' => array(
+        'archetypes' => [
             'manager' => CAP_ALLOW,
-            'editingteacher' => CAP_ALLOW
-        )
-    ),
-    'local/resourcelibrary:configurecustomfields' => array(
+        ],
+    ],
+    'local/resourcelibrary:editvalue' => [
         'riskbitmask' => RISK_SPAM | RISK_XSS,
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
-        'archetypes' => array(
+        'archetypes' => [
             'manager' => CAP_ALLOW,
-        )
-    ),
-    'local/resourcelibrary:changelockedcustomfields' => array(
+            'editingteacher' => CAP_ALLOW,
+        ],
+    ],
+    'local/resourcelibrary:configurecustomfields' => [
         'riskbitmask' => RISK_SPAM | RISK_XSS,
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
-        'archetypes' => array(
-            'manager' => CAP_ALLOW
-        ),
-    ),
-    'local/resourcelibrary:view' => array(
+        'archetypes' => [
+            'manager' => CAP_ALLOW,
+        ],
+    ],
+    'local/resourcelibrary:changelockedcustomfields' => [
+        'riskbitmask' => RISK_SPAM | RISK_XSS,
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_COURSE,
+        'archetypes' => [
+            'manager' => CAP_ALLOW,
+        ],
+    ],
+    'local/resourcelibrary:view' => [
         'riskbitmask' => RISK_SPAM | RISK_XSS,
         'captype' => 'read',
         'contextlevel' => CONTEXT_COURSE,
-        'archetypes' => array(
+        'archetypes' => [
             'user' => CAP_ALLOW,
-            'guest' => CAP_ALLOW
-        )
-    ),
-    'local/resourcelibrary:setitemsvisibility' => array(
+            'guest' => CAP_ALLOW,
+        ],
+    ],
+    'local/resourcelibrary:setitemsvisibility' => [
         'riskbitmask' => RISK_SPAM | RISK_XSS,
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
-        'archetypes' => array(
-            'manager' => CAP_ALLOW
-        )
-    ),
-);
+        'archetypes' => [
+            'manager' => CAP_ALLOW,
+        ],
+    ],
+];

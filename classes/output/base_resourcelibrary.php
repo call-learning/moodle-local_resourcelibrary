@@ -177,7 +177,7 @@ abstract class base_resourcelibrary implements renderable, templatable {
             'view' => $this->view,
             'paging' => $this->paging,
             'displaycategories' => $this->displaycategories,
-            'entitytype' => $handler->get_area()
+            'entitytype' => $handler->get_area(),
         ];
         $defaultvariables['filtersformcontent'] = $this->get_filters_content($handler);
         return $defaultvariables;
@@ -200,7 +200,7 @@ abstract class base_resourcelibrary implements renderable, templatable {
     public function get_filters_content($handler) {
         global $_GET;
         $filterform = new filter_form(null, ['handler' => $handler],
-            'post', '', array('class' => 'resourcelibrary-filters-form p-0'));
+            'post', '', ['class' => 'resourcelibrary-filters-form p-0']);
 
         $filterscontent = $filterform->render();
         return $filterscontent;

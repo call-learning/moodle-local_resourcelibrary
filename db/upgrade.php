@@ -31,7 +31,7 @@
  * @throws upgrade_exception|dml_exception
  */
 function xmldb_local_resourcelibrary_upgrade($oldversion) {
-    GLOBAL $DB;
+    global $DB;
 
     $dbman = $DB->get_manager(); // Loads ddl manager and xmldb classes.
 
@@ -68,7 +68,7 @@ function xmldb_local_resourcelibrary_upgrade($oldversion) {
         global $DB;
         // Change all specialised course custom field (old course_handler class) into usual course custom fields.
         $coursefields =
-            $DB->get_records('customfield_category', array('area' => 'course', 'component' => 'local_resourcelibrary'));
+            $DB->get_records('customfield_category', ['area' => 'course', 'component' => 'local_resourcelibrary']);
         foreach ($coursefields as $cf) {
             $cf->component = 'core_course';
             $DB->update_record('customfield_category', $cf);
@@ -103,11 +103,11 @@ function xmldb_local_resourcelibrary_upgrade($oldversion) {
     if ($oldversion < 2023102500) {
         // Get the list of courses configured in the setting 'local_resourcelibrary/hiddencoursesid'
         // For each course in the list, create a record in the table local_resourcelibrary
-        // with itemid = courseid, itemtype = 2 (course) and visibility = 1 (hidden)
+        // with itemid = courseid, itemtype = 2 (course) and visibility = 1 (hidden).
         if ($invisiblecoursesids = get_config('local_resourcelibrary', 'hiddencoursesid')) {
             $invisiblecourseidlist = explode(',', $invisiblecoursesids);
-            foreach($invisiblecourseidlist as $courseid) {
-                $record = (object)[];
+            foreach ($invisiblecourseidlist as $courseid) {
+                $record = (object) [];
                 $record->itemid = $courseid;
                 $record->itemtype = 2;
                 $record->visibility = 1;

@@ -56,7 +56,7 @@ class api_test extends local_resourcelibrary_testcase {
         $dg = $this->getDataGenerator();
 
         $data = ['shortname' => 'SN', 'fullname' => 'FN',
-            'summary' => 'DESC', 'summaryformat' => FORMAT_MOODLE] +
+            'summary' => 'DESC', 'summaryformat' => FORMAT_MOODLE, ] +
             $this->get_simple_cf_data();
         $dg->create_course($data);
 
@@ -81,7 +81,7 @@ class api_test extends local_resourcelibrary_testcase {
             $moduledata['customfield_f4'] = [1, 2];
         }
         $c1 = $dg->create_course();
-        foreach (array('page', 'label', 'page', 'label') as $modtype) {
+        foreach (['page', 'label', 'page', 'label'] as $modtype) {
             $dg->create_module($modtype, array_merge(
                 ['course' => $c1->id],
                 $moduledata
@@ -106,13 +106,13 @@ class api_test extends local_resourcelibrary_testcase {
         $now = time();
 
         $c1 = $dg->create_course();
-        foreach (array('page', 'label', 'page', 'label') as $index => $modtype) {
+        foreach (['page', 'label', 'page', 'label'] as $index => $modtype) {
             $moduledata = [
                 'customfield_f1' => 'some text' . $index,
                 'customfield_f2' => $index % 2,
                 'customfield_f3' => $now + ((0 - $index % 2) * 20000),
                 'customfield_f5' => (1 + ($index % 2)),
-                'customfield_f6_editor' => ['text' => 'test', 'format' => FORMAT_HTML]];
+                'customfield_f6_editor' => ['text' => 'test', 'format' => FORMAT_HTML], ];
             if (utils::is_multiselect_installed()) {
                 $moduledata['customfield_f4'] = [1, 2];
             }
@@ -122,12 +122,12 @@ class api_test extends local_resourcelibrary_testcase {
             ));
         }
 
-        $modules = local_resourcelibrary_external::get_filtered_course_content($c1->id, array(array(
+        $modules = local_resourcelibrary_external::get_filtered_course_content($c1->id, [[
             'type' => 'select',
             'shortname' => 'f5',
             'operator' => 1,
             'value' => '2',
-        )));
+        ], ]);
 
         $this->assertCount(2, $modules);
     }

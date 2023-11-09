@@ -51,10 +51,10 @@ class filters_test extends local_resourcelibrary_testcase {
         $dg = $this->getDataGenerator();
 
         $data = ['shortname' => 'SN', 'fullname' => 'FN',
-            'summary' => 'DESC', 'summaryformat' => FORMAT_MOODLE] + $this->get_simple_cf_data();
+            'summary' => 'DESC', 'summaryformat' => FORMAT_MOODLE, ] + $this->get_simple_cf_data();
         $c1 = $dg->create_course($data);
 
-        $activitydata = array('course' => $c1->id) + $this->get_simple_cf_data();
+        $activitydata = ['course' => $c1->id] + $this->get_simple_cf_data();
 
         // TODO: It would have been nice here to prefix the form and the values by 'resourcelibrary'.
         // But the datacontroller for each class (checkbox) will answer customfield_xx for the element name which
@@ -66,7 +66,7 @@ class filters_test extends local_resourcelibrary_testcase {
         $activityrow = $DB->get_records_sql($sqlcm);
         $this->assertCount(1, $courserow);
         $this->assertCount(1, $activityrow);
-        foreach (array(reset($courserow), reset($activityrow)) as $data) {
+        foreach ([reset($courserow), reset($activityrow)] as $data) {
             $this->assert_check_simple_cf_data($data);
         }
     }
@@ -80,7 +80,7 @@ class filters_test extends local_resourcelibrary_testcase {
         $dg = $this->getDataGenerator();
 
         $data = ['shortname' => 'SN', 'fullname' => 'FN',
-            'summary' => 'DESC', 'summaryformat' => FORMAT_MOODLE ] + $this->get_simple_cf_data();
+            'summary' => 'DESC', 'summaryformat' => FORMAT_MOODLE, ] + $this->get_simple_cf_data();
         $c1 = $dg->create_course($data);
         $handler = course_handler::create($c1->id);
         // Set the first field as hidden.
@@ -98,7 +98,7 @@ class filters_test extends local_resourcelibrary_testcase {
         $dg = $this->getDataGenerator();
 
         $data = ['shortname' => 'SN', 'fullname' => 'FN',
-            'summary' => 'DESC', 'summaryformat' => FORMAT_MOODLE] + $this->get_simple_cf_data();
+            'summary' => 'DESC', 'summaryformat' => FORMAT_MOODLE, ] + $this->get_simple_cf_data();
         $c1 = $dg->create_course($data);
         $handler = course_handler::create($c1->id);
 
@@ -123,7 +123,7 @@ class filters_test extends local_resourcelibrary_testcase {
         $dg = $this->getDataGenerator();
 
         $data = ['shortname' => 'SN', 'fullname' => 'FN',
-            'summary' => 'DESC', 'summaryformat' => FORMAT_MOODLE] + $this->get_simple_cf_data();
+            'summary' => 'DESC', 'summaryformat' => FORMAT_MOODLE, ] + $this->get_simple_cf_data();
         $c1 = $dg->create_course($data);
         $handler = course_handler::create($c1->id);
         $fields = $handler->get_fields();
@@ -132,7 +132,7 @@ class filters_test extends local_resourcelibrary_testcase {
             'f1',
             'f2',
             'f3',
-            'f5'
+            'f5',
         ]);
 
         // Test the two ways to call this method (int and array of int).

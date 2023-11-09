@@ -41,16 +41,16 @@ class behat_local_resourcelibrary_generator extends behat_generator_base {
         return [
             'category' => [
                 'datagenerator' => 'category',
-                'required' => ['component', 'area']
+                'required' => ['component', 'area'],
             ],
             'field' => [
                 'datagenerator' => 'field',
-                'required' => ['component', 'area']
+                'required' => ['component', 'area'],
             ],
             'fielddata' => [
                 'datagenerator' => 'fielddata',
-                'required' => ['fieldshortname', 'courseshortname']
-            ]
+                'required' => ['fieldshortname', 'courseshortname'],
+            ],
         ];
     }
 
@@ -65,7 +65,7 @@ class behat_local_resourcelibrary_generator extends behat_generator_base {
         global $DB;
         $elementdata['categoryid'] = $DB->get_field('customfield_category', 'id',
             ['name' => trim($elementdata['customfieldcategory']),
-                'area' => $elementdata['area'], 'component' => $elementdata['component']]);
+                'area' => $elementdata['area'], 'component' => $elementdata['component'], ]);
         return $elementdata;
     }
 

@@ -53,12 +53,12 @@ class manage_customfields extends external_api {
      */
     public static function get_hidden_fields_filter_parameters() {
         return new external_function_parameters(
-            array(
+            [
                 'component' => new external_value(PARAM_ALPHANUMEXT,
                     'customfield handler type (course, coursemodule)'),
                 'area' => new external_value(PARAM_ALPHANUMEXT,
-                    'customfield handler area')
-            )
+                    'customfield handler area'),
+            ]
         );
     }
 
@@ -74,7 +74,7 @@ class manage_customfields extends external_api {
      */
     public static function get_hidden_fields_filter(string $component, string $area) {
         // Validate parameters.
-        $inparams = compact(array('component', 'area'));
+        $inparams = compact(['component', 'area']);
         self::validate_parameters(self::get_hidden_fields_filter_parameters(), $inparams);
         $handler = handler::get_handler($component, $area);
         return utils::get_hidden_fields_filters($handler);
@@ -90,9 +90,9 @@ class manage_customfields extends external_api {
         return
             new external_multiple_structure(
                 new external_single_structure(
-                    array(
+                    [
                         'shortname' => new external_value(PARAM_ALPHANUM, 'field shortname'),
-                    )
+                    ]
                 )
             );
     }
@@ -104,15 +104,15 @@ class manage_customfields extends external_api {
      */
     public static function hide_fields_filter_parameters() {
         return new external_function_parameters(
-            array(
+            [
                 'component' => new external_value(PARAM_ALPHANUMEXT,
                     'customfield handler type (course, coursemodule)'),
                 'area' => new external_value(PARAM_ALPHANUMEXT,
                     'customfield handler area'),
                 'fieldshortnames' => new external_multiple_structure(
                     new external_value(PARAM_ALPHANUMEXT, 'ccustomfield shortname')
-                )
-            )
+                ),
+            ]
         );
     }
 
@@ -128,7 +128,7 @@ class manage_customfields extends external_api {
      */
     public static function hide_fields_filter($component, $area, $fieldshortnames) {
         // Validate parameters.
-        $inparams = compact(array('component', 'area', 'fieldshortnames'));
+        $inparams = compact(['component', 'area', 'fieldshortnames']);
         self::validate_parameters(self::hide_fields_filter_parameters(), $inparams);
         $handler = handler::get_handler($component, $area);
         utils::hide_fields_filter($handler, $fieldshortnames);
@@ -151,15 +151,15 @@ class manage_customfields extends external_api {
      */
     public static function show_fields_filter_parameters() {
         return new external_function_parameters(
-            array(
+            [
                 'component' => new external_value(PARAM_ALPHANUMEXT,
                     'customfield handler type (course, coursemodule)'),
                 'area' => new external_value(PARAM_ALPHANUMEXT,
                     'customfield handler area'),
                 'fieldshortnames' => new external_multiple_structure(
                     new external_value(PARAM_ALPHANUMEXT, 'ccustomfield shortname')
-                )
-            )
+                ),
+            ]
         );
     }
 
@@ -175,7 +175,7 @@ class manage_customfields extends external_api {
      */
     public static function show_fields_filter($component, $area, $fieldshortnames) {
         // Validate parameters.
-        $inparams = compact(array('component', 'area', 'fieldshortnames'));
+        $inparams = compact(['component', 'area', 'fieldshortnames']);
         self::validate_parameters(self::show_fields_filter_parameters(), $inparams);
         $handler = handler::get_handler($component, $area);
         utils::show_fields_filter($handler, $fieldshortnames);

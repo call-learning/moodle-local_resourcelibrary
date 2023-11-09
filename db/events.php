@@ -22,13 +22,13 @@
  */
 
 defined('MOODLE_INTERNAL') || die;
-$observers = array(
-    array(
+$observers = [
+    [
         'eventname' => '\core\event\course_deleted',
-        'callback' => '\local_resourcelibrary\observer\eventmanager::course_deleted'
-    ),
-    array(
+        'callback' => '\local_resourcelibrary\observer\eventmanager::course_deleted',
+    ],
+    [
         'eventname' => '\core\event\course_module_deleted',
-        'callback' => '\local_resourcelibrary\observer\eventmanager::course_module_deleted'
-    )
-);
+        'callback' => '\local_resourcelibrary\observer\eventmanager::course_module_deleted',
+    ],
+];

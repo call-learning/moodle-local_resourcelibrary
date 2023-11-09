@@ -26,7 +26,7 @@ namespace local_resourcelibrary\privacy;
 
 use core_privacy\local\request\user_preference_provider;
 use core_privacy\local\metadata\collection;
-use \core_privacy\local\request\writer;
+use core_privacy\local\request\writer;
 
 /**
  * Privacy Subsystem for local_resourcelibrary.

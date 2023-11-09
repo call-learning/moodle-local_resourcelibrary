@@ -33,10 +33,10 @@ list($options, $unrecognised) = cli_get_params([
     'help' => false,
     'name' => null,
 ], [
-    'h' => 'help'
+    'h' => 'help',
 ]);
 
-$possiblefunctions = array('setup_customfields');
+$possiblefunctions = ['setup_customfields'];
 
 $usage = "Run different setup script for testing purpose
 

@@ -24,8 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$functions = array(
-    'local_resourcelibrary_get_filtered_courses' => array(
+$functions = [
+    'local_resourcelibrary_get_filtered_courses' => [
         'classname' => 'local_resourcelibrary_external',
         'methodname' => 'get_filtered_courses',
         'classpath' => 'local/resourcelibrary/externallib.php',
@@ -33,9 +33,9 @@ $functions = array(
         'type' => 'read',
         'capabilities' => 'moodle/course:view, moodle/course:update, moodle/course:viewhiddencourses',
         'ajax' => true,
-        'loginrequired' => false // Global filter course page is accessible without being logged in.
-    ),
-    'local_resourcelibrary_get_filtered_course_content' => array(
+        'loginrequired' => false, // Global filter course page is accessible without being logged in.
+    ],
+    'local_resourcelibrary_get_filtered_course_content' => [
         'classname' => 'local_resourcelibrary_external',
         'methodname' => 'get_filtered_course_content',
         'classpath' => 'local/resourcelibrary/externallib.php',
@@ -43,42 +43,42 @@ $functions = array(
         'type' => 'read',
         'capabilities' => 'moodle/course:view, moodle/course:update, moodle/course:viewhiddencourses',
         'ajax' => true,
-        'loginrequired' => false // Global filter course page is accessible without being logged in.
-    ),
-    'local_resourcelibrary_hide_fields_filters' => array(
+        'loginrequired' => false, // Global filter course page is accessible without being logged in.
+    ],
+    'local_resourcelibrary_hide_fields_filters' => [
         'classname' => '\\local_resourcelibrary\\external\\manage_customfields',
         'methodname' => 'hide_fields_filter',
         'description' => 'Hide a set of fields from the filters',
         'type' => 'write',
         'capabilities' => 'local/resourcelibrary:configurecustomfields',
         'ajax' => true,
-        'loginrequired' => true
-    ),
-    'local_resourcelibrary_show_fields_filters' => array(
+        'loginrequired' => true,
+    ],
+    'local_resourcelibrary_show_fields_filters' => [
         'classname' => '\\local_resourcelibrary\\external\\manage_customfields',
         'methodname' => 'show_fields_filter',
         'description' => 'Make sure that the given set of fields will show in the filters',
         'type' => 'write',
         'capabilities' => 'local/resourcelibrary:configurecustomfields',
         'ajax' => true,
-        'loginrequired' => true
-    ),
-    'local_resourcelibrary_get_hidden_fields_filters' => array(
+        'loginrequired' => true,
+    ],
+    'local_resourcelibrary_get_hidden_fields_filters' => [
         'classname' => '\\local_resourcelibrary\\external\\manage_customfields',
         'methodname' => 'get_hidden_fields_filters',
         'description' => 'Get the list of filters that are hidden',
         'type' => 'read',
         'capabilities' => 'local/resourcelibrary:configurecustomfields',
         'ajax' => true,
-        'loginrequired' => true
-    ),
-    'local_resourcelibrary_set_items_visibility' => array(
+        'loginrequired' => true,
+    ],
+    'local_resourcelibrary_set_items_visibility' => [
         'classname' => '\\local_resourcelibrary\\external\\item_visibility',
         'methodname' => 'set_items_visibility',
         'description' => 'Set the visibility status for items in the catalogue',
         'type' => 'write',
         'capabilities' => 'local/resourcelibrary:setitemsvisibility',
         'ajax' => true,
-        'loginrequired' => true
-    ),
-);
+        'loginrequired' => true,
+    ],
+];

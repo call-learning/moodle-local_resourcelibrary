@@ -78,7 +78,7 @@ class checkbox_filter extends base {
         $field = $this->_name;
 
         if (array_key_exists($field,  (array) $formdata) && $formdata->$field !== '') {
-            return array('value' => (string) $formdata->$field);
+            return ['value' => (string) $formdata->$field];
         }
 
         return false;
@@ -95,7 +95,7 @@ class checkbox_filter extends base {
         $name = 'ex_checkbox' . $counter++;
 
         $field = $this->get_sql_field_name();
-        return empty($data) ? array(null, null) : array("$field=:$name", array($name => $data));
+        return empty($data) ? [null, null] : ["$field=:$name", [$name => $data]];
     }
 }
 

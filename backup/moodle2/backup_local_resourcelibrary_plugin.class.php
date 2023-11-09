@@ -38,9 +38,9 @@ class backup_local_resourcelibrary_plugin extends backup_plugin {
      */
     public function define_module_plugin_structure() {
         $rlfields = new backup_optigroup_element('resourcelibraryfields');
-        $resourcelibraryfield = new backup_nested_element('resourcelibraryfield', array('id'), array(
-            'shortname', 'type', 'value', 'valueformat'
-        ));
+        $resourcelibraryfield = new backup_nested_element('resourcelibraryfield', ['id'], [
+            'shortname', 'type', 'value', 'valueformat',
+        ]);
         $rlfields->add_child($resourcelibraryfield);
 
         $this->optigroup->add_child($rlfields);

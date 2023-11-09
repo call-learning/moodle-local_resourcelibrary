@@ -51,7 +51,7 @@ class select_filter extends baseselect_filter {
      */
     public function add_to_form(\MoodleQuickForm &$mform) {
         $elementname = $this->get_form_value_item_name();
-        $choices = array('' => get_string('filter:anyvalue', 'local_resourcelibrary')) + $this->_options;
+        $choices = ['' => get_string('filter:anyvalue', 'local_resourcelibrary')] + $this->_options;
         $mform->addElement('select', $elementname, $this->_label, $choices);
         $mform->setType($elementname, $this->get_param_type());
         parent::add_to_form($mform);
@@ -76,7 +76,7 @@ class select_filter extends baseselect_filter {
         $field = $this->_name;
 
         if (array_key_exists($field, (array) $formdata) && $formdata->$field !== '') {
-            return array('value' => (string) $formdata->$field);
+            return ['value' => (string) $formdata->$field];
         }
 
         return false;
@@ -93,6 +93,6 @@ class select_filter extends baseselect_filter {
         $name = 'ex_simpleselect' . $counter++;
 
         $field = $this->get_sql_field_name();
-        return empty($data) ? array(null, null) : array("$field=:$name", array($name => $data));
+        return empty($data) ? [null, null] : ["$field=:$name", [$name => $data]];
     }
 }

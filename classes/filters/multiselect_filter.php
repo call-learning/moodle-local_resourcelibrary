@@ -57,7 +57,7 @@ class multiselect_filter extends baseselect_filter {
             $elementname,
             $this->_label,
             $choices,
-            array('multiple' => true));
+            ['multiple' => true]);
         $mform->setType($elementname, $this->get_param_type());
         base::add_to_form($mform);
     }
@@ -80,7 +80,7 @@ class multiselect_filter extends baseselect_filter {
         $field = $this->_name;
 
         if (array_key_exists($field, (array) $formdata) && $formdata->$field !== '') {
-            return array('value' => (string) $formdata->$field);
+            return ['value' => (string) $formdata->$field];
         }
 
         return false;
@@ -94,16 +94,16 @@ class multiselect_filter extends baseselect_filter {
      */
     public function get_sql_filter($data) {
         static $counter = 0;
-        $likes = array(
-            (object) array('operator' => ' = :%s ', 'value' => '%s'),
-            (object) array('operator' => ' LIKE(:%s)', 'value' => '%s,%%'),
-            (object) array('operator' => ' LIKE(:%s)', 'value' => '%%,%s'),
-            (object) array('operator' => ' LIKE(:%s)', 'value' => '%%,%s,%%')
-        );
+        $likes = [
+            (object) ['operator' => ' = :%s ', 'value' => '%s'],
+            (object) ['operator' => ' LIKE(:%s)', 'value' => '%s,%%'],
+            (object) ['operator' => ' LIKE(:%s)', 'value' => '%%,%s'],
+            (object) ['operator' => ' LIKE(:%s)', 'value' => '%%,%s,%%'],
+        ];
         $name = 'ex_multiselect' . $counter++;
 
         if (!isset($data)) {
-            return array(null, null);
+            return [null, null];
         }
         $values = explode(',', $data);
 
@@ -119,9 +119,9 @@ class multiselect_filter extends baseselect_filter {
                 $paramcount++;
             }
         }
-        $comparisonarray = array("($comparisonstring)", $comparisonparams);
+        $comparisonarray = ["($comparisonstring)", $comparisonparams];
 
-        return empty($values) ? array(null, null) : $comparisonarray;
+        return empty($values) ? [null, null] : $comparisonarray;
     }
 }
 

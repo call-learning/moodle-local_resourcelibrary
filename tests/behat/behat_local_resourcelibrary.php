@@ -52,6 +52,7 @@ class behat_local_resourcelibrary extends behat_base {
     /**
      * Add a step to navigate to /local/resourcelibrary/index.php
      *
+     * @param string $coursefullname
      * @Given /^I navigate to resource library "(?P<coursefullname_string>(?:[^"]|\\")*)" page$/
      */
     public function i_navigate_to_resource_librar_course_content(string $coursefullname) {

@@ -60,7 +60,7 @@ class fulltext_filter implements resourcelibrary_filter_interface, static_filter
     public function check_data($formdata) {
         $field = 'fulltext';
         if (array_key_exists($field, (array) $formdata) && $formdata->$field !== '') {
-            return array('value' => (string) $formdata->$field);
+            return ['value' => (string) $formdata->$field];
         }
         return false;
     }
@@ -83,8 +83,8 @@ class fulltext_filter implements resourcelibrary_filter_interface, static_filter
      */
     public function get_sql_filter($data) {
         global $DB;
-        return empty($data) ? array(null, null) : array(
+        return empty($data) ? [null, null] : [
             $DB->sql_like('fullname', ":fulltext", false),
-            array('fulltext' => "%$data%"));
+            ['fulltext' => "%$data%"], ];
     }
 }

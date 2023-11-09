@@ -63,7 +63,7 @@ abstract class basetext_filter extends base {
     public function check_data($formdata) {
         $field = $this->_name;
         if (array_key_exists($field, (array) $formdata) && $formdata->$field !== '') {
-            return array('value' => (string) $formdata->$field);
+            return ['value' => (string) $formdata->$field];
         }
         return false;
     }
@@ -80,8 +80,8 @@ abstract class basetext_filter extends base {
         $name = 'ex_textfilter' . $counter++;
 
         $field = $this->get_sql_field_name();
-        return empty($data) ? array(null, null) : array(
+        return empty($data) ? [null, null] : [
             $DB->sql_like($field, ":$name", false),
-            array($name => "%$data%"));
+            [$name => "%$data%"], ];
     }
 }

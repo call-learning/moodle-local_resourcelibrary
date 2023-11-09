@@ -25,6 +25,7 @@
 namespace local_resourcelibrary\external;
 
 use external_api;
+use external_description;
 use external_function_parameters;
 use external_multiple_structure;
 use external_single_structure;
@@ -63,20 +64,21 @@ class item_visibility extends external_api {
                             'visibility' => new external_value(PARAM_INT, 'visibility status'),
                         ]
                     )
-                )
+                ),
             ]
         );
     }
 
     /**
      * Set the visibility status for items in the catalogue.
+     * @param array $items
      */
     public static function set_items_visibility(array $items) {
         GLOBAL $DB;
 
         $params = self::validate_parameters(self::set_items_visibility_parameters(),
             [
-                'items' => $items
+                'items' => $items,
             ]
         );
 
@@ -89,7 +91,7 @@ class item_visibility extends external_api {
             $warnings[] = [
                 'item' => $requestid,
                 'warningcode' => 'settingvisibilitynotallowed',
-                'message' => get_string('settingvisibilitynotallowed', 'local_resourcelibrary')
+                'message' => get_string('settingvisibilitynotallowed', 'local_resourcelibrary'),
             ];
         }
 
@@ -149,7 +151,7 @@ class item_visibility extends external_api {
 
         $items = [];
 
-        // Get all courses in this category
+        // Get all courses in this category.
         $courses = $DB->get_records('course', ['category' => $categoryid]);
         foreach ($courses as $course) {
             $items[] = [
@@ -159,17 +161,17 @@ class item_visibility extends external_api {
             ];
         }
 
-        // Get all subcategories of this category
+        // Get all subcategories of this category.
         $subcategories = $DB->get_records('course_categories', ['parent' => $categoryid]);
         foreach ($subcategories as $subcategory) {
-            // Recursively get the category tree for this subcategory
-            $subcategory_items = self::get_category_tree($subcategory->id, $visibility);
-            foreach ($subcategory_items as $item) {
+            // Recursively get the category tree for this subcategory.
+            $subcategoryitems = self::get_category_tree($subcategory->id, $visibility);
+            foreach ($subcategoryitems as $item) {
                 $items[] = $item;
             }
         }
 
-        // Add this category to the list of items
+        // Add this category to the list of items.
         $items[] = [
             'itemid' => $categoryid,
             'itemtype' => LOCAL_RESOURCELIBRARY_ITEMTYPE_CATEGORY,
@@ -196,7 +198,7 @@ class item_visibility extends external_api {
                         'visibility' => new external_value(PARAM_INT, 'visibility status'),
                     ]
                 )
-            )
+            ),
         ]);
     }
 }

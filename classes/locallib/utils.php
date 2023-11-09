@@ -67,12 +67,12 @@ class utils {
         if ($context instanceof \context_course && $activities) {
             global $DB;
             $params['courseid'] = $context->instanceid;
-            $coursename = $DB->get_field('course', 'shortname', array('id' => $context->instanceid));
+            $coursename = $DB->get_field('course', 'shortname', ['id' => $context->instanceid]);
             $urltext = static::get_resource_library_menu_text($coursename);
         }
         return [
             $urltext,
-            new \moodle_url($CFG->wwwroot . '/local/resourcelibrary/index.php', $params)];
+            new \moodle_url($CFG->wwwroot . '/local/resourcelibrary/index.php', $params), ];
     }
 
     /**

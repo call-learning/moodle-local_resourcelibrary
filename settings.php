@@ -29,19 +29,19 @@ if ($hassiteconfig) {
         new admin_externalpage('resourcelibrary_coursemodule_customfield',
             new lang_string('resourcelibrary_coursemodule_customfield', 'local_resourcelibrary'),
             $CFG->wwwroot . '/local/resourcelibrary/activityfields.php',
-            array('local/resourcelibrary:manage')
+            ['local/resourcelibrary:manage']
         )
     );
     $settings->add('resourcelibrary',
         new admin_externalpage('resourcelibrary_course_customfield',
             new lang_string('resourcelibrary_course_customfield', 'local_resourcelibrary'),
             $CFG->wwwroot . '/local/resourcelibrary/coursefields.php',
-            array('local/resourcelibrary:manage')
+            ['local/resourcelibrary:manage']
         )
     );
     $mainsettings = new admin_settingpage('resourcelibrarymainsettings',
         get_string('resourcelibrarymainsettings', 'local_resourcelibrary'),
-        array('local/resourcelibrary:manage'),
+        ['local/resourcelibrary:manage'],
         empty($CFG->enableresourcelibrary));
 
     $mainsettings->add(new admin_setting_configtext('local_resourcelibrary/courseviewbaseurl',
@@ -51,7 +51,7 @@ if ($hassiteconfig) {
 
     $samplemenutext = '';
     $stringmanager = get_string_manager();
-    foreach (array('en', 'fr') as $lang) {
+    foreach (['en', 'fr'] as $lang) {
         $text = $stringmanager->get_string('resourcelibrary', 'local_resourcelibrary', null, 'en');
         $samplemenutext .= \html_writer::tag('p', "\"{$text}\"|{$lang}\n");
     }

@@ -30,7 +30,7 @@ $edit = optional_param('edit', null, PARAM_BOOL);    // Turn editing on and off.
 require_login($courseid, true); // We make sure the course exists and we can access it.
 
 $PAGE->set_pagelayout('standard');
-$pageparams = array();
+$pageparams = [];
 $renderable = null;
 
 $context = context_system::instance();
@@ -92,9 +92,9 @@ if ($courseid != SITEID) {
         'mainresourcelibrary',
         'mainlibrary'
     );
-    $course = $DB->get_record('course', array('id' => $courseid));
+    $course = $DB->get_record('course', ['id' => $courseid]);
     $PAGE->navbar->add(course_format_name($course),
-        new moodle_url('/course/view.php', array('id' => $course->id)),
+        new moodle_url('/course/view.php', ['id' => $course->id]),
         navigation_node::TYPE_CUSTOM,
         'course',
         'course'

@@ -31,23 +31,23 @@ use local_resourcelibrary\locallib\utils;
  */
 function generate_category_and_fields($dg) {
     $generator = $dg->get_plugin_generator('local_resourcelibrary');
-    foreach (array('core_course' => 'course', 'local_resourcelibrary' => 'coursemodule') as $component => $area) {
+    foreach (['core_course' => 'course', 'local_resourcelibrary' => 'coursemodule'] as $component => $area) {
         $catid = $generator->create_category(['component' => $component, 'area' => $area])->get('id');
         $generator->create_field(['name' => 'Field 1', 'categoryid' => $catid, 'type' => 'text', 'shortname' => 'f1',
-            'area' => $area, 'component' => $component]);
+            'area' => $area, 'component' => $component, ]);
         $generator->create_field(['name' => 'Field 2', 'categoryid' => $catid, 'type' => 'checkbox', 'shortname' => 'f2',
-            'area' => $area, 'component' => $component]);
+            'area' => $area, 'component' => $component, ]);
         $generator->create_field(['name' => 'Field 3', 'categoryid' => $catid, 'type' => 'date', 'shortname' => 'f3',
             'configdata' => ['startyear' => 2000, 'endyear' => 3000, 'includetime' => 1], 'area' => $area,
-            'component' => $component]);
+            'component' => $component, ]);
         if (utils::is_multiselect_installed()) {
             $generator->create_field(['name' => 'Field 4', 'categoryid' => $catid, 'type' => 'multiselect', 'shortname' => 'f4',
-                'configdata' => ['options' => "a\nb\nc"], 'area' => $area, 'component' => $component]);
+                'configdata' => ['options' => "a\nb\nc"], 'area' => $area, 'component' => $component, ]);
         }
         $generator->create_field(['name' => 'Field 5', 'categoryid' => $catid, 'type' => 'select', 'shortname' => 'f5',
-            'configdata' => ['options' => "a\nb\nc"], 'area' => $area, 'component' => $component]);
+            'configdata' => ['options' => "a\nb\nc"], 'area' => $area, 'component' => $component, ]);
         $generator->create_field(['name' => 'Field 6', 'categoryid' => $catid, 'type' => 'textarea', 'shortname' => 'f6',
-            'area' => $area, 'component' => $component]);
+            'area' => $area, 'component' => $component, ]);
     }
 }
 
@@ -92,7 +92,7 @@ abstract class local_resourcelibrary_testcase extends advanced_testcase {
             'customfield_f2' => 1,
             'customfield_f3' => $this->now,
             'customfield_f5' => 2,
-            'customfield_f6_editor' => ['text' => 'test', 'format' => FORMAT_HTML]];
+            'customfield_f6_editor' => ['text' => 'test', 'format' => FORMAT_HTML], ];
         if (utils::is_multiselect_installed()) {
             $simpledata['customfield_f4'] = [1, 2];
         }

@@ -40,7 +40,7 @@ class setup {
     /**
      * Generic category short name
      */
-    const GENERIC_CATEGORIES = array('general');
+    const GENERIC_CATEGORIES = ['general'];
 
     /**
      * Create or update the first category of each custom field types
@@ -51,7 +51,7 @@ class setup {
         foreach (self::GENERIC_CATEGORIES as $catshorname) {
             $fullname = get_string('category:' . $catshorname, 'local_resourcelibrary');
             $carea = 'coursemodule'; // Just add the module resourcelibrary fields.
-            $categories = category::get_records(array('component' => 'local_resourcelibrary', 'area' => $carea));
+            $categories = category::get_records(['component' => 'local_resourcelibrary', 'area' => $carea]);
             if (empty($categories)) {
                 $categorydata = new stdClass();
                 $categorydata->name = $fullname;

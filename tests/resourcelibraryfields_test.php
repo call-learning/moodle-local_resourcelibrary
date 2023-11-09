@@ -57,7 +57,7 @@ class resourcelibraryfields_test extends local_resourcelibrary_testcase {
         global $DB;
         $dg = $this->getDataGenerator();
         $data = ['shortname' => 'SN', 'fullname' => 'FN',
-                'summary' => 'DESC', 'summaryformat' => FORMAT_MOODLE] + $this->get_simple_cf_data();
+                'summary' => 'DESC', 'summaryformat' => FORMAT_MOODLE, ] + $this->get_simple_cf_data();
         $c1 = $dg->create_course($data);
 
         $data = course_handler::create()->export_instance_data_object($c1->id);
@@ -83,9 +83,9 @@ class resourcelibraryfields_test extends local_resourcelibrary_testcase {
         global $DB;
         $dg = $this->getDataGenerator();
         $c1 = $dg->create_course(['shortname' => 'SN', 'fullname' => 'FN',
-            'summary' => 'DESC', 'summaryformat' => FORMAT_MOODLE]);
+            'summary' => 'DESC', 'summaryformat' => FORMAT_MOODLE, ]);
 
-        $data = array('course' => $c1->id) + $this->get_simple_cf_data();
+        $data = ['course' => $c1->id] + $this->get_simple_cf_data();
         $a1 = $dg->create_module('label', (object) $data);
 
         $data = coursemodule_handler::create()->export_instance_data_object($a1->cmid);
@@ -114,10 +114,10 @@ class resourcelibraryfields_test extends local_resourcelibrary_testcase {
             $this->markTestSkipped();
         }
         $c1 = $dg->create_course(['shortname' => 'SN', 'fullname' => 'FN',
-            'summary' => 'DESC', 'summaryformat' => FORMAT_MOODLE]);
+            'summary' => 'DESC', 'summaryformat' => FORMAT_MOODLE, ]);
 
-        $data = array('course' => $c1->id,
-            'customfield_f4' => [1, 2]);
+        $data = ['course' => $c1->id,
+            'customfield_f4' => [1, 2], ];
         $a1 = $dg->create_module('label', (object) $data);
 
         $data = coursemodule_handler::create()->export_instance_data_object($a1->cmid);
@@ -179,8 +179,8 @@ class resourcelibraryfields_test extends local_resourcelibrary_testcase {
             'shortname' => 'SN',
             'fullname' => 'FN',
             'summary' => 'DESC',
-            'summaryformat' => FORMAT_MOODLE]);
-        $data = array('course' => $c1->id) + $this->get_simple_cf_data();
+            'summaryformat' => FORMAT_MOODLE, ]);
+        $data = ['course' => $c1->id] + $this->get_simple_cf_data();
         $dg->create_module('label', (object) $data);
 
         $backupid = $this->backup_course($c1->id);
@@ -212,9 +212,9 @@ class resourcelibraryfields_test extends local_resourcelibrary_testcase {
             'shortname' => 'SN',
             'fullname' => 'FN',
             'summary' => 'DESC',
-            'summaryformat' => FORMAT_MOODLE]);
-        $data = array('course' => $c1->id,
-            'customfield_f4' => [1, 2]);
+            'summaryformat' => FORMAT_MOODLE, ]);
+        $data = ['course' => $c1->id,
+            'customfield_f4' => [1, 2], ];
         $dg->create_module('label', (object) $data);
 
         $backupid = $this->backup_course($c1->id);
@@ -272,9 +272,10 @@ class resourcelibraryfields_test extends local_resourcelibrary_testcase {
         $rc = new restore_controller($backupid, $courseid, backup::INTERACTIVE_NO, backup::MODE_GENERAL, $userid, $target);
         $target == backup::TARGET_NEW_COURSE ?: $rc->get_plan()->get_setting('overwrite_conf')->set_value(true);
         $this->assertTrue($rc->execute_precheck());
-        $rc->execute_plan();
 
-        $course = $DB->get_record('course', array('id' => $rc->get_courseid()));
+        @$rc->execute_plan();
+        $this->resetDebugging();
+        $course = $DB->get_record('course', ['id' => $rc->get_courseid()]);
 
         $rc->destroy();
         unset($rc);

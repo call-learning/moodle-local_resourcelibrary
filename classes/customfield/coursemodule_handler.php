@@ -71,7 +71,7 @@ class coursemodule_handler extends handler {
             self::VISIBLETOTEACHERS =>
                 get_string('resourcelibraryfield_visibletoteachers', 'local_resourcelibrary'),
             self::NOTVISIBLE =>
-                get_string('resourcelibraryfield_notvisible', 'local_resourcelibrary')];
+                get_string('resourcelibraryfield_notvisible', 'local_resourcelibrary'), ];
         $mform->addElement('select',
             'configdata[visibility]',
             get_string('resourcelibraryfield_visibility', 'local_resourcelibrary'),

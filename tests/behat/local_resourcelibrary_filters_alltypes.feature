@@ -95,6 +95,7 @@ Feature: As an admin I should be able filter with all custom field types
     And I expand all fieldsets
     And I set the field "Test Field Text" to "<field>"
     When I click on "filterbutton" "button"
+    And I wait until the page is ready
     Then I should see the texts "<see>"
     And I should not see the texts "<notsee>"
     Examples:
@@ -109,6 +110,7 @@ Feature: As an admin I should be able filter with all custom field types
     And I expand all fieldsets
     And I set the field "Test Field Checkbox" to "1"
     When I click on "filterbutton" "button"
+    And I wait until the page is ready
     Then I should see the texts "<see>"
     And I should not see the texts "<notsee>"
     Examples:
@@ -141,6 +143,7 @@ Feature: As an admin I should be able filter with all custom field types
     And I expand all fieldsets
     And I set the field "Test Field MSelect" to "<selection>"
     When I click on "filterbutton" "button"
+    And I wait until the page is ready
     Then I should see the texts "<see>"
     And I should not see the texts "<notsee>"
     Examples:
@@ -157,6 +160,7 @@ Feature: As an admin I should be able filter with all custom field types
     And I expand all fieldsets
     And I set the field "Test Field Textarea" to "<textfield>"
     When I click on "filterbutton" "button"
+    And I wait until the page is ready
     Then I should see the texts "<see>"
     And I should not see the texts "<notsee>"
     Examples:
@@ -181,7 +185,6 @@ Feature: As an admin I should be able filter with all custom field types
       | Home     | Course 2 | Course 1, Course 3, Course 4, Course 5 | Test Field Text | 2           | Test Field Select   | B           |
       | Course 1 | Page 1   | Page 2, Page 3, Page 4, Page 5         | Test Field Text | ABCDEFP1    | Test Field Checkbox | 1           |
       | Course 1 | Page 2   | Page 1, Page 3, Page 4, Page 5         | Test Field Text | 2           | Test Field Select   | B           |
-
 
   Scenario Outline: As an admin I should be able to filter through a multicriteria search for courses and activities (Multiselect)
     Given multiselect field is installed
@@ -209,6 +212,7 @@ Feature: As an admin I should be able filter with all custom field types
     And I set the field "<field1name>" to "<field1value>"
     And I set the field "<field2name>" to "<field2value>"
     When I click on "filterbutton" "button"
+    And I wait until the page is ready
     Then I should see the texts "<see>"
     And I should not see the texts "<notsee>"
     Examples:
@@ -217,4 +221,3 @@ Feature: As an admin I should be able filter with all custom field types
       | Home     | Course 2 | Course 1, Course 3, Course 4, Course 5 | Test Field Text | 2           | Test Field MSelect  | A,B         |
       | Course 1 | Page 1   | Page 2, Page 3, Page 4, Page 5         | Test Field Text | ABCDEFP1    | Test Field Checkbox | 1           |
       | Course 1 | Page 2   | Page 1, Page 3, Page 4, Page 5         | Test Field Text | 2           | Test Field MSelect  | A,B         |
-

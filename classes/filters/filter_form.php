@@ -60,7 +60,7 @@ class filter_form extends \moodleform {
         $buttonarray[] = &$mform->createElement('submit', 'filterbutton',
             get_string('filter:submit', 'local_resourcelibrary'));
         $buttonarray[] = $mform->createElement('submit', 'resetbutton', get_string('clear'));
-        $mform->addGroup($buttonarray, 'buttonar', '', array(' '), false);
+        $mform->addGroup($buttonarray, 'buttonar', '', [' '], false);
         $mform->closeHeaderBefore('buttonar');
     }
 

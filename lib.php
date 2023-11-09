@@ -103,7 +103,7 @@ function local_resourcelibrary_coursemodule_validation($mform, $data) {
         return [];
     }
     $handler = \local_resourcelibrary\customfield\coursemodule_handler::create($data['id']);
-    return $handler->instance_form_validation($data, array());
+    return $handler->instance_form_validation($data, []);
 }
 
 /**
@@ -154,37 +154,37 @@ function local_resourcelibrary_extend_navigation(global_navigation $nav) {
  * @return mixed Array representing current options along with defaults
  */
 function local_resourcelibrary_user_preferences() {
-    $preferences['local_resourcelibrary_user_sort_preference'] = array(
+    $preferences['local_resourcelibrary_user_sort_preference'] = [
         'null' => NULL_NOT_ALLOWED,
         'default' => local_resourcelibrary\output\base_resourcelibrary::SORT_FULLNAME_ASC,
         'type' => PARAM_ALPHA,
-        'choices' => array(
+        'choices' => [
             local_resourcelibrary\output\base_resourcelibrary::SORT_FULLNAME_ASC,
             local_resourcelibrary\output\base_resourcelibrary::SORT_FULLNAME_DESC,
             local_resourcelibrary\output\base_resourcelibrary::SORT_LASTMODIF_ASC,
             local_resourcelibrary\output\base_resourcelibrary::SORT_LASTMODIF_DESC,
-        )
-    );
-    $preferences['local_resourcelibrary_user_view_preference'] = array(
+        ],
+    ];
+    $preferences['local_resourcelibrary_user_view_preference'] = [
         'null' => NULL_NOT_ALLOWED,
         'default' => local_resourcelibrary\output\base_resourcelibrary::VIEW_CARD,
         'type' => PARAM_ALPHA,
-        'choices' => array(
+        'choices' => [
             local_resourcelibrary\output\base_resourcelibrary::VIEW_CARD,
-            local_resourcelibrary\output\base_resourcelibrary::VIEW_LIST
-        )
-    );
+            local_resourcelibrary\output\base_resourcelibrary::VIEW_LIST,
+        ],
+    ];
 
-    $preferences['local_resourcelibrary_user_paging_preference'] = array(
+    $preferences['local_resourcelibrary_user_paging_preference'] = [
         'null' => NULL_NOT_ALLOWED,
         'default' => local_resourcelibrary\output\base_resourcelibrary::PAGING_12,
         'type' => PARAM_INT,
-        'choices' => array(
+        'choices' => [
             local_resourcelibrary\output\base_resourcelibrary::PAGING_12,
             local_resourcelibrary\output\base_resourcelibrary::PAGING_24,
-            local_resourcelibrary\output\base_resourcelibrary::PAGING_48
-        )
-    );
+            local_resourcelibrary\output\base_resourcelibrary::PAGING_48,
+        ],
+    ];
 
     return $preferences;
 }

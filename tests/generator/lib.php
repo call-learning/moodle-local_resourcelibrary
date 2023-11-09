@@ -24,8 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-use \core_customfield\category_controller;
-use \core_customfield\field_controller;
+use core_customfield\category_controller;
+use core_customfield\field_controller;
 
 global $CFG;
 
@@ -43,10 +43,10 @@ require_once($CFG->dirroot . '/customfield/tests/generator/lib.php');
  */
 class local_resourcelibrary_generator extends component_generator_base {
     /** @var int Number of created categories and field for each entity. */
-    protected $counts = array(
-        'course' => array('categorycount' => 0, 'fieldcount' => 0),
-        'coursemodule' => array('categorycount' => 0, 'fieldcount' => 0),
-    );
+    protected $counts = [
+        'course' => ['categorycount' => 0, 'fieldcount' => 0],
+        'coursemodule' => ['categorycount' => 0, 'fieldcount' => 0],
+    ];
 
     /**
      * Create a new category.

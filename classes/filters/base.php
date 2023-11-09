@@ -71,7 +71,7 @@ abstract class base implements resourcelibrary_filter_interface {
         $this->_field = $field;
         if (!static::check_is_righttype($field)) {
             throw new \moodle_exception('wronghandlerforfilter', 'local_resourcelibrary',
-                $link = '', array('handlername' => self::class, 'fieldname' => $field->get('name')));
+                $link = '', ['handlername' => self::class, 'fieldname' => $field->get('name')]);
         }
     }
 

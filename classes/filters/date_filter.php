@@ -87,7 +87,7 @@ class date_filter extends base {
         $field = $this->_name;
 
         if (array_key_exists($field, (array) $formdata) && $formdata->$field !== '') {
-            return array('value' => (string) $formdata->$field);
+            return ['value' => (string) $formdata->$field];
         }
 
         return false;
@@ -108,6 +108,6 @@ class date_filter extends base {
         $timestamp = DateTime::createFromFormat('j,m,Y', $value)->getTimestamp();
         $field = $this->get_sql_field_name();
         $sqloperator = '>';
-        return empty($value) ? array(null, null) : array("$field $sqloperator :$name", array($name => $timestamp));
+        return empty($value) ? [null, null] : ["$field $sqloperator :$name", [$name => $timestamp]];
     }
 }

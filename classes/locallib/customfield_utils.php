@@ -53,7 +53,7 @@ class customfield_utils {
      * @throws \ReflectionException
      * @throws \moodle_exception
      */
-    public static function get_sql_for_entity_customfields($type, $additionaljoins = array(), $additionalfields = array()) {
+    public static function get_sql_for_entity_customfields($type, $additionaljoins = [], $additionalfields = []) {
         $table = 'course';
         switch ($type) {
             case 'coursemodule':
@@ -108,7 +108,7 @@ class customfield_utils {
                 $joinsfields[$datafieldname] = $joinfield;
             }
         }
-        return array($joinsfields, $joins);
+        return [$joinsfields, $joins];
     }
 
     /**
@@ -188,7 +188,7 @@ class customfield_utils {
                 }
             }
         }
-        return array($sqlwhere, $sqlparams);
+        return [$sqlwhere, $sqlparams];
     }
 
     /**
