@@ -51,4 +51,31 @@ class eventmanager {
         $handler = coursemodule_handler::create();
         $handler->delete_instance($event->objectid);
     }
+
+    /**
+     * Course create event observer.
+     * On course creation a check should be made to see if any of its parent categories has the hidden flag set
+     * in the local_resourcelibrary table. If so, we need to add a record to the local_resourcelibrary table for the
+     * new course.
+     */
+    public static function course_created(\core\event\course_created $event) {
+        global $DB, $CFG;
+        require_once($CFG->dirroot . '/local/resourcelibrary/lib.php');
+        $course = $event->get_record_snapshot('course', $event->objectid);
+        // Check if the course category is hidden
+        $categorystatus = $DB->get_field('local_resourcelibrary', 'visibility',
+            [
+                'itemid' => $course->category,
+                'itemtype' => LOCAL_RESOURCELIBRARY_ITEMTYPE_CATEGORY
+            ]);
+        if ($categorystatus == LOCAL_RESOURCELIBRARY_ITEM_HIDDEN) {
+            // Add a record for the course
+            $DB->insert_record('local_resourcelibrary',
+                [
+                    'itemid' => $course->id,
+                    'itemtype' => LOCAL_RESOURCELIBRARY_ITEMTYPE_COURSE,
+                    'visibility' => LOCAL_RESOURCELIBRARY_ITEM_HIDDEN
+                ]);
+        }
+    }
 }
