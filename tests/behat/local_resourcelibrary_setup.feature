@@ -5,10 +5,12 @@ Feature: As an admin I want to be able to turn on and off the plugin and custom 
     Given the following "courses" exist:
       | shortname | fullname |
       | C1        | Course 1 |
-    Given the following "local_resourcelibrary > category" exist:
+    And the following config values are set as admin:
+      | enablecourserequests | 0 |
+    And the following "local_resourcelibrary > category" exist:
       | component   | area   | name                             |
       | core_course | course | Resource Library: Generic fields |
-    Given the following "local_resourcelibrary > field" exist:
+    And the following "local_resourcelibrary > field" exist:
       | component             | area         | name                | customfieldcategory              | shortname | type        | configdata                                                                                                          |
       | core_course           | course       | Test Field Text     | Resource Library: Generic fields | CF1       | text        |                                                                                                                     |
       | local_resourcelibrary | coursemodule | Test Field Text     | Resource Library: Generic fields | CM1       | text        |                                                                                                                     |

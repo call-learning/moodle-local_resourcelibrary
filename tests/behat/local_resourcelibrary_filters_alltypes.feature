@@ -5,6 +5,9 @@ Feature: As an admin I should be able filter with all custom field types
     Given the following "local_resourcelibrary > category" exist:
       | component   | area   | name                             |
       | core_course | course | Resource Library: Generic fields |
+    And the following config values are set as admin:
+      | config                | value |
+      | enableresourcelibrary | 1     |
     And the following "local_resourcelibrary > field" exist:
       | component             | area         | name                | customfieldcategory              | shortname | type     | configdata                                                                                                          |
       | core_course           | course       | Test Field Text     | Resource Library: Generic fields | CF1       | text     |                                                                                                                     |

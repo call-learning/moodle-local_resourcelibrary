@@ -6,10 +6,13 @@ Feature: As an admin I should be able to access values from custom field
       | username | firstname | lastname | email                |
       | user     | User      | 1        | user1@example.com    |
       | teacher  | Teacher   | 1        | teacher1@example.com |
-    Given the following "local_resourcelibrary > category" exist:
+    And the following config values are set as admin:
+      | config                | value |
+      | enableresourcelibrary | 1     |
+    And the following "local_resourcelibrary > category" exist:
       | component   | area   | name                             |
       | core_course | course | Resource Library: Generic fields |
-    Given the following "local_resourcelibrary > field" exist:
+    And the following "local_resourcelibrary > field" exist:
       | component             | area         | name                | customfieldcategory              | shortname | type     | configdata                                                                                                          |
       | core_course           | course       | Test Field Text     | Resource Library: Generic fields | CF1       | text     |                                                                                                                     |
       | core_course           | course       | Test Field Checkbox | Resource Library: Generic fields | CF2       | checkbox |                                                                                                                     |
@@ -19,11 +22,11 @@ Feature: As an admin I should be able to access values from custom field
       | local_resourcelibrary | coursemodule | Test Field Checkbox | Resource Library: Generic fields | CM2       | checkbox |                                                                                                                     |
       | local_resourcelibrary | coursemodule | Test Field Select   | Resource Library: Generic fields | CM4       | select   | {"required":"1","uniquevalues":"0","options":"A\r\nB\r\nC\r\nD","defaultvalue":"A,C","locked":"0","visibility":"2"} |
       | local_resourcelibrary | coursemodule | Test Field Textarea | Resource Library: Generic fields | CM5       | textarea |                                                                                                                     |
-    Given the following "categories" exist:
+    And the following "categories" exist:
       | name  | category | idnumber | visible |
       | Cat 1 | 0        | CAT1     | 1       |
       | Cat 2 | 0        | CAT2     | 0       |
-    Given the following "courses" exist:
+    And the following "courses" exist:
       | shortname | fullname  | category |
       | C1        | Course 01 | CAT1     |
       | C2        | Course 02 | CAT1     |

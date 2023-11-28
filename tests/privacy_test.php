@@ -73,7 +73,7 @@ class privacy_test extends \core_privacy\tests\provider_testcase {
      *
      * @return array Array of valid user preferences.
      */
-    public static function user_preference_provider() {
+    public static function user_preference_provider(): array {
         return [
             ['local_resourcelibrary_user_sort_preference', 'title', ''],
             ['local_resourcelibrary_user_view_preference', 'card', ''],

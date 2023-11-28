@@ -5,10 +5,13 @@ Feature: As an admin I should be able to set and retrieve values from all types 
     Given the following "courses" exist:
       | shortname | fullname |
       | C1        | Course 1 |
-    Given the following "local_resourcelibrary > category" exist:
+    And the following config values are set as admin:
+      | config                | value |
+      | enableresourcelibrary | 1     |
+    And the following "local_resourcelibrary > category" exist:
       | component   | area   | name                             |
       | core_course | course | Resource Library: Generic fields |
-    Given the following "local_resourcelibrary > field" exist:
+    And the following "local_resourcelibrary > field" exist:
       | component             | area         | name                | customfieldcategory              | shortname | type     | configdata                                                                                                          |
       | core_course           | course       | Test Field Text     | Resource Library: Generic fields | CF1       | text     |                                                                                                                     |
       | core_course           | course       | Test Field Checkbox | Resource Library: Generic fields | CF2       | checkbox |                                                                                                                     |
@@ -23,7 +26,7 @@ Feature: As an admin I should be able to set and retrieve values from all types 
       | page     | PageName1 | PageDesc1 | C1     | PAGE1    |
     # Note that select field are indexed from 1 to n (the 0 index is for the empty value)
     # And the multiselect are indexed from 0 to n-1
-    Given the following "local_resourcelibrary > fielddata" exist:
+    And the following "local_resourcelibrary > fielddata" exist:
       | fieldshortname | value       | courseshortname | activityidnumber | activity |
       | CF1            | ABCDEF      | C1              |                  |          |
       | CM1            | ABCDEF      | C1              | PAGE1            | page     |

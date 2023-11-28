@@ -5,17 +5,20 @@ Feature: As an admin I should be able to set and retrieve values from basic cust
     Given the following "courses" exist:
       | shortname | fullname |
       | C1        | Course 1 |
-    Given the following "local_resourcelibrary > category" exist:
+    And the following config values are set as admin:
+      | config                | value |
+      | enableresourcelibrary | 1     |
+    And the following "local_resourcelibrary > category" exist:
       | component   | area   | name                             |
       | core_course | course | Resource Library: Generic fields |
-    Given the following "local_resourcelibrary > field" exist:
+    And the following "local_resourcelibrary > field" exist:
       | component             | area         | name                | customfieldcategory              | shortname | type        | configdata                                                                                                          |
       | core_course           | course       | Test Field Text     | Resource Library: Generic fields | CF1       | text        |                                                                                                                     |
       | local_resourcelibrary | coursemodule | Test Field Text     | Resource Library: Generic fields | CM1       | text        |                                                                                                                     |
     And the following "activities" exist:
       | activity | name      | intro     | course | idnumber |
       | page     | PageName1 | PageDesc1 | C1     | PAGE1    |
-    Given the following "local_resourcelibrary > fielddata" exist:
+    And the following "local_resourcelibrary > fielddata" exist:
       | fieldshortname | value  | courseshortname | activityidnumber | activity |
       | CF1            | ABCDEF | C1              |                  |          |
       | CM1            | ABCDEF | C1              | PAGE1            | page     |
