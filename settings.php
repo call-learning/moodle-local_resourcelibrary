@@ -44,6 +44,11 @@ if ($hassiteconfig) {
         ['local/resourcelibrary:manage'],
         empty($CFG->enableresourcelibrary));
 
+    $mainsettings->add(new admin_setting_configtext('local_resourcelibrary/hiddencoursesid',
+        get_string('resourcelibrary:hiddencoursesid', 'local_resourcelibrary'),
+        get_string('resourcelibrary:hiddencoursesid:desc', 'local_resourcelibrary'),
+        ''));
+
     $mainsettings->add(new admin_setting_configtext('local_resourcelibrary/courseviewbaseurl',
         get_string('resourcelibrary:courseviewbaseurl', 'local_resourcelibrary'),
         get_string('resourcelibrary:courseviewbaseurl:desc', 'local_resourcelibrary'),

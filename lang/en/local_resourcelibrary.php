@@ -65,6 +65,10 @@ $string['resourcelibrary:courseviewbaseurl'] = 'Base URL for course view.';
 $string['resourcelibrary:courseviewbaseurl:desc'] = 'Base URL for course view. Most of the time it will be /course/view.php.'
     .' We add the identifier \'id\' to the URL with the id of the course.';
 $string['resourcelibrarymainsettings'] = 'Resource Library: Global Settings';
+$string['resourcelibrary:hiddencoursesid'] = 'Hidden courses Id';
+$string['resourcelibrary:hiddencoursesid:desc'] = 'List of comma separated
+ courses identifiers (course id) that will be invisible on the catalog';
+
 $string['category:general'] = 'Resource Library: Generic fields';
 
 $string['enableresourcelibrary'] = 'Enable Resource Library';
