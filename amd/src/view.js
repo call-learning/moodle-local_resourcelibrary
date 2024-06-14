@@ -69,6 +69,8 @@ define(
 
         var courseId = 0;
 
+        var categoryId = 0;
+
         /**
          * Get display modifier values from DOM.
          * This will either change the sorting order, the way we display the cards or list
@@ -104,7 +106,7 @@ define(
         var getEntities = function(modifiers, filters, limit, offset) {
             if (entityType === 'course') {
                 return Repository.getFilteredCourseList({
-                    categoryid: 0,
+                    categoryid: categoryId,
                     sorting: [{column: modifiers.sort.column, order: modifiers.sort.order}],
                     filters: filters,
                     limit: limit,
@@ -343,6 +345,7 @@ define(
             initializePagedContent(root);
             entityType = root.attr('data-entity-type');
             courseId = parseInt(root.attr('data-parent-id'));
+            categoryId = parseInt(root.attr('data-category-id'));
             if (!root.attr('data-init')) {
                 registerEventListeners(root);
                 root.attr('data-init', true);
