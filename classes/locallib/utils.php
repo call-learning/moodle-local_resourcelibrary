@@ -113,7 +113,7 @@ class utils {
      */
     public static function get_hidden_fields_filters($handler) {
         if (self::$hiddenfields) {
-            self::$hiddenfields;
+            return self::$hiddenfields;
         }
         $configname = static::get_hidden_filter_config_name($handler);
         $hiddenfieldslist =
