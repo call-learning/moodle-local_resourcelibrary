@@ -51,7 +51,7 @@ class manage_customfields extends external_api {
      *
      * @return external_function_parameters
      */
-    public static function get_hidden_fields_filter_parameters() {
+    public static function get_hidden_fields_filters_parameters() {
         return new external_function_parameters(
             [
                 'component' => new external_value(PARAM_ALPHANUMEXT,
@@ -72,10 +72,10 @@ class manage_customfields extends external_api {
      * @throws \invalid_parameter_exception
      * @throws \moodle_exception
      */
-    public static function get_hidden_fields_filter(string $component, string $area) {
+    public static function get_hidden_fields_filters(string $component, string $area) {
         // Validate parameters.
         $inparams = compact(['component', 'area']);
-        self::validate_parameters(self::get_hidden_fields_filter_parameters(), $inparams);
+        self::validate_parameters(self::get_hidden_fields_filters_parameters(), $inparams);
         $handler = handler::get_handler($component, $area);
         return utils::get_hidden_fields_filters($handler);
     }
@@ -86,7 +86,7 @@ class manage_customfields extends external_api {
      * @return external_multiple_structure
      * @since Moodle 2.2
      */
-    public static function get_hidden_fields_filter_returns() {
+    public static function get_hidden_fields_filters_returns() {
         return
             new external_multiple_structure(
                 new external_single_structure(
