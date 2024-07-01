@@ -47,6 +47,7 @@ class course_resourcelibrary extends base_resourcelibrary {
         $handler = \core_course\customfield\course_handler::create();
         $defaultvariables = $this->get_export_defaults($output, $handler);
         $defaultvariables['parentid'] = 0;
+        $defaultvariables['categoryid'] = optional_param('categoryid', 0, PARAM_INT);
         $preferences = $this->get_preferences();
         return array_merge($defaultvariables, $preferences);
     }
