@@ -251,7 +251,10 @@ class local_resourcelibrary_external extends external_api {
         // Simplification here: we return only visible courses, whichever is the context.
         $sqlwhere = " e.id != " . SITEID . " ";
         if ($categoryid) {
-            $sqlwhere .= " AND e.categoryid = $categoryid ";
+            $coursecat = core_course_category::get($categoryid);
+            $children = $coursecat->get_all_children_ids();
+            $children[] = $categoryid;
+            $sqlwhere .= " AND e.category IN (" . implode(',', $children) . ") ";
         }
 
         $coursefields = ['fullname', 'shortname', 'format', 'showgrades', 'newsitems', 'startdate', 'enddate', 'maxbytes',
