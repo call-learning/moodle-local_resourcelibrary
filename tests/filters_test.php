@@ -61,12 +61,9 @@ class filters_test extends local_resourcelibrary_testcase {
         // makes it impossible to prefix the Resource Library field by anything else than 'customfield_'.
         $dg->create_module('label', (object) $activitydata);
         $sqlcourse = \local_resourcelibrary\locallib\customfield_utils::get_sql_for_entity_customfields('course');
-        $sqlcm = \local_resourcelibrary\locallib\customfield_utils::get_sql_for_entity_customfields('coursemodule');
         $courserow = $DB->get_records_sql($sqlcourse . ' WHERE e.id =' . $c1->id);
-        $activityrow = $DB->get_records_sql($sqlcm);
         $this->assertCount(1, $courserow);
-        $this->assertCount(1, $activityrow);
-        foreach ([reset($courserow), reset($activityrow)] as $data) {
+        foreach ([reset($courserow)] as $data) {
             $this->assert_check_simple_cf_data($data);
         }
     }
@@ -138,6 +135,7 @@ class filters_test extends local_resourcelibrary_testcase {
         // Test the two ways to call this method (int and array of int).
         utils::show_fields_filter($handler, 'f1');
         utils::show_fields_filter($handler, ['f3', 'f5']);
+        $hidden = utils::get_hidden_fields_filters($handler);
         $this->assertFalse(utils::is_field_hidden_filters($handler, 'f1'));
         $this->assertTrue(utils::is_field_hidden_filters($handler, 'f2'));
         $this->assertFalse(utils::is_field_hidden_filters($handler, 'f3'));

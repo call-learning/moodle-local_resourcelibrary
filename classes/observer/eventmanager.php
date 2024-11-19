@@ -15,8 +15,6 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 namespace local_resourcelibrary\observer;
 
-use local_resourcelibrary\customfield\coursemodule_handler;
-
 /**
  * Class eventmanager
  *
@@ -33,17 +31,6 @@ class eventmanager {
      */
     public static function course_deleted(\core\event\course_deleted $event) {
         // Nothing happens here.
-    }
-
-    /**
-     * Course Module delete event observer.
-     * This will delete any attached custom fields
-     *
-     * @param \core\event\course_module_deleted $event The course deleted event.
-     */
-    public static function course_module_deleted(\core\event\course_module_deleted $event) {
-        $handler = coursemodule_handler::create();
-        $handler->delete_instance($event->objectid);
     }
 
     /**

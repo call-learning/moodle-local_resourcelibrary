@@ -55,7 +55,7 @@ class manage_customfields extends external_api {
         return new external_function_parameters(
             [
                 'component' => new external_value(PARAM_ALPHANUMEXT,
-                    'customfield handler type (course, coursemodule)'),
+                    'customfield handler type course'),
                 'area' => new external_value(PARAM_ALPHANUMEXT,
                     'customfield handler area'),
             ]
@@ -106,7 +106,7 @@ class manage_customfields extends external_api {
         return new external_function_parameters(
             [
                 'component' => new external_value(PARAM_ALPHANUMEXT,
-                    'customfield handler type (course, coursemodule)'),
+                    'customfield handler type course'),
                 'area' => new external_value(PARAM_ALPHANUMEXT,
                     'customfield handler area'),
                 'fieldshortnames' => new external_multiple_structure(
@@ -153,7 +153,7 @@ class manage_customfields extends external_api {
         return new external_function_parameters(
             [
                 'component' => new external_value(PARAM_ALPHANUMEXT,
-                    'customfield handler type (course, coursemodule)'),
+                    'customfield handler type course'),
                 'area' => new external_value(PARAM_ALPHANUMEXT,
                     'customfield handler area'),
                 'fieldshortnames' => new external_multiple_structure(

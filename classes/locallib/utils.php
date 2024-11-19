@@ -63,13 +63,6 @@ class utils {
         }
         $urltext = static::get_resource_library_menu_text();
         $params = [];
-        $activities = get_config('local_resourcelibrary', 'activateactivitylibrary');
-        if ($context instanceof \context_course && $activities) {
-            global $DB;
-            $params['courseid'] = $context->instanceid;
-            $coursename = $DB->get_field('course', 'shortname', ['id' => $context->instanceid]);
-            $urltext = static::get_resource_library_menu_text($coursename);
-        }
         return [
             $urltext,
             new \moodle_url($CFG->wwwroot . '/local/resourcelibrary/index.php', $params), ];
@@ -152,8 +145,10 @@ class utils {
                 $hiddenfieldslist = array_merge($hiddenfieldslist, $fieldshortname);
             }
         }
+        $hiddenfieldslist = array_unique($hiddenfieldslist); // Remove duplicate values
         $configname = static::get_hidden_filter_config_name($handler);
         set_config($configname, implode(',', $hiddenfieldslist), 'local_resourcelibrary');
+        self::$hiddenfields = $hiddenfieldslist;
     }
 
     /**
@@ -178,6 +173,7 @@ class utils {
         $hiddenfieldslist = array_diff($hiddenfieldslist, $fieldstoremove);
         $configname = static::get_hidden_filter_config_name($handler);
         set_config($configname, implode(',', $hiddenfieldslist), 'local_resourcelibrary');
+        self::$hiddenfields = $hiddenfieldslist;
     }
 
     /**

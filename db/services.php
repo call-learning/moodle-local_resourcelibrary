@@ -35,16 +35,6 @@ $functions = [
         'ajax' => true,
         'loginrequired' => false, // Global filter course page is accessible without being logged in.
     ],
-    'local_resourcelibrary_get_filtered_course_content' => [
-        'classname' => 'local_resourcelibrary_external',
-        'methodname' => 'get_filtered_course_content',
-        'classpath' => 'local/resourcelibrary/externallib.php',
-        'description' => 'Return a list of filtered activities in a given course',
-        'type' => 'read',
-        'capabilities' => 'moodle/course:view, moodle/course:update, moodle/course:viewhiddencourses',
-        'ajax' => true,
-        'loginrequired' => false, // Global filter course page is accessible without being logged in.
-    ],
     'local_resourcelibrary_hide_fields_filters' => [
         'classname' => '\\local_resourcelibrary\\external\\manage_customfields',
         'methodname' => 'hide_fields_filter',

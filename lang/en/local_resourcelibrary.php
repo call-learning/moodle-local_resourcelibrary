@@ -50,7 +50,6 @@ $string['resourcelibrary:replacecourseindex:desc'] = 'Replace course index with 
 
 $string['resourcelibraryfieldsettings'] = 'Resource Library Field Settings';
 $string['resourcelibrary_course_customfield'] = 'Manage custom Resource Library field for course';
-$string['resourcelibrary_coursemodule_customfield'] = 'Manage custom Resource Library field for course modules';
 $string['resourcelibraryfield_islocked'] = 'Field is locked';
 $string['resourcelibraryfield_islocked_help'] = 'Field is locked';
 $string['resourcelibraryfield_visibletoall'] = 'Field is visible to all';

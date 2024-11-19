@@ -50,7 +50,6 @@ $string['resourcelibrary:replacecourseindex:desc'] = 'Remplacer la page de liste
 
 $string['resourcelibraryfieldsettings'] = 'Paramètres des champs de la Pédagothèque numérique';
 $string['resourcelibrary_course_customfield'] = 'Gestion des champs personnalisés de cours pour la Pédagothèque numérique';
-$string['resourcelibrary_coursemodule_customfield'] = 'Gestion des champs personnalisés d\'activité pour la Pédagothèque numérique';
 $string['resourcelibraryfield_islocked'] = 'Le champ est vérouillé';
 $string['resourcelibraryfield_islocked_help'] = 'Le champ est vérouillé et ne peut être changé';
 $string['resourcelibraryfield_visibletoall'] = 'Le champ est visible pour tous';

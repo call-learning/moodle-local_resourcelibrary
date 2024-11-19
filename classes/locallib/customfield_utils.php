@@ -55,23 +55,12 @@ class customfield_utils {
      */
     public static function get_sql_for_entity_customfields($type, $additionaljoins = [], $additionalfields = []) {
         $table = 'course';
-        switch ($type) {
-            case 'coursemodule':
-                $handler = handler::get_handler('local_resourcelibrary', 'coursemodule');
-                $table = 'course_modules';
-                list($currentfields, $currentjoins) = self::get_fields_and_joins_for_cf_handler($handler, $table);
-                $joinsfields = array_merge($additionalfields, $currentfields);
-                $joins = array_merge($additionaljoins, $currentjoins);
-                break;
-            default: // Course.
-                $rlhandler = handler::get_handler('core_course', 'course');
-                $customfieldhandler = \core_course\customfield\course_handler::create();
-                list($customfields, $customjoins) = self::get_fields_and_joins_for_cf_handler(
-                    $customfieldhandler,
-                    'course');
-                $joinsfields = array_values(array_merge($additionalfields, $customfields));
-                $joins = array_values(array_merge($additionaljoins, $customjoins));
-        }
+        $customfieldhandler = \core_course\customfield\course_handler::create();
+        list($customfields, $customjoins) = self::get_fields_and_joins_for_cf_handler(
+            $customfieldhandler,
+            'course');
+        $joinsfields = array_values(array_merge($additionalfields, $customfields));
+        $joins = array_values(array_merge($additionaljoins, $customjoins));
 
         $sql = "SELECT e.id as id, " . implode(', ', $joinsfields) . " FROM {{$table}} e " . implode(' ', $joins);
 

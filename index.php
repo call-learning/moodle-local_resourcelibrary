@@ -34,16 +34,10 @@ $pageparams = [];
 $renderable = null;
 
 $context = context_system::instance();
-if ($courseid != SITEID) {
-    $pageparams['courseid'] = $courseid;
-    $context = context_course::instance($courseid);
-    $renderable = new local_resourcelibrary\output\activity_resourcelibrary($courseid);
-    $PAGE->set_pagetype('resource-library-activities');
-    $PAGE->add_body_class('resource-library-activities');
-} else {
-    $renderable = new local_resourcelibrary\output\course_resourcelibrary();
-    $PAGE->add_body_class('resource-library-courses');
-}
+
+$renderable = new local_resourcelibrary\output\course_resourcelibrary();
+$PAGE->add_body_class('resource-library-courses');
+
 
 $site = get_site();
 
@@ -81,28 +75,6 @@ if ($PAGE->user_allowed_editing()) {
     }
 } else {
     $USER->editing = $edit = 0;
-}
-
-if ($courseid != SITEID) {
-    $PAGE->navbar->ignore_active();
-    $mainlibrarypage = new moodle_url('/local/resourcelibrary/index.php');
-    $PAGE->navbar->add(get_string('mainresourcelibrary', 'local_resourcelibrary'),
-        $mainlibrarypage,
-        navigation_node::TYPE_CUSTOM,
-        'mainresourcelibrary',
-        'mainlibrary'
-    );
-    $course = $DB->get_record('course', ['id' => $courseid]);
-    $PAGE->navbar->add(course_format_name($course),
-        new moodle_url('/course/view.php', ['id' => $course->id]),
-        navigation_node::TYPE_CUSTOM,
-        'course',
-        'course'
-    );
-
-    $PAGE->navbar->add(
-        \local_resourcelibrary\locallib\utils::get_resource_library_menu_text(course_format_name($course)
-        ));
 }
 
 $renderer = $PAGE->get_renderer('local_resourcelibrary');

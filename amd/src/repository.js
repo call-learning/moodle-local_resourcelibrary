@@ -44,28 +44,6 @@ define(['core/ajax', 'core/notification'], function(Ajax, Notification) {
     };
 
     /**
-     * Retrieve a list of modules.
-     *
-     * Valid args are:
-     * filters                  array of filters values (see get_filtered_courses_parameters)
-     *
-     * @method getFilteredCourseList
-     * @param {object} args The request arguments
-     * @return {promise} Resolved with an array of courses
-     */
-    var getFilteredModulesList = function(args) {
-
-        var request = {
-            methodname: 'local_resourcelibrary_get_filtered_course_content',
-            args:  args
-        };
-
-        var promise = Ajax.call([request])[0];
-
-        return promise;
-    };
-
-    /**
      * Update the user preferences.
      *
      * @param {Object} args Arguments send to the webservice.
@@ -92,7 +70,6 @@ define(['core/ajax', 'core/notification'], function(Ajax, Notification) {
 
     return {
         getFilteredCourseList: getFilteredCourseList,
-        getFilteredModulesList: getFilteredModulesList,
         updateUserPreferences: updateUserPreferences
     };
 });

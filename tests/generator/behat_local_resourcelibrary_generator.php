@@ -96,20 +96,8 @@ class behat_local_resourcelibrary_generator extends behat_generator_base {
         $field = core_customfield\field_controller::create($elementdata['fieldid']);
         $courseid = $DB->get_field('course', 'id',
             ['shortname' => trim($elementdata['courseshortname'])]);
-        switch ($field->get_handler()->get_area()) {
-            case 'course':
-                $elementdata['instanceid'] = $courseid;
-                break;
-            case 'coursemodule':
-                $modinfo = course_modinfo::instance($courseid);
-                $activities = $modinfo->get_instances_of($elementdata['activity']);
-                foreach ($activities as $activity) {
-                    if (trim($activity->idnumber) == trim($elementdata['activityidnumber'])) {
-                        $elementdata['instanceid'] = $activity->id;
-                    }
-                }
-                break;
-        }
+        $elementdata['instanceid'] = $courseid;
+
         return $elementdata;
     }
 
