@@ -1,0 +1,164 @@
+$white: #ffffff;
+$primary: #00b8de;
+
+.card-course {
+    background: $white;
+    box-shadow: 0 2px 14px -4px rgba(0, 0, 0, 0.25);
+    /* stylelint-disable declaration-no-important */
+    height: 288px !important;
+    position: relative;
+
+    @media (max-width: 767.98px) {
+        margin: 0;
+        width: 100%;
+    }
+
+    &:after {
+        border-color: $primary transparent transparent transparent;
+        border-style: solid;
+        border-width: 120px 120px 0 0;
+        content: "";
+        height: 0;
+        left: 0;
+        opacity: 0.6;
+        position: absolute;
+        top: 0;
+        width: 0;
+    }
+
+    .course-image {
+        background-position: center;
+        background-size: cover;
+        height: 180px;
+        width: 100%;
+    }
+
+    .title {
+        font-size: 16px;
+        font-weight: bold;
+        line-height: 150%;
+        max-height: 60px;
+        overflow: hidden;
+        padding: 8px;
+        padding-right: 24px;
+        text-align: center;
+        text-overflow: ellipsis;
+        white-space: normal;
+    }
+
+    .link-go-to-content {
+        .btn-primary:not(:disabled):hover,
+        .btn-primary:not(:disabled):active:focus,
+        .btn-primary:focus {
+            background-color: transparent;
+            box-shadow: initial;
+            color: $primary;
+            outline: initial;
+        }
+
+        bottom: 0;
+        padding: .5rem;
+        position: absolute;
+        right: 0; // Fix dashboard card arrow.
+    }
+}
+
+#page-local-resourcelibrary-index .dashboard-card-deck .dashboard-card {
+    .dashboard-card-img {
+        height: 180px;
+    }
+    .link-go-to-content {
+        padding: initial;
+    }
+}
+
+.local-resourcelibrary .dashboard-card-img {
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.local-resourcelibrary img.list-image {
+    width: 4em;
+    height: 4em;
+    border-radius: 20%;
+}
+
+.local-resourcelibrary .card-icon {
+    position: absolute;
+    top: 1em;
+    right: 1em;
+}
+
+.resourcelibrary-filters-form .fdate_selector {
+    flex-wrap: wrap;
+}
+
+.resourcelibrary-filters-form .filter-instructions {
+    font-size: xx-small;
+    font-style: italic;
+}
+
+.resourcelibrary-filters-form #fgroup_id_buttonar .col-form-label {
+    display: none !important; /* stylelint-disable-line declaration-no-important */
+}
+
+.resourcelibrary-content a.item-view .icon {
+    font-size: 40px;
+    width: 40px;
+    height: 40px;
+}
+
+.local-resourcelibrary .card .entityame {
+    /* Line clamping */
+    display: -webkit-box;
+    line-clamp: 3;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+
+[data-action="hidefromcatalogue"],
+[data-action="showincatalogue"] {
+    transition: all 0.5s ease;
+    &.blink .fa {
+        animation: blink 1s ease-in-out infinite;
+    }
+}
+
+@keyframes blink {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.3);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.path-local-resourcelibrary .dashboard-card-deck .dashboard-card {
+    margin-bottom: .5rem;
+    flex-basis: auto;
+    width: 100%;
+    flex-grow: 0;
+    flex-shrink: 0;
+    .dashboard-card-img {
+        height: 7rem;
+        background-position: center;
+        background-size: cover;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+    @media (min-width: 576px) {
+        &.card-course {
+            width: calc(50% - 0.5rem);
+        }
+    }
+    @media (min-width: 840px) {
+        &.card-course {
+            width: calc(33.33% - 0.5rem);
+        }
+    }
+}

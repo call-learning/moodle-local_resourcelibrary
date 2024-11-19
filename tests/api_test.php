@@ -41,8 +41,7 @@ require_once($CFG->dirroot . '/local/resourcelibrary/tests/lib.php');
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class api_test extends local_resourcelibrary_testcase {
-
+final class api_test extends local_resourcelibrary_testcase {
 
     /**
      * Test that we can obtain a single row result for a set of fields for a course and course module
@@ -50,7 +49,7 @@ class api_test extends local_resourcelibrary_testcase {
      * @covers \local_resourcelibrary\local_resourcelibrary_external::get_filtered_courses
      * @runInSeparateProcess
      */
-    public function test_get_filtered_courses_simple() {
+    public function test_get_filtered_courses_simple(): void {
         global $CFG;
         require_once($CFG->dirroot . '/local/resourcelibrary/externallib.php');
 

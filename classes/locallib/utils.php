@@ -145,7 +145,7 @@ class utils {
                 $hiddenfieldslist = array_merge($hiddenfieldslist, $fieldshortname);
             }
         }
-        $hiddenfieldslist = array_unique($hiddenfieldslist); // Remove duplicate values
+        $hiddenfieldslist = array_unique($hiddenfieldslist); // Remove duplicate values.
         $configname = static::get_hidden_filter_config_name($handler);
         set_config($configname, implode(',', $hiddenfieldslist), 'local_resourcelibrary');
         self::$hiddenfields = $hiddenfieldslist;

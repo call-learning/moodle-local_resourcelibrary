@@ -106,7 +106,7 @@ abstract class base_resourcelibrary implements renderable, templatable {
     /**
      * Store the display categories config setting
      *
-     * @var boolean
+     * @var bool
      */
     protected $displaycategories;
 

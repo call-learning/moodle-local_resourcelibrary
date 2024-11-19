@@ -113,6 +113,7 @@ define(
                     offset: offset
                 });
             }
+            return Promise.resolve([]);
         };
 
         /**

@@ -49,18 +49,6 @@ class renderer extends plugin_renderer_base {
     }
 
     /**
-     * Return the main content for the block overview.
-     *
-     * @param activity_resourcelibrary $activityrl The main renderable
-     * @return string HTML string
-     * @throws \moodle_exception
-     */
-    public function render_activity_resourcelibrary(activity_resourcelibrary $activityrl) {
-        return $this->render_from_template('local_resourcelibrary/resourcelibrary',
-            $activityrl->export_for_template($this));
-    }
-
-    /**
      * Render custom field management interface.
      *
      * @param customfield_management $list

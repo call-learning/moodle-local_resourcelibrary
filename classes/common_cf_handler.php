@@ -26,6 +26,13 @@ namespace local_resourcelibrary;
 use core_customfield\api;
 use core_customfield\field_controller;
 
+/**
+ * Trait common_cf_handler
+ *
+ * @package    local_resourcelibrary
+ * @copyright  2020 CALL Learning 2020 - Laurent David
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 trait common_cf_handler {
     /**
      * @var common_cf_handler
@@ -44,7 +51,7 @@ trait common_cf_handler {
      * @param int $itemid
      * @return common_cf_handler
      */
-    public static function create(int $itemid = 0) : \core_customfield\handler {
+    public static function create(int $itemid = 0): \core_customfield\handler {
         if (static::$singleton === null) {
             static::$singleton = new static(0);
         }
@@ -66,7 +73,7 @@ trait common_cf_handler {
      *
      * @return bool true if the current can configure custom fields, false otherwise
      */
-    public function can_configure() : bool {
+    public function can_configure(): bool {
         return has_capability('local/resourcelibrary:configurecustomfields', $this->get_configuration_context());
     }
 
@@ -77,11 +84,11 @@ trait common_cf_handler {
      * @param int $instanceid id of the course to test edit permission
      * @return bool true if the current can edit custom fields, false otherwise
      */
-    public function can_edit(field_controller $field, int $instanceid = 0) : bool {
+    public function can_edit(field_controller $field, int $instanceid = 0): bool {
         if ($instanceid) {
             $context = $this->get_instance_context($instanceid);
             return (!$field->get_configdata_property('locked') ||
-                has_capability('local/resourcelibrary::changelockedcustomfields', $context));
+                has_capability('local/resourcelibrary:changelockedcustomfields', $context));
         } else {
             $context = $this->get_parent_context();
             return (!$field->get_configdata_property('locked') ||
@@ -106,7 +113,7 @@ trait common_cf_handler {
      *
      * @return \context the context for configuration
      */
-    public function get_configuration_context() : \context {
+    public function get_configuration_context(): \context {
         return \context_system::instance();
     }
 
@@ -115,7 +122,7 @@ trait common_cf_handler {
      *
      * @return bool
      */
-    public function uses_categories() : bool {
+    public function uses_categories(): bool {
         return false;
     }
 
@@ -142,7 +149,7 @@ trait common_cf_handler {
      * @param string $externalpagename
      * @return string page heading
      */
-    protected function setup_edit_page_with_external(field_controller $field, $externalpagename) : string {
+    protected function setup_edit_page_with_external(field_controller $field, $externalpagename): string {
         global $CFG, $PAGE;
         require_once($CFG->libdir.'/adminlib.php');
 

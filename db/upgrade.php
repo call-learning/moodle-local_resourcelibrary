@@ -13,6 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
 /**
  * Updates
  *
@@ -41,14 +42,6 @@ function xmldb_local_resourcelibrary_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2020042002, 'local', 'resourcelibrary');
     }
 
-    if ($oldversion < 2020042003) {
-        \local_resourcelibrary\locallib\setup::setup_resourcelibrary_custom_fields();
-        upgrade_plugin_savepoint(true, 2020042003, 'local', 'resourcelibrary');
-    }
-    if ($oldversion < 2020042005) {
-        \local_resourcelibrary\locallib\setup::setup_resourcelibrary_custom_fields();
-        upgrade_plugin_savepoint(true, 2020042005, 'local', 'resourcelibrary');
-    }
     if ($oldversion < 2020042006) {
         upgrade_plugin_savepoint(true, 2020042006, 'local', 'resourcelibrary');
     }

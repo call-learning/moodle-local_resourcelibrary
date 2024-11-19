@@ -40,13 +40,13 @@ require_once($CFG->dirroot . '/local/resourcelibrary/tests/lib.php');
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class filters_test extends local_resourcelibrary_testcase {
+final class filters_test extends local_resourcelibrary_testcase {
 
     /**
      * Test that we can obtain a single row result for a set of fields for a course and course module
      * @covers \local_resourcelibrary\locallib\customfield_utils::get_sql_for_entity_customfields
      */
-    public function test_flat_sql_course() {
+    public function test_flat_sql_course(): void {
         global $DB;
         $dg = $this->getDataGenerator();
 
@@ -56,7 +56,7 @@ class filters_test extends local_resourcelibrary_testcase {
 
         $activitydata = ['course' => $c1->id] + $this->get_simple_cf_data();
 
-        // TODO: It would have been nice here to prefix the form and the values by 'resourcelibrary'.
+        // TODO: MDL-0 It would have been nice here to prefix the form and the values by 'resourcelibrary'.
         // But the datacontroller for each class (checkbox) will answer customfield_xx for the element name which
         // makes it impossible to prefix the Resource Library field by anything else than 'customfield_'.
         $dg->create_module('label', (object) $activitydata);
@@ -72,7 +72,7 @@ class filters_test extends local_resourcelibrary_testcase {
      * Test that we can obtain a single row result for a set of fields for a course and course module
      * @covers \local_resourcelibrary\locallib\customfield_utils::get_sql_for_entity_customfields
      */
-    public function test_utils_get_hiddenfields_course() {
+    public function test_utils_get_hiddenfields_course(): void {
         $this->resetAfterTest();
         $dg = $this->getDataGenerator();
 
@@ -90,7 +90,7 @@ class filters_test extends local_resourcelibrary_testcase {
      * Test that we can obtain a single row result for a set of fields for a course and course module
      * @covers \local_resourcelibrary\locallib\customfield_utils::set_hiddenfields_course
      */
-    public function test_utils_set_get_hiddenfields_course() {
+    public function test_utils_set_get_hiddenfields_course(): void {
         $this->resetAfterTest();
         $dg = $this->getDataGenerator();
 
@@ -115,7 +115,7 @@ class filters_test extends local_resourcelibrary_testcase {
      * Test that we can obtain a single row result for a set of fields for a course and course module
      * @covers \local_resourcelibrary\locallib\customfield_utils::show_hiddenfields_course
      */
-    public function test_utils_show_hiddenfields_course() {
+    public function test_utils_show_hiddenfields_course(): void {
         $this->resetAfterTest();
         $dg = $this->getDataGenerator();
 

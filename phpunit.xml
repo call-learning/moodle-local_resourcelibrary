@@ -43,7 +43,6 @@
       <directory suffix=".php">tests/generator</directory>
       <file>externallib.php</file>
       <file>lib.php</file>
-      <file>locallib.php</file>
       <file>renderer.php</file>
       <file>rsslib.php</file>
     </include>

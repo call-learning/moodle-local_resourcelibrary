@@ -44,7 +44,7 @@ require_once($CFG->dirroot . '/customfield/tests/generator/lib.php');
 class local_resourcelibrary_generator extends component_generator_base {
     /** @var int Number of created categories and field for each entity. */
     protected $counts = [
-        'course' => ['categorycount' => 0, 'fieldcount' => 0]
+        'course' => ['categorycount' => 0, 'fieldcount' => 0],
     ];
 
     /**

@@ -37,4 +37,3 @@ Feature: As an admin I should be able to set and retrieve values from basic cust
     And I navigate to "Settings" in current page administration
     When I expand all fieldsets
     Then the field "Test Field" matches value "ACDBE"
-
