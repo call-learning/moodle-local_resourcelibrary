@@ -18,10 +18,6 @@ Feature: As an admin I should be able to access values from custom field
       | core_course           | course       | Test Field Checkbox | Resource Library: Generic fields | CF2       | checkbox |                                                                                                                     |
       | core_course           | course       | Test Field Select   | Resource Library: Generic fields | CF4       | select   | {"required":"1","uniquevalues":"0","options":"A\r\nB\r\nC\r\nD","defaultvalue":"A,C","locked":"0","visibility":"2"} |
       | core_course           | course       | Test Field Textarea | Resource Library: Generic fields | CF5       | textarea |                                                                                                                     |
-      | local_resourcelibrary | coursemodule | Test Field Text     | Resource Library: Generic fields | CM1       | text     |                                                                                                                     |
-      | local_resourcelibrary | coursemodule | Test Field Checkbox | Resource Library: Generic fields | CM2       | checkbox |                                                                                                                     |
-      | local_resourcelibrary | coursemodule | Test Field Select   | Resource Library: Generic fields | CM4       | select   | {"required":"1","uniquevalues":"0","options":"A\r\nB\r\nC\r\nD","defaultvalue":"A,C","locked":"0","visibility":"2"} |
-      | local_resourcelibrary | coursemodule | Test Field Textarea | Resource Library: Generic fields | CM5       | textarea |                                                                                                                     |
     And the following "categories" exist:
       | name  | category | idnumber | visible |
       | Cat 1 | 0        | CAT1     | 1       |
@@ -39,19 +35,6 @@ Feature: As an admin I should be able to access values from custom field
       | C9        | Course 09 | CAT2     |
       | C10       | Course 10 | CAT1     |
       | C11       | Course 11 | CAT1     |
-    And the following "activities" exist:
-      | activity | name    | intro     | course | idnumber | visible |
-      | page     | Page 01 | PageDesc1 | C1     | PAGE1    | 1       |
-      | page     | Page 02 | PageDesc2 | C1     | PAGE2    | 1       |
-      | page     | Page 03 | PageDesc3 | C1     | PAGE3    | 1       |
-      | page     | Page 04 | PageDesc4 | C1     | PAGE4    | 1       |
-      | page     | Page 05 | PageDesc5 | C1     | PAGE5    | 0       |
-      | page     | Page 06 | PageDesc1 | C1     | PAGE6    | 1       |
-      | page     | Page 07 | PageDesc2 | C1     | PAGE7    | 1       |
-      | page     | Page 08 | PageDesc3 | C1     | PAGE8    | 1       |
-      | page     | Page 09 | PageDesc4 | C1     | PAGE9    | 0       |
-      | page     | Page 10 | PageDesc5 | C1     | PAGE10   | 1       |
-      | page     | Page 11 | PageDesc1 | C1     | PAGE11   | 1       |
     And the following "course enrolments" exist:
       | user    | course | role           |
       | teacher | C1     | editingteacher |
@@ -71,6 +54,3 @@ Feature: As an admin I should be able to access values from custom field
       | Home      | Course 01, Course 05, Course 09 |                  | admin   |
       | Home      | Course 01, Course 05            | Course 09        | teacher |
       | Home      | Course 01, Course 09            | Course 05        | user    |
-      | Course 01 | Page 01, Page 05, Page 09       |                  | admin   |
-      | Course 01 | Page 01, Page 05, Page 09       |                  | teacher |
-      | Course 01 | Page 01                         | Page 05, Page 09 | user    |

@@ -43,7 +43,7 @@ class provider implements \core_privacy\local\metadata\provider, user_preference
      * @param  \core_privacy\local\metadata\collection $collection A collection of meta-data.
      * @return \core_privacy\local\metadata\collection Return the collection of meta-data.
      */
-    public static function get_metadata(collection $collection) : collection {
+    public static function get_metadata(collection $collection): collection {
         $collection->add_user_preference('local_resourcelibrary_sort_preference', 'privacy:metadata:resourcelibrarysortpreference');
         $collection->add_user_preference('local_resourcelibrary_view_preference', 'privacy:metadata:resourcelibraryviewpreference');
         $collection->add_user_preference('local_resourcelibrary_user_paging_preference',

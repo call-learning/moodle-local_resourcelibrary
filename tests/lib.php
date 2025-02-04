@@ -31,7 +31,7 @@ use local_resourcelibrary\locallib\utils;
  */
 function generate_category_and_fields($dg) {
     $generator = $dg->get_plugin_generator('local_resourcelibrary');
-    foreach (['core_course' => 'course', 'local_resourcelibrary' => 'coursemodule'] as $component => $area) {
+    foreach (['core_course' => 'course'] as $component => $area) {
         $catid = $generator->create_category(['component' => $component, 'area' => $area])->get('id');
         $generator->create_field(['name' => 'Field 1', 'categoryid' => $catid, 'type' => 'text', 'shortname' => 'f1',
             'area' => $area, 'component' => $component, ]);

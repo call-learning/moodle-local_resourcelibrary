@@ -18,6 +18,7 @@
  * Behat data generator for local_resourcelibrary.
  *
  * @category    test
+ * @package local_resourcelibrary
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -25,7 +26,7 @@
 /**
  * Behat data generator for resource library
  *
- * @package    local_resourcelibrary
+ * @package local_resourcelibrary
  * @category    test
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -96,20 +97,8 @@ class behat_local_resourcelibrary_generator extends behat_generator_base {
         $field = core_customfield\field_controller::create($elementdata['fieldid']);
         $courseid = $DB->get_field('course', 'id',
             ['shortname' => trim($elementdata['courseshortname'])]);
-        switch ($field->get_handler()->get_area()) {
-            case 'course':
-                $elementdata['instanceid'] = $courseid;
-                break;
-            case 'coursemodule':
-                $modinfo = course_modinfo::instance($courseid);
-                $activities = $modinfo->get_instances_of($elementdata['activity']);
-                foreach ($activities as $activity) {
-                    if (trim($activity->idnumber) == trim($elementdata['activityidnumber'])) {
-                        $elementdata['instanceid'] = $activity->id;
-                    }
-                }
-                break;
-        }
+        $elementdata['instanceid'] = $courseid;
+
         return $elementdata;
     }
 

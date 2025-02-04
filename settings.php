@@ -26,13 +26,6 @@ if ($hassiteconfig) {
     $settings = new admin_category('resourcelibrary', get_string('pluginname', 'local_resourcelibrary'));
 
     $settings->add('resourcelibrary',
-        new admin_externalpage('resourcelibrary_coursemodule_customfield',
-            new lang_string('resourcelibrary_coursemodule_customfield', 'local_resourcelibrary'),
-            $CFG->wwwroot . '/local/resourcelibrary/activityfields.php',
-            ['local/resourcelibrary:manage']
-        )
-    );
-    $settings->add('resourcelibrary',
         new admin_externalpage('resourcelibrary_course_customfield',
             new lang_string('resourcelibrary_course_customfield', 'local_resourcelibrary'),
             $CFG->wwwroot . '/local/resourcelibrary/coursefields.php',
@@ -73,10 +66,6 @@ if ($hassiteconfig) {
         get_string('resourcelibrary:replacecourseindex:desc', 'local_resourcelibrary'),
         true));
 
-    $mainsettings->add(new admin_setting_configcheckbox('local_resourcelibrary/activateactivitylibrary',
-        get_string('resourcelibrary:activateactivitylibrary', 'local_resourcelibrary'),
-        get_string('resourcelibrary:activateactivitylibrary:desc', 'local_resourcelibrary'),
-        true));
 
     $settings->add('resourcelibrary', $mainsettings);
 
