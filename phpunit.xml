@@ -20,7 +20,7 @@
 
   <php>
     <!--<const name="PHPUNIT_LONGTEST" value="1"/> uncomment to execute also slow or otherwise expensive tests-->
-    <const name="PHPUNIT_SEQUENCE_START" value="191000"/>
+    <const name="PHPUNIT_SEQUENCE_START" value="119000"/>
 
     <!--Following constants instruct tests to fetch external test files from alternative location
         or skip tests if empty, clone https://github.com/moodlehq/moodle-exttests to local web server-->
@@ -33,6 +33,7 @@
   <testsuites>
     <testsuite name="local_resourcelibrary_testsuite">
       <directory suffix="_test.php">.</directory>
+      <exclude>./classes</exclude>
     </testsuite>
   </testsuites>
 
@@ -42,7 +43,6 @@
       <directory suffix=".php">tests/generator</directory>
       <file>externallib.php</file>
       <file>lib.php</file>
-      <file>locallib.php</file>
       <file>renderer.php</file>
       <file>rsslib.php</file>
     </include>

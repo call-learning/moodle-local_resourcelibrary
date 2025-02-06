@@ -112,15 +112,8 @@ define(
                     limit: limit,
                     offset: offset
                 });
-            } else {
-                return Repository.getFilteredModulesList({
-                    courseid: courseId,
-                    sorting: [{column: modifiers.sort.column, order: modifiers.sort.order}],
-                    filters: filters,
-                    limit: limit,
-                    offset: offset
-                });
             }
+            return Promise.resolve([]);
         };
 
         /**

@@ -40,13 +40,13 @@ require_once($CFG->dirroot . '/local/resourcelibrary/tests/lib.php');
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class filters_test extends local_resourcelibrary_testcase {
+final class filters_test extends local_resourcelibrary_testcase {
 
     /**
      * Test that we can obtain a single row result for a set of fields for a course and course module
      * @covers \local_resourcelibrary\locallib\customfield_utils::get_sql_for_entity_customfields
      */
-    public function test_flat_sql_course() {
+    public function test_flat_sql_course(): void {
         global $DB;
         $dg = $this->getDataGenerator();
 
@@ -56,17 +56,14 @@ class filters_test extends local_resourcelibrary_testcase {
 
         $activitydata = ['course' => $c1->id] + $this->get_simple_cf_data();
 
-        // TODO: It would have been nice here to prefix the form and the values by 'resourcelibrary'.
+        // TODO: MDL-0 It would have been nice here to prefix the form and the values by 'resourcelibrary'.
         // But the datacontroller for each class (checkbox) will answer customfield_xx for the element name which
         // makes it impossible to prefix the Resource Library field by anything else than 'customfield_'.
         $dg->create_module('label', (object) $activitydata);
         $sqlcourse = \local_resourcelibrary\locallib\customfield_utils::get_sql_for_entity_customfields('course');
-        $sqlcm = \local_resourcelibrary\locallib\customfield_utils::get_sql_for_entity_customfields('coursemodule');
         $courserow = $DB->get_records_sql($sqlcourse . ' WHERE e.id =' . $c1->id);
-        $activityrow = $DB->get_records_sql($sqlcm);
         $this->assertCount(1, $courserow);
-        $this->assertCount(1, $activityrow);
-        foreach ([reset($courserow), reset($activityrow)] as $data) {
+        foreach ([reset($courserow)] as $data) {
             $this->assert_check_simple_cf_data($data);
         }
     }
@@ -75,7 +72,7 @@ class filters_test extends local_resourcelibrary_testcase {
      * Test that we can obtain a single row result for a set of fields for a course and course module
      * @covers \local_resourcelibrary\locallib\customfield_utils::get_sql_for_entity_customfields
      */
-    public function test_utils_get_hiddenfields_course() {
+    public function test_utils_get_hiddenfields_course(): void {
         $this->resetAfterTest();
         $dg = $this->getDataGenerator();
 
@@ -93,7 +90,7 @@ class filters_test extends local_resourcelibrary_testcase {
      * Test that we can obtain a single row result for a set of fields for a course and course module
      * @covers \local_resourcelibrary\locallib\customfield_utils::set_hiddenfields_course
      */
-    public function test_utils_set_get_hiddenfields_course() {
+    public function test_utils_set_get_hiddenfields_course(): void {
         $this->resetAfterTest();
         $dg = $this->getDataGenerator();
 
@@ -118,7 +115,7 @@ class filters_test extends local_resourcelibrary_testcase {
      * Test that we can obtain a single row result for a set of fields for a course and course module
      * @covers \local_resourcelibrary\locallib\customfield_utils::show_hiddenfields_course
      */
-    public function test_utils_show_hiddenfields_course() {
+    public function test_utils_show_hiddenfields_course(): void {
         $this->resetAfterTest();
         $dg = $this->getDataGenerator();
 
@@ -138,6 +135,7 @@ class filters_test extends local_resourcelibrary_testcase {
         // Test the two ways to call this method (int and array of int).
         utils::show_fields_filter($handler, 'f1');
         utils::show_fields_filter($handler, ['f3', 'f5']);
+        $hidden = utils::get_hidden_fields_filters($handler);
         $this->assertFalse(utils::is_field_hidden_filters($handler, 'f1'));
         $this->assertTrue(utils::is_field_hidden_filters($handler, 'f2'));
         $this->assertFalse(utils::is_field_hidden_filters($handler, 'f3'));

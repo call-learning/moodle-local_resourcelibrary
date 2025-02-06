@@ -13,6 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
 /**
  * Event handlers
  *
@@ -26,10 +27,6 @@ $observers = [
     [
         'eventname' => '\core\event\course_deleted',
         'callback' => '\local_resourcelibrary\observer\eventmanager::course_deleted',
-    ],
-    [
-        'eventname' => '\core\event\course_module_deleted',
-        'callback' => '\local_resourcelibrary\observer\eventmanager::course_module_deleted',
     ],
     [
         'eventname' => '\core\event\course_created',
