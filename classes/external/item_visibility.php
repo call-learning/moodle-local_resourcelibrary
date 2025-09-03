@@ -23,20 +23,11 @@
  */
 
 namespace local_resourcelibrary\external;
-
-use external_api;
-use external_description;
-use external_function_parameters;
-use external_multiple_structure;
-use external_single_structure;
-use external_value;
-use external_warnings;
-use local_resourcelibrary\locallib\utils;
-
-defined('MOODLE_INTERNAL') || die();
-global $CFG;
-require_once("$CFG->libdir/externallib.php");
-require_once($CFG->dirroot . '/local/resourcelibrary/lib.php');
+use core_external\external_api;
+use core_external\external_function_parameters;
+use core_external\external_multiple_structure;
+use core_external\external_single_structure;
+use core_external\external_value;
 
 /**
  * Class used for Ajax Management of the visibility of categories and courses
@@ -146,7 +137,7 @@ class item_visibility extends external_api {
      * @param int $visibility
      * @return array of items with id, itemid, itemtype and visibility
      */
-    public static function get_category_tree($categoryid, $visibility) {
+    protected static function get_category_tree($categoryid, $visibility) {
         GLOBAL $DB;
 
         $items = [];
@@ -184,7 +175,7 @@ class item_visibility extends external_api {
     /**
      * Returns description of method result value
      *
-     * @return external_description
+     * @return external_single_structure
      */
     public static function set_items_visibility_returns() {
         return new external_single_structure([
