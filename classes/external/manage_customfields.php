@@ -26,17 +26,13 @@
 
 namespace local_resourcelibrary\external;
 
-use core_customfield\handler;
-use external_api;
-use external_function_parameters;
-use external_multiple_structure;
-use external_single_structure;
-use external_value;
-use local_resourcelibrary\locallib\utils;
 
-defined('MOODLE_INTERNAL') || die();
-global $CFG;
-require_once("$CFG->libdir/externallib.php");
+use core_external\external_api;
+use core_external\external_function_parameters;
+use core_external\external_multiple_structure;
+use core_external\external_single_structure;
+use core_external\external_value;
+use local_resourcelibrary\locallib\utils;
 
 /**
  * Class used for Ajax Management of the custom field (administration)
@@ -184,7 +180,7 @@ class manage_customfields extends external_api {
     /**
      * Returns description of method result value
      *
-     * @return external_multiple_structure
+     * @return external_multiple_structure|null
      * @since Moodle 2.2
      */
     public static function show_fields_filter_returns() {
