@@ -24,10 +24,10 @@
 namespace local_resourcelibrary;
 use backup;
 use backup_controller;
-use base_plan_exception;
+
 use core_course\customfield\course_handler;
 use local_resourcelibrary\locallib\utils;
-use local_resourcelibrary_testcase;
+use local_resourcelibrary\tests\local_resourcelibrary_testcase;
 use restore_controller;
 use restore_dbops;
 use stdClass;
@@ -37,7 +37,6 @@ defined('MOODLE_INTERNAL') || die();
 global $CFG;
 require_once($CFG->dirroot . '/backup/util/includes/backup_includes.php');
 require_once($CFG->dirroot . '/backup/util/includes/restore_includes.php');
-require_once($CFG->dirroot . '/local/resourcelibrary/tests/lib.php');
 
 /**
  * Tests for customfields in courses

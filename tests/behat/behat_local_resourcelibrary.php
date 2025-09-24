@@ -22,6 +22,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use local_resourcelibrary\locallib\utils;
 use Moodle\BehatExtension\Exception\SkippedException;
 
@@ -36,19 +37,6 @@ require_once(__DIR__ . '/../../../../lib/behat/behat_base.php');
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class behat_local_resourcelibrary extends behat_base {
-
-    /**
-     * Checks that the Multiselect Custom Field is installed.
-     *
-     * @Given /^multiselect field is installed$/
-     */
-    public function multiselect_field_is_installed() {
-
-        if (!utils::is_multiselect_installed()) {
-            throw new SkippedException;
-        }
-    }
-
     /**
      * Add a step to navigate to /local/resourcelibrary/index.php
      *
@@ -94,6 +82,22 @@ class behat_local_resourcelibrary extends behat_base {
         foreach ($textarray as $text) {
             $text = str_replace('\\"', '"', $text);
             $this->assertSession()->pageTextNotContains($text);
+        }
+    }
+
+    /**
+     * BeforeScenario hook to check if the scenario is tagged with @with_multiselect_installed
+     *
+     * @BeforeScenario @mod_bigbluebuttonbn
+     *
+     * @param BeforeScenarioScope $scope
+     */
+    public function before_scenario(BeforeScenarioScope $scope) {
+        $tags = $scope->getFeature()->getTags();
+        foreach ($tags as $tag) {
+            if ($tag === 'with_multiselect_installed' && !utils::is_multiselect_installed()) {
+                throw new SkippedException('Multiselect plugin is not installed, skipping scenario.');
+            }
         }
     }
 

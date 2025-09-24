@@ -51,9 +51,9 @@ Feature: As an admin I should be able to set and retrieve values from all types 
     And the field "Test Field Select" matches value "C"
     And the field "Test Field Textarea" matches value "ACDBE Text"
 
+  @with_multiselect_installed
   Scenario: As an admin if I set a value for a course custom field, then I should be able to retrieve it after (Multiselect).
-    Given multiselect field is installed
-    And the following "local_resourcelibrary > field" exist:
+    Given the following "local_resourcelibrary > field" exist:
       | component             | area         | name               | customfieldcategory              | shortname | type        | configdata                                                                                                          |
       | core_course           | course       | Test Field MSelect | Resource Library: Generic fields | CF3       | multiselect | {"required":"1","uniquevalues":"0","options":"A\r\nB\r\nC\r\nD","defaultvalue":"A,C","locked":"0","visibility":"2"} |
     And the following "local_resourcelibrary > fielddata" exist:

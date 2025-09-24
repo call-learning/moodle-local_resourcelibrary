@@ -148,7 +148,7 @@ abstract class local_resourcelibrary_testcase extends advanced_testcase {
             'f3' => $this->now, // Date.
             'f4' => [1, 2],
             'f5' => 2,
-            'f6' => ['text' => '<p>text editor<p>', 'format' => FORMAT_HTML],
+            'f6' => ['text' => '<p>text editor</p>', 'format' => FORMAT_HTML],
         ];
         $data = array_merge($defaultdata, $data);
         $simpledata = [
@@ -177,7 +177,7 @@ abstract class local_resourcelibrary_testcase extends advanced_testcase {
             $this->assertEquals('1,2', $data->customfield_f4);
         }
         $this->assertEquals(2, $data->customfield_f5);
-        $this->assertEquals('test', $data->customfield_f6);
+        $this->assertEquals('<p>text editor</p>', $data->customfield_f6);
     }
 
     /**
@@ -194,6 +194,6 @@ abstract class local_resourcelibrary_testcase extends advanced_testcase {
             $this->assertEquals('b, c', $data->f4);
         }
         $this->assertEquals('b', $data->f5);
-        $this->assertEquals('test', $data->f6);
+        $this->assertEquals('<p>text editor</p>', $data->f6);
     }
 }
