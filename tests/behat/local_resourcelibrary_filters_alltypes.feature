@@ -87,9 +87,9 @@ Feature: As an admin I should be able filter with all custom field types
       | page     | see      | notsee                                 |
       | Home     | Course 1 | Course 2, Course 3, Course 4, Course 5 |
 
+  @with_multiselect_installed
   Scenario Outline: As an admin I should be able to filter through a multi-select for courses
-    Given multiselect field is installed
-    And the following "local_resourcelibrary > field" exist:
+    Given the following "local_resourcelibrary > field" exist:
       | component             | area         | name               | customfieldcategory              | shortname | type        | configdata                                                                                                          |
       | core_course           | course       | Test Field MSelect | Resource Library: Generic fields | CF3       | multiselect | {"required":"1","uniquevalues":"0","options":"A\r\nB\r\nC\r\nD","defaultvalue":"A,C","locked":"0","visibility":"2"} |
     And the following "local_resourcelibrary > fielddata" exist:
@@ -142,9 +142,9 @@ Feature: As an admin I should be able filter with all custom field types
       | Home     | Course 1 | Course 2, Course 3, Course 4, Course 5 | Test Field Text | ABCDEFC1    | Test Field Checkbox | 1           |
       | Home     | Course 2 | Course 1, Course 3, Course 4, Course 5 | Test Field Text | 2           | Test Field Select   | B           |
 
+  @with_multiselect_installed
   Scenario Outline: As an admin I should be able to filter through a multicriteria search for courses and activities (Multiselect)
-    Given multiselect field is installed
-    And the following "local_resourcelibrary > field" exist:
+    Given the following "local_resourcelibrary > field" exist:
       | component   | area   | name               | customfieldcategory              | shortname | type        | configdata                                                                                                          |
       | core_course | course | Test Field MSelect | Resource Library: Generic fields | CF3       | multiselect | {"required":"1","uniquevalues":"0","options":"A\r\nB\r\nC\r\nD","defaultvalue":"A,C","locked":"0","visibility":"2"} |
     And the following "local_resourcelibrary > fielddata" exist:
