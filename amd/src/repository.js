@@ -19,57 +19,89 @@
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-define(['core/ajax', 'core/notification'], function(Ajax, Notification) {
+import Ajax from 'core/ajax';
+import Notification from 'core/notification';
 
-    /**
-     * Retrieve a list of courses.
-     *
-     * Valid args are:
-     * filters                  array of filters values (see get_filtered_courses_parameters)
-     *
-     * @method getFilteredCourseList
-     * @param {object} args The request arguments
-     * @return {promise} Resolved with an array of courses
-     */
-    var getFilteredCourseList = function(args) {
-
-        var request = {
-            methodname: 'local_resourcelibrary_get_filtered_courses',
-            args:  args
-        };
-
-        var promise = Ajax.call([request])[0];
-
-        return promise;
+/**
+ * Retrieve a list of courses.
+ *
+ * Valid args are:
+ * filters                  array of filters values (see get_filtered_courses_parameters)
+ *
+ * @method getFilteredCourseList
+ * @param {object} args The request arguments
+ * @return {promise} Resolved with an array of courses
+ */
+export const getFilteredCourseList = (args) => {
+    const request = {
+        methodname: 'local_resourcelibrary_get_filtered_courses',
+        args: args
     };
 
-    /**
-     * Update the user preferences.
-     *
-     * @param {Object} args Arguments send to the webservice.
-     *
-     * Sample args:
-     * {
-     *     preferences: [
-     *         {
-     *             type: 'block_example_user_sort_preference'
-     *             value: 'title'
-     *         }
-     *     ]
-     * }
-     */
-    var updateUserPreferences = function(args) {
-        var request = {
-            methodname: 'core_user_update_user_preferences',
-            args: args
-        };
+    return Ajax.call([request])[0];
+};
 
-        Ajax.call([request])[0]
-            .fail(Notification.exception);
+/**
+ * Update the user preferences.
+ *
+ * @param {Object} args Arguments send to the webservice.
+ *
+ * Sample args:
+ * {
+ *     preferences: [
+ *         {
+ *             type: 'block_example_user_sort_preference'
+ *             value: 'title'
+ *         }
+ *     ]
+ * }
+ */
+export const updateUserPreferences = (args) => {
+    const request = {
+        methodname: 'core_user_update_user_preferences',
+        args: args
     };
 
-    return {
-        getFilteredCourseList: getFilteredCourseList,
-        updateUserPreferences: updateUserPreferences
+    Ajax.call([request])[0].fail(Notification.exception);
+};
+
+
+/**
+ * Hide fields filters.
+ *
+ * @param {String} component
+ * @param {String} area
+ * @param {Array} fieldshortnames
+ */
+export const hideFieldsFilters = (component, area, fieldshortnames) => {
+    const request = {
+        methodname: 'local_resourcelibrary_hide_fields_filters',
+        args: {
+            component: component,
+            area: area,
+            fieldshortnames: fieldshortnames
+        }
     };
-});
+
+    Ajax.call([request])[0].fail(Notification.exception);
+};
+
+/**
+ * Show fields filters.
+ *
+ * @param {String} component
+ * @param {String} area
+ * @param {Array} fieldshortnames
+ */
+export const showFieldsFilters = (component, area, fieldshortnames) => {
+    const request = {
+        methodname: 'local_resourcelibrary_show_fields_filters',
+        args: {
+            component: component,
+            area: area,
+            fieldshortnames: fieldshortnames
+        }
+    };
+
+    Ajax.call([request])[0].fail(Notification.exception);
+};

@@ -19,41 +19,71 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define(['jquery', 'core/config', 'core/templates', 'core/toast', 'core/str', 'core/notification'],
-    function($, config, Templates, Toast, Str, Notification) {
+import getString from 'core/str';
+import Toast from 'core/toast';
+import Templates from 'core/templates';
+import Notification from 'core/notification';
 
-    var Permalink = {};
-    Permalink.catalogURL = null;
-    Permalink.setupCopyLink = function(triggerid, targetid) {
-        document.querySelector("#" + triggerid).addEventListener("click",
-            function() {
-                var target = document.getElementById(targetid);
+let catalogURL = null;
+
+export const setupCopyLink = (triggerid, targetid) => {
+    const triggerElement = document.querySelector(`#${triggerid}`);
+    if (triggerElement) {
+        triggerElement.addEventListener('click', async () => {
+            const target = document.getElementById(targetid);
+            if (target) {
                 target.select();
-                if (document.execCommand("copy")) {
-                    Toast.add(Str.get_string('copied', 'local_resourcelibrary'), null, 'success');
+                try {
+                    await navigator.clipboard.writeText(target.value);
+                    const copiedString = await getString('copied', 'local_resourcelibrary');
+                    Toast.add(copiedString, null, 'success');
+                } catch (error) {
+                    // Fallback pour les navigateurs plus anciens
+                    if (document.execCommand('copy')) {
+                        const copiedString = await getString('copied', 'local_resourcelibrary');
+                        Toast.add(copiedString, null, 'success');
+                    }
                 }
-            });
-    };
-
-    Permalink.init = function() {
-        Permalink.catalogURL = new URL(window.location.href);
-        $(document).on('resourcelibrary-filters-change', function(e, filterarray) {
-                filterarray.forEach(function(f) {
-                    const fieldname = 'customfield_' + f.shortname;
-                    if (f.value) {
-                        Permalink.catalogURL.searchParams.append(fieldname + '[operator]', f.operator);
-                        Permalink.catalogURL.searchParams.append(fieldname + '[value]', f.value);
-                        Permalink.catalogURL.searchParams.append(fieldname + '[type]', f.type);
-                    }
-                });
-                Templates.render('local_resourcelibrary/permalink',
-                    {url: Permalink.catalogURL.toString()}).then(
-                    function(html, js) {
-                        return Templates.replaceNodeContents('#resourcelibrary-permalink', html, js);
-                    }
-                ).catch(Notification.exception);
             }
-        );
-    };
-    return Permalink;
-});
+        });
+    }
+};
+
+export const init = () => {
+    catalogURL = new URL(window.location.href);
+
+    document.addEventListener('resourcelibrary-filters-change', async (e)=> {
+        const filterarray = e.detail;
+
+        // Reset search params for filters
+        const paramsToRemove = [];
+        for (const [key] of catalogURL.searchParams.entries()) {
+            if (key.startsWith('customfield_')) {
+                paramsToRemove.push(key);
+            }
+        }
+        paramsToRemove.forEach(param => catalogURL.searchParams.delete(param));
+
+        // Add new filter parameters
+        filterarray.forEach(f => {
+            const fieldname = `customfield_${f.shortname}`;
+            if (f.value) {
+                catalogURL.searchParams.append(`${fieldname}[operator]`, f.operator);
+                catalogURL.searchParams.append(`${fieldname}[value]`, f.value);
+                catalogURL.searchParams.append(`${fieldname}[type]`, f.type);
+            }
+        });
+
+        try {
+            Templates.render('local_resourcelibrary/permalink', {
+                url: catalogURL.toString()
+            }).then(async (html, js) => {
+                Templates.replaceNodeContents('#resourcelibrary-permalink', html, js);
+            });
+
+        } catch (error) {
+            Notification.exception(error);
+        }
+    });
+};
+

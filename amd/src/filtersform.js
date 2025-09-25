@@ -20,93 +20,94 @@
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-define(['jquery', 'core/config'], function($, config) {
 
-    /**
-     * FilterForm class.
-     *
-     * @class FilterForm
-     * @param {String} selector The selector for the form
-     */
-    var FiltersForm = {};
+import Config from 'core/config';
 
-    /**
-     * Refresh after
-     * @param {String} target selector The selector for the form
-     * @param {Bool} ignoresesskey Ignore the sesskey in the form.
-     * @return {Object|Bool} Filter data or false if sesskey is not confirmed.
-     */
-    function getFilterData(target, ignoresesskey) {
-        var data = $(target).serializeArray();
-        var filterdata = {};
-        // Check sesskey (if not ignore request).
-        var sesskeyconfirmed = false;
-        data.forEach(function(d) {
-            if (d.name === 'sesskey') {
-                sesskeyconfirmed = d.value === config.sesskey;
-            } else {
-                var parsename = d.name.match(/(customfield_)?(\w+)\[(\w+)\]\[?(\w*)\]?/);
-                if (parsename) {
-                    var hasCustomShortName = false;
-                    if (parsename.length >= 4) { // This is a customfield (value, operator, type).
-                        parsename.shift();
-                        hasCustomShortName = true;
-                    }
-                    var rootname = parsename[1];
-                    var type = parsename[2];
-                    if (filterdata[rootname] === undefined) {
-                        filterdata[rootname] = {};
-                    }
-                    if (hasCustomShortName && filterdata[rootname].shortname === undefined) {
-                        Object.defineProperty(filterdata[rootname], 'shortname', {
-                            enumerable: true, // For JSON Stringify.
-                            value: rootname
+const getFilterData = (target, ignoresesskey) => {
+    const formData = new FormData(target);
+    const filterdata = {};
+    let sesskeyconfirmed = false;
+
+    for (const [name, value] of formData.entries()) {
+        if (name === 'sesskey') {
+            sesskeyconfirmed = value === Config.sesskey;
+        } else {
+            const parsename = name.match(/(customfield_)?(\w+)\[(\w+)\]\[?(\w*)\]?/);
+            if (parsename) {
+                let hasCustomShortName = false;
+                if (parsename.length >= 4) {
+                    parsename.shift();
+                    hasCustomShortName = true;
+                }
+                const rootname = parsename[1];
+                const type = parsename[2];
+
+                if (filterdata[rootname] === undefined) {
+                    filterdata[rootname] = {};
+                }
+
+                if (hasCustomShortName && filterdata[rootname].shortname === undefined) {
+                    Object.defineProperty(filterdata[rootname], 'shortname', {
+                        enumerable: true,
+                        value: rootname
+                    });
+                }
+
+                if (value !== "_qf__force_multiselect_submission") {
+                    if (typeof filterdata[rootname].value === "undefined") {
+                        Object.defineProperty(filterdata[rootname], type, {
+                            enumerable: true,
+                            value: value,
+                            writable: true
                         });
-                    }
-                    if (d.value != "_qf__force_multiselect_submission") { // Specific case for multiselect
-                        if (typeof filterdata[rootname].value == "undefined"
-                        ) {
-                            Object.defineProperty(filterdata[rootname], type, {
-                                enumerable: true, // For JSON Stringify.
-                                value: d.value,
-                                writable: true
-                            });
-                        } else {
-                            filterdata[rootname].value += ',' + d.value;
-                        }
+                    } else {
+                        filterdata[rootname].value += ',' + value;
                     }
                 }
             }
-        });
-        var filterdataarray = Object.values(filterdata).filter(function(v) {
-            // For date type there is a fourth parameter which should be equal to 1
-            // whenever the box is checked.
-            if (v.type == 'date' && v.value !== undefined) {
-                return v.value.split(",").length > 3; // We have 3 commas: there should be a 1 at the end (enabled).
-            }
-            return v.value !== undefined || (v.value === null);
-        }); // Remove filters for which value is undefined or null.
-        if (sesskeyconfirmed || ignoresesskey) {
-            return filterdataarray;
         }
-        return false;
     }
-    FiltersForm.init = function(selector) {
-        var target = $(selector);
-        // Remove any attempt to submit the form for real.
-        target.on('submit', 'form', function(e) {
+
+    const filterdataarray = Object.values(filterdata).filter(v => {
+        if (v.type === 'date' && v.value !== undefined) {
+            return v.value.split(",").length > 3;
+        }
+        return v.value !== undefined || (v.value === null);
+    });
+
+    return (sesskeyconfirmed || ignoresesskey) ? filterdataarray : false;
+};
+
+export const init = (selector) => {
+    const target = document.querySelector(selector);
+
+    target.addEventListener('submit', (e) => {
+        if (e.target.tagName === 'FORM') {
             e.preventDefault();
-            // Now we get all the current values from the form.
-            var filterdataarray = getFilterData(target.children('form'), false);
+            const filterdataarray = getFilterData(e.target, false);
             if (filterdataarray) {
-                $(document).trigger('resourcelibrary-filters-change', [filterdataarray]);
+                document.dispatchEvent(new CustomEvent('resourcelibrary-filters-change', {
+                    detail: filterdataarray
+                }));
+            }
+        }
+    });
+
+    const resetButton = document.getElementById('id_resetbutton');
+    if (resetButton) {
+        resetButton.addEventListener('click', () => {
+            const form = target.querySelector('form.resourcelibrary-filters-form');
+            if (form) {
+                form.reset();
             }
         });
-        $('#id_resetbutton').on('click', function() {
-            $(target).children('form.resourcelibrary-filters-form')[0].reset();
-        });
-        var filterdataarray = getFilterData(target.children('form'), true);
-        $(document).trigger('resourcelibrary-filters-inited', [filterdataarray]); // Filter are now initialised.
-    };
-    return FiltersForm;
-});
+    }
+
+    const form = target.querySelector('form');
+    if (form) {
+        const filterdataarray = getFilterData(form, true);
+        document.dispatchEvent(new CustomEvent('resourcelibrary-filters-inited', {
+            detail: filterdataarray
+        }));
+    }
+};

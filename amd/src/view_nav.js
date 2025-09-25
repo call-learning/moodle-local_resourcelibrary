@@ -21,122 +21,106 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define(
-    [
-        'jquery',
-        'core/custom_interaction_events',
-        'local_resourcelibrary/repository',
-        'local_resourcelibrary/view',
-        'local_resourcelibrary/selectors'
-    ],
-    function(
-        $,
-        CustomEvents,
-        Repository,
-        View,
-        Selectors
-    ) {
 
-        var SELECTORS = {
-            MODIFIERS: '[data-region="display-modifiers"]',
-            SORT_OPTION: '[data-sort]',
-            DISPLAY_OPTION: '[data-display-option]'
-        };
+import {updateUserPreferences} from 'local_resourcelibrary/repository';
+import View from 'local_resourcelibrary/view';
+import Selectors from 'local_resourcelibrary/selectors';
 
-        /**
-         * Update the user preference for the block.
-         *
-         * @param {String} filter The type of filter: display/sort.
-         * @param {String} value The current preferred value.
-         */
-        var updatePreferences = function(filter, value) {
-            var type = null;
-            if (filter === 'display') {
-                type = 'local_resourcelibrary_user_view_preference';
-            } else if (filter === 'sort') {
-                type = 'local_resourcelibrary_user_sort_preference';
-            }
-            if (type) {
-                Repository.updateUserPreferences({
-                    preferences: [
-                        {
-                            type: type,
-                            value: value
-                        }
-                    ]
-                });
-            }
-        };
 
-        /**
-         * Event listener for the Display filter (cards, list).
-         *
-         * @param {object} root The root element for the overview block
-         */
-        var registerSelector = function(root) {
+export default class ViewNav {
+    static SELECTORS = {
+        MODIFIERS: '[data-region="display-modifiers"]',
+        SORT_OPTION: '[data-sort]',
+        DISPLAY_OPTION: '[data-display-option]'
+    };
 
-            var Selector = root.find(SELECTORS.MODIFIERS);
-
-            CustomEvents.define(Selector, [CustomEvents.events.activate]);
-            Selector.on(
-                CustomEvents.events.activate,
-                SELECTORS.SORT_OPTION,
-                function(e, data) {
-                    var option = $(e.target);
-
-                    if (option.hasClass('active')) {
-                        // If it's already active then we don't need to do anything.
-                        return;
+    /**
+     * Update the user preference for the block.
+     *
+     * @param {String} filter The type of filter: display/sort.
+     * @param {String} value The current preferred value.
+     */
+    static updatePreferences(filter, value) {
+        let type = null;
+        if (filter === 'display') {
+            type = 'local_resourcelibrary_user_view_preference';
+        } else if (filter === 'sort') {
+            type = 'local_resourcelibrary_user_sort_preference';
+        }
+        if (type) {
+            updateUserPreferences({
+                preferences: [
+                    {
+                        type: type,
+                        value: value
                     }
+                ]
+            });
+        }
+    }
 
-                    var sortoption = option.attr('data-sort');
-                    var sortcolumn = option.attr('data-column');
-                    // Update model.
-                    root.find(Selectors.entityView.region).attr('data-sort-column', sortcolumn);
-                    root.find(Selectors.entityView.region).attr('data-sort-order', sortoption);
-                    updatePreferences('sort', sortcolumn + ',' + sortoption);
+    /**
+     * Event listener for the Display filter (cards, list).
+     *
+     * @param {Element} root The root element for the overview block
+     */
+    static registerSelector(root) {
+        const selector = root.querySelector(ViewNav.SELECTORS.MODIFIERS);
 
-                    // Reset the views.
+        if (!selector) {
+            return;
+        }
+
+        selector.addEventListener('click', (e) => {
+            const sortTarget = e.target.closest(ViewNav.SELECTORS.SORT_OPTION);
+            if (sortTarget) {
+                if (sortTarget.classList.contains('active')) {
+                    return;
+                }
+
+                const sortoption = sortTarget.getAttribute('data-sort');
+                const sortcolumn = sortTarget.getAttribute('data-column');
+
+                const entityRegion = root.querySelector(Selectors.entityView.region);
+                if (entityRegion) {
+                    entityRegion.setAttribute('data-sort-column', sortcolumn);
+                    entityRegion.setAttribute('data-sort-order', sortoption);
+                    ViewNav.updatePreferences('sort', sortcolumn + ',' + sortoption);
                     View.refresh(root);
-                    data.originalEvent.preventDefault();
                 }
-            );
-            CustomEvents.define(Selector, [CustomEvents.events.activate]);
-            Selector.on(
-                CustomEvents.events.activate,
-                SELECTORS.DISPLAY_OPTION,
-                function(e, data) {
-                    var option = $(e.target);
+                e.preventDefault();
+                return;
+            }
 
-                    if (option.hasClass('active')) {
-                        return;
-                    }
+            const displayTarget = e.target.closest(ViewNav.SELECTORS.DISPLAY_OPTION);
+            if (displayTarget) {
+                if (displayTarget.classList.contains('active')) {
+                    return;
+                }
 
-                    var displayoptions = option.attr('data-display-option');
+                const displayoptions = displayTarget.getAttribute('data-display-option');
 
-                    // Update model.
-                    root.find(Selectors.entityView.region).attr('data-display', displayoptions);
-                    updatePreferences('display', displayoptions);
-
-                    // Reset the views.
+                const entityRegion = root.querySelector(Selectors.entityView.region);
+                if (entityRegion) {
+                    entityRegion.setAttribute('data-display', displayoptions);
+                    ViewNav.updatePreferences('display', displayoptions);
                     View.reset(root);
-                    data.originalEvent.preventDefault();
                 }
-            );
-        };
+                e.preventDefault();
+            }
+        });
+    }
 
-        /**
-         * Initialise the timeline view navigation by adding event listeners to
-         * the navigation elements.
-         *
-         * @param {object} root The root element for the Resource Library
-         */
-        var init = function(root) {
-            root = $(root);
-            registerSelector(root);
-        };
-
-        return {
-            init: init
-        };
-    });
+    /**
+     * Initialise the timeline view navigation by adding event listeners to
+     * the navigation elements.
+     *
+     * @param {Element} root The root element for the Resource Library
+     */
+    static init(root) {
+        if (typeof root === 'string') {
+            root = document.querySelector(root);
+        }
+        ViewNav.registerSelector(root);
+    }
+}

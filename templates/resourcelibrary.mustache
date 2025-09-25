@@ -72,14 +72,14 @@
     </div>
 </div>
 {{#js}}
-require(['jquery', 'local_resourcelibrary/resourcelibrary',
+require([
+    'jquery',
+    'local_resourcelibrary/resourcelibrary',
     'local_resourcelibrary/filtersform',
     'local_resourcelibrary/permalink'
     ], function($, Main, FiltersForm, Permalink) {
-    var root = $('#local-resourcelibrary-{{uniqid}}');
-    Main.init(root);
-    var filters = $('#resourcelibrary-filter-{{uniqid}}');
-    FiltersForm.init(filters);
+    Main.init('#local-resourcelibrary-{{uniqid}}');
+    FiltersForm.init('#resourcelibrary-filter-{{uniqid}}');
     Permalink.init();
 });
 {{/js}}

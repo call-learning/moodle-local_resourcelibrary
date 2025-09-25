@@ -19,23 +19,28 @@
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-define(['jquery', 'core/ajax', 'core/notification'], function($, Ajax, Notification) {
-    return {
-        init: function(component, area, hidefilterlocator) {
-            $(hidefilterlocator).click(function() {
-                const checked = $(this).is(':checked');
-                var request = {
-                    methodname: checked ?
-                        'local_resourcelibrary_hide_fields_filters'
-                        : 'local_resourcelibrary_show_fields_filters',
-                    args:  {
-                        component: component,
-                        area: area,
-                        fieldshortnames: [$(this).data('field-shortname')]
-                    }
-                };
-                Ajax.call([request])[0].fail(Notification.exception);
-            });
-        },
-    };
-});
+import {hideFieldsFilters, showFieldsFilters} from "./repository";
+import Pending from 'core/pending';
+
+/**
+ * Initialise the hide/show filter fields checkboxes.
+ *
+ * @param {String} component
+ * @param {String} area
+ * @param {Boolean} hidefilterlocator
+ */
+export const init = (component, area, hidefilterlocator) => {
+    const elements = document.querySelectorAll(hidefilterlocator);
+
+    elements.forEach(element => {
+        element.addEventListener('click', async ()=>{
+            const pending = new Pending('local_resourcelibrary/hide_show_field');
+            if (this.checked) {
+                await hideFieldsFilters(component, area, [this.dataset.fieldShortname]);
+            } else {
+                await showFieldsFilters(component, area, [this.dataset.fieldShortname]);
+            }
+            pending.resolve();
+        });
+    });
+};
