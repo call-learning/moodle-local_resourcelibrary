@@ -22,7 +22,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_resourcelibrary\locallib;
+namespace local_resourcelibrary\local;
 
 use core_customfield\handler;
 use local_resourcelibrary\customfield\course_handler;
@@ -35,6 +35,31 @@ use Matrix\Exception;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class utils {
+
+    /**
+     * Item type is a category
+     * @var int
+     */
+    public const LOCAL_RESOURCELIBRARY_ITEMTYPE_CATEGORY  = 1;
+
+    /**
+     * Item type is a course
+     * @var int
+     */
+    public const LOCAL_RESOURCELIBRARY_ITEMTYPE_COURSE  = 2;
+
+
+    /**
+     * Item type is visible
+     * @var int
+     */
+    public const LOCAL_RESOURCELIBRARY_ITEM_VISIBLE  = 0;
+
+    /**
+     * Item type is hidden
+     * @var int
+     */
+    public const LOCAL_RESOURCELIBRARY_ITEM_HIDDEN  = 1;
 
     /**
      * @var array $hiddenfields

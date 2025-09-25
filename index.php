@@ -42,7 +42,7 @@ $PAGE->add_body_class('resource-library-courses');
 
 $site = get_site();
 
-$strresourcelibrary = \local_resourcelibrary\locallib\utils::get_resource_library_menu_text();
+$strresourcelibrary = \local_resourcelibrary\local\utils::get_resource_library_menu_text();
 
 $pagedesc = $strresourcelibrary;
 $title = $strresourcelibrary;

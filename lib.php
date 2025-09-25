@@ -22,15 +22,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-
-define("LOCAL_RESOURCELIBRARY_ITEMTYPE_CATEGORY", 1);
-define("LOCAL_RESOURCELIBRARY_ITEMTYPE_COURSE", 2);
-
-define("LOCAL_RESOURCELIBRARY_ITEM_VISIBLE", 0);
-define("LOCAL_RESOURCELIBRARY_ITEM_HIDDEN", 1);
-
-
-
 /**
  * Nothing for now
  */
@@ -58,7 +49,7 @@ function local_resourcelibrary_extend_navigation(global_navigation $nav) {
     if (empty($CFG->enableresourcelibrary)) {
         return;
     }
-    list($urltext, $url) = \local_resourcelibrary\locallib\utils::get_catalog_url();
+    list($urltext, $url) = \local_resourcelibrary\local\utils::get_catalog_url();
     $mycoursesnode = $nav->find('mycourses', null);
     if ($mycoursesnode) {
         $node = $nav->create($urltext, $url, navigation_node::NODETYPE_LEAF, null, 'resourcelibrary',

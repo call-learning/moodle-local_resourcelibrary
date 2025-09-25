@@ -23,7 +23,7 @@
  */
 
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
-use local_resourcelibrary\locallib\utils;
+use local_resourcelibrary\local\utils;
 use Moodle\BehatExtension\Exception\SkippedException;
 
 require_once(__DIR__ . '/../../../../lib/behat/behat_base.php');

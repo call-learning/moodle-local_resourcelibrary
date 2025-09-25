@@ -22,11 +22,10 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_resourcelibrary\locallib;
+namespace local_resourcelibrary\local;
 
 use core_customfield\field_controller;
 use core_customfield\handler;
-use local_resourcelibrary\locallib\utils;
 
 /**
  * Class customfield_utils

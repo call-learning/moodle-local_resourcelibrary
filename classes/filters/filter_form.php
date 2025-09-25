@@ -24,8 +24,8 @@
 
 namespace local_resourcelibrary\filters;
 
-use local_resourcelibrary\locallib\customfield_utils;
-use local_resourcelibrary\locallib\utils;
+use local_resourcelibrary\local\customfield_utils;
+use local_resourcelibrary\local\utils;
 
 defined('MOODLE_INTERNAL') || die;
 global $CFG;

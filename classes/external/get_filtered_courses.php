@@ -26,9 +26,9 @@ use core_external\external_function_parameters;
 use core_external\external_multiple_structure;
 use core_external\external_single_structure;
 use core_external\external_value;
-use Exception;
-use local_resourcelibrary\locallib\customfield_utils;
-use local_resourcelibrary\locallib\externalhelper;
+use local_resourcelibrary\local\customfield_utils;
+use local_resourcelibrary\local\externalhelper;
+use local_resourcelibrary\local\utils;
 
 /**
  * Get filtered course content for the catalogue
@@ -153,7 +153,7 @@ class get_filtered_courses extends external_api {
     public static function get_hidden_items() {
         GLOBAL $DB;
         $sql = "SELECT itemid FROM {local_resourcelibrary} WHERE itemtype = :itemtype AND visibility = :visibility";
-        $params = ['itemtype' => LOCAL_RESOURCELIBRARY_ITEMTYPE_COURSE, 'visibility' => LOCAL_RESOURCELIBRARY_ITEM_HIDDEN];
+        $params = ['itemtype' => utils::LOCAL_RESOURCELIBRARY_ITEMTYPE_COURSE, 'visibility' => utils::LOCAL_RESOURCELIBRARY_ITEM_HIDDEN];
         $records = $DB->get_records_sql($sql, $params);
         $hiddenitems = [];
         foreach ($records as $record) {

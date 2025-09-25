@@ -27,7 +27,7 @@
 namespace local_resourcelibrary\tests;
 
 use advanced_testcase;
-use local_resourcelibrary\locallib\utils;
+use local_resourcelibrary\local\utils;
 use stdClass;
 use testing_data_generator;
 

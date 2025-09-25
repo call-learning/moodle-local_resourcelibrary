@@ -25,7 +25,7 @@
 namespace local_resourcelibrary\output;
 
 use core_customfield\field_controller;
-use local_resourcelibrary\locallib\customfield_utils;
+use local_resourcelibrary\local\customfield_utils;
 use renderer_base;
 
 /**

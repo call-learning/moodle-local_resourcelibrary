@@ -25,7 +25,7 @@
 namespace local_resourcelibrary\output;
 
 use core_customfield\output\management;
-use local_resourcelibrary\locallib\utils;
+use local_resourcelibrary\local\utils;
 
 /**
  *  Custom field management

@@ -28,6 +28,8 @@ use core_external\external_function_parameters;
 use core_external\external_multiple_structure;
 use core_external\external_single_structure;
 use core_external\external_value;
+use core_external\external_warnings;
+use local_resourcelibrary\local\utils;
 
 /**
  * Class used for Ajax Management of the visibility of categories and courses
@@ -80,7 +82,7 @@ class item_visibility extends external_api {
         $context = \context_system::instance();
         if (!has_capability('local/resourcelibrary:setitemsvisibility', $context)) {
             $warnings[] = [
-                'item' => $requestid,
+                'itemid' => 0,
                 'warningcode' => 'settingvisibilitynotallowed',
                 'message' => get_string('settingvisibilitynotallowed', 'local_resourcelibrary'),
             ];
@@ -103,7 +105,7 @@ class item_visibility extends external_api {
                 $item->id = $DB->insert_record('local_resourcelibrary', $item);
             }
             // If the item is a category, we need to set the visibility of all courses and categories in this category.
-            if ($item->itemtype == LOCAL_RESOURCELIBRARY_ITEMTYPE_CATEGORY) {
+            if ($item->itemtype == utils::LOCAL_RESOURCELIBRARY_ITEMTYPE_CATEGORY) {
                 $treeitems = self::get_category_tree($item->itemid, $item->visibility);
                 foreach ($treeitems as $treeitem) {
                     $treeitem = (object)$treeitem;
@@ -147,7 +149,7 @@ class item_visibility extends external_api {
         foreach ($courses as $course) {
             $items[] = [
                 'itemid' => $course->id,
-                'itemtype' => LOCAL_RESOURCELIBRARY_ITEMTYPE_COURSE,
+                'itemtype' => utils::LOCAL_RESOURCELIBRARY_ITEMTYPE_COURSE,
                 'visibility' => $visibility,
             ];
         }
@@ -165,7 +167,7 @@ class item_visibility extends external_api {
         // Add this category to the list of items.
         $items[] = [
             'itemid' => $categoryid,
-            'itemtype' => LOCAL_RESOURCELIBRARY_ITEMTYPE_CATEGORY,
+            'itemtype' => utils::LOCAL_RESOURCELIBRARY_ITEMTYPE_CATEGORY,
             'visibility' => $visibility,
         ];
 
