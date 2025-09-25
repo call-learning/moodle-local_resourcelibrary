@@ -26,7 +26,7 @@ defined('MOODLE_INTERNAL') || die;
 
 $functions = [
     'local_resourcelibrary_get_filtered_courses' => [
-        'classname' => local_resourcelibrary\external\get_filtered_courses::class,
+        'classname' => \local_resourcelibrary\external\get_filtered_courses::class,
         'methodname' => 'execute',
         'description' => 'Return a list of filtered courses course details',
         'type' => 'read',

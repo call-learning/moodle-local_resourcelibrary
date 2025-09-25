@@ -20,31 +20,26 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define(
-[
-    'jquery',
-    'local_resourcelibrary/view',
-    'local_resourcelibrary/view_nav'
-],
-function(
-    $,
-    View,
-    ViewNav
-) {
-    /**
-     * Initialise all of the modules for the imt resourcelibrary local plugin.
-     * Inspired from block myoverview.
-     * @param {object} root The root element for the overview block.
-     */
-    var init = function(root) {
-        root = $(root);
-        // Initialise the course navigation elements.
-        ViewNav.init(root);
-        // Initialise the courses view modules.
-        View.init(root);
-    };
+import View from './view';
+import ViewNav from './view_nav';
+import Log from 'core/log';
+/**
+ * Initialise all of the modules for the imt resourcelibrary local plugin.
+ * Inspired from block myoverview.
+ * @param {String} root The root element for the overview block.
+ */
+const init = (root) => {
+    const rootElement = document.querySelector(root);
+    if (!rootElement) {
+        Log.error('Root element not found');
+        return;
+    }
+    // Initialise the course navigation elements.
+    ViewNav.init(rootElement);
+    // Initialise the courses view modules.
+    View.init(rootElement);
+};
 
-    return {
-        init: init
-    };
-});
+export default {
+    init
+};

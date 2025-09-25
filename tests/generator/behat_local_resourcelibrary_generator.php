@@ -92,8 +92,13 @@ class behat_local_resourcelibrary_generator extends behat_generator_base {
      */
     protected function preprocess_fielddata($elementdata) {
         global $DB;
-        $elementdata['fieldid'] = $DB->get_field('customfield_field', 'id',
-            ['shortname' => trim($elementdata['fieldshortname'])]);
+        $elementdata['fieldid'] = $DB->get_field(
+            'customfield_field',
+            'id',
+            [
+                'shortname' => trim($elementdata['fieldshortname'])
+            ]
+        );
         $field = core_customfield\field_controller::create($elementdata['fieldid']);
         $courseid = $DB->get_field('course', 'id',
             ['shortname' => trim($elementdata['courseshortname'])]);

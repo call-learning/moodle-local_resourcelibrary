@@ -20,11 +20,11 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define([], function() {
-    return {
-        entityView: {
-            region: '[data-region="resourcelibrary-view"]',
-            regionContent: '[data-region="resourcelibrary-view-content"]'
-        }
-    };
-});
+const Selectors = {
+    entityView: {
+        region: '[data-region="resourcelibrary-view"]',
+        regionContent: '[data-region="resourcelibrary-view-content"]'
+    }
+};
+
+export default Selectors;

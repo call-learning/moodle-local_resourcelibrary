@@ -20,367 +20,283 @@
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+import * as Repository from 'local_resourcelibrary/repository';
+import PagedContentFactory from 'core/paged_content_factory';
+import PubSub from 'core/pubsub';
+import Notification from 'core/notification';
+import Templates from 'core/templates';
+import * as Selectors from 'local_resourcelibrary/selectors';
+import PagedContentEvents from 'core/paged_content_events';
 
-define(
-    [
-        'jquery',
-        'local_resourcelibrary/repository',
-        'core/paged_content_factory',
-        'core/pubsub',
-        'core/custom_interaction_events',
-        'core/notification',
-        'core/templates',
-        'core_course/events',
-        'local_resourcelibrary/selectors',
-        'core/paged_content_events',
-    ],
-    function(
-        $,
-        Repository,
-        PagedContentFactory,
-        PubSub,
-        CustomEvents,
-        Notification,
-        Templates,
-        CourseEvents,
-        Selectors,
-        PagedContentEvents
-    ) {
+export default class View {
+    static TEMPLATES = {
+        ENTITES_CARDS: 'local_resourcelibrary/view-cards',
+        ENTITIES_LIST: 'local_resourcelibrary/view-list',
+        NOENTITIES: 'local_resourcelibrary/no-entities'
+    };
 
-        var TEMPLATES = {
-            ENTITES_CARDS: 'local_resourcelibrary/view-cards',
-            ENTITIES_LIST: 'local_resourcelibrary/view-list',
-            NOENTITIES: 'local_resourcelibrary/no-entities'
+    static NUMCOURSES_PERPAGE = [12, 24, 48];
+
+    static DEFAULT_PAGED_CONTENT_CONFIG = {
+        ignoreControlWhileLoading: true,
+        controlPlacementBottom: true,
+        persistentLimitKey: 'local_resourcelibrary_user_paging_preference'
+    };
+
+    static loadedPages = [];
+    static lastPage = 0;
+    static lastLimit = 0;
+    static namespace = null;
+    static currentFilters = [];
+    static entityType = 'course';
+    static courseId = 0;
+    static categoryId = 0;
+
+    static getDisplayModifierValues(root) {
+        const entityRegion = root.querySelector(Selectors.entityView.region);
+        if (!entityRegion) {
+            throw new Error('Entity region not found in the provided root element.');
+        }
+        return {
+            display: entityRegion.getAttribute('data-display'),
+            sort: {
+                column: entityRegion.getAttribute('data-sort-column'),
+                order: entityRegion.getAttribute('data-sort-order')
+            },
+            displaycategories: entityRegion.getAttribute('data-displaycategories'),
         };
+    }
 
-        var NUMCOURSES_PERPAGE = [12, 24, 48];
+    static getEntities(modifiers, filters, limit, offset, additionalValues = {}) {
+        if (View.entityType === 'course') {
+            return Repository.getFilteredCourseList({
+                categoryid: View.categoryId,
+                sorting: [{column: modifiers.sort.column, order: modifiers.sort.order}],
+                filters: filters,
+                limit: limit,
+                offset: offset,
+                ...additionalValues
+            });
+        }
+        return Promise.resolve([]);
+    }
 
-        var loadedPages = [];
+    static getPagedContentContainer(root, index) {
+        return root.querySelector(`[data-region="paged-content-page"][data-page="${index}"]`);
+    }
 
-        var lastPage = 0;
+    static renderEntities(root, pageData) {
+        let entities = [];
+        if (pageData.entities !== undefined) {
+            entities = pageData.entities;
+        }
+        const filters = View.getDisplayModifierValues(root);
 
-        var lastLimit = 0;
+        let currentTemplate = '';
+        if (filters.display === 'list') {
+            currentTemplate = View.TEMPLATES.ENTITIES_LIST;
+        } else {
+            currentTemplate = View.TEMPLATES.ENTITES_CARDS;
+        }
 
-        var namespace = null;
+        if (filters.displaycategories !== 'on') {
+            entities = entities.map((entity) => {
+                delete entity.category;
+                return entity;
+            });
+        }
 
-        var currentFilters = [];
-
-        var entityType = 'course';
-
-        var courseId = 0;
-
-        var categoryId = 0;
-
-        /**
-         * Get display modifier values from DOM.
-         * This will either change the sorting order, the way we display the cards or list
-         * and if we display categories or sections
-         * @param {object} root The root element for the entities view.
-         * @return {object} display modifier Set.
-         */
-        var getDisplayModifierValues = function(root) {
-            var entityRegion = root.find(Selectors.entityView.region);
-            return {
-                display: entityRegion.attr('data-display'),
-                sort: {column: entityRegion.attr('data-sort-column'), order: entityRegion.attr('data-sort-order')},
-                displaycategories: entityRegion.attr('data-displaycategories'),
-            };
-        };
-
-        // We want the paged content controls below the paged content area.
-        // and the controls should be ignored while data is loading.
-        var DEFAULT_PAGED_CONTENT_CONFIG = {
-            ignoreControlWhileLoading: true,
-            controlPlacementBottom: true,
-            persistentLimitKey: 'local_resourcelibrary_user_paging_preference'
-        };
-
-        /**
-         * Get enrolled entities from backend.
-         * @param {object} modifiers The display modifier for this view.
-         * @param {object} filters The filters for this view.
-         * @param {int} limit The number of entities to show.
-         * @param {int} offset to start with The number of entities to show.
-         * @return {promise} Resolved with an array of entities.
-         */
-        var getEntities = function(modifiers, filters, limit, offset) {
-            if (entityType === 'course') {
-                return Repository.getFilteredCourseList({
-                    categoryid: categoryId,
-                    sorting: [{column: modifiers.sort.column, order: modifiers.sort.order}],
-                    filters: filters,
-                    limit: limit,
-                    offset: offset
-                });
+        if (entities.length) {
+            return Templates.render(currentTemplate, {
+                entities: entities,
+            });
+        } else {
+            const entityRegion = root.querySelector(Selectors.entityView.region);
+            if (!entityRegion) {
+                throw new Error('Entity region not found in the provided root element.');
             }
-            return Promise.resolve([]);
-        };
+            const noentitiesimg = entityRegion.getAttribute('data-noentitiesimg');
+            return Templates.render(View.TEMPLATES.NOENTITIES, {
+                noentitiesimg: noentitiesimg
+            });
+        }
+    }
 
-        /**
-         * Get the paged content container element.
-         *
-         * @param  {Object} root The entity overview container
-         * @param  {Number} index Rendered page index.
-         * @return {Object} The rendered paged container.
-         */
-        var getPagedContentContainer = function(root, index) {
-            return root.find('[data-region="paged-content-page"][data-page="' + index + '"]');
-        };
+    static setLimit(limit) {
+        const root = this;
+        const entityRegion = root.querySelector(Selectors.entityView.region);
+        if (entityRegion) {
+            entityRegion.setAttribute('data-paging', limit);
+        }
+    }
 
-        /**
-         * Render the dashboard entities.
-         *
-         * @param {object} root The root element for the entities view.
-         * @param {array} pageData containing the page data as setup in LoadPage
-         * @return {promise} jQuery promise resolved after rendering is complete.
-         */
-        var renderEntities = function(root, pageData) {
+    static registerPagedEventHandlers(root, namespace) {
+        const event = namespace + PagedContentEvents.SET_ITEMS_PER_PAGE_LIMIT;
+        if (PubSub && typeof PubSub.subscribe === 'function') {
+            PubSub.subscribe(event, View.setLimit.bind(root));
+        }
+    }
 
-            var entities = [];
-            if (pageData.entities !== undefined) {
-                entities = pageData.entities;
-            }
-            var filters = getDisplayModifierValues(root);
+    static getItemPerPage(rootNode) {
+        let itemsPerPage = View.NUMCOURSES_PERPAGE;
+        const entityRegion = rootNode.querySelector(Selectors.entityView.region);
+        if (!entityRegion) {
+            throw new Error('Entity region not found in the provided root element.');
+        }
+        const pagingLimit = parseInt(entityRegion.getAttribute('data-paging'), 10);
+        if (pagingLimit) {
+            itemsPerPage = View.NUMCOURSES_PERPAGE.map((value) => {
+                const active = value === pagingLimit;
+                return {
+                    value: value,
+                    active: active
+                };
+            });
+        }
+        return itemsPerPage;
+    }
 
-            var currentTemplate = '';
-            if (filters.display === 'list') {
-                currentTemplate = TEMPLATES.ENTITIES_LIST;
-            } else {
-                currentTemplate = TEMPLATES.ENTITES_CARDS;
-            }
+    static initializePagedContent(root) {
+        if (!(root instanceof HTMLElement)) {
+            throw new Error('Invalid root element provided. It must be a valid CSS selector or an HTMLElement.');
+        }
+        View.namespace = "local_resourcelibrary" + root.getAttribute('id') + "_" + Math.random();
 
-            // Delete the entity category if it is not to be displayed.
-            if (filters.displaycategories !== 'on') {
-                entities = entities.map(function(entity) {
-                    delete entity.category;
-                    return entity;
-                });
-            }
+        const itemsPerPage = View.getItemPerPage(root);
+        const modifiers = View.getDisplayModifierValues(root);
+        const config = Object.assign({}, View.DEFAULT_PAGED_CONTENT_CONFIG);
+        config.eventNamespace = View.namespace;
 
-            if (entities.length) {
-                return Templates.render(currentTemplate, {
-                    entities: entities,
-                });
-            } else {
-                var noentitiesimg = root.find(Selectors.entityView.region).attr('data-noentitiesimg');
-                return Templates.render(TEMPLATES.NOENTITIES, {
-                    noentitiesimg: noentitiesimg
-                });
-            }
-        };
+        const pagedContentPromise = PagedContentFactory.createWithLimit(
+            itemsPerPage,
+            (pagesData, actions) => {
+                const promises = [];
 
-        /**
-         * Return the callback to be passed to the subscribe event
-         *
-         * @param {Number} limit The paged limit that is passed through the event
-         */
-        var setLimit = function(limit) {
-            this.find(Selectors.entityView.region).attr('data-paging', limit);
-        };
+                pagesData.forEach((pageData) => {
+                    const currentPage = pageData.pageNumber;
+                    const limit = pageData.limit;
 
-        /**
-         * Intialise the paged list and cards views on page load.
-         * Returns an array of paged contents that we would like to handle here
-         *
-         * @param {object} root The root element for the entities view
-         * @param {string} namespace The namespace for all the events attached
-         */
-        var registerPagedEventHandlers = function(root, namespace) {
-            var event = namespace + PagedContentEvents.SET_ITEMS_PER_PAGE_LIMIT;
-            PubSub.subscribe(event, setLimit.bind(root));
-        };
-
-        /**
-         * Get the maximum item per page
-         * @param {DomNode} rootNode
-         * @returns {array} of items per page
-         */
-        var getItemPerPage = function(rootNode) {
-            var itemsPerPage = NUMCOURSES_PERPAGE;
-            var pagingLimit = parseInt(rootNode.find(Selectors.entityView.region).attr('data-paging'), 10);
-            if (pagingLimit) {
-                itemsPerPage = NUMCOURSES_PERPAGE.map(function(value) {
-                    var active = false;
-                    if (value === pagingLimit) {
-                        active = true;
+                    if (View.lastLimit !== limit) {
+                        View.loadedPages = [];
+                        View.lastPage = 0;
                     }
 
-                    return {
-                        value: value,
-                        active: active
-                    };
+                    if (View.lastPage === currentPage) {
+                        actions.allItemsLoaded(View.lastPage);
+                        promises.push(View.renderEntities(root, View.loadedPages[currentPage]));
+                        return;
+                    }
+                    View.lastLimit = limit;
+                    let additionalValues = {};
+                    if (View.entityType !== 'course') {
+                        additionalValues.courseId = View.courseId;
+                    }
+                    const pagePromise = View.getEntities(
+                        modifiers,
+                        View.currentFilters,
+                        limit,
+                        limit * (currentPage - 1),
+                        additionalValues
+                    ).then((entities) => {
+                        View.loadedPages[currentPage] = {
+                            entities: entities
+                        };
+                        if (View.loadedPages[currentPage].entities.length < pageData.limit) {
+                            View.lastPage = currentPage;
+                            actions.allItemsLoaded(currentPage);
+                        }
+                        return View.renderEntities(root, View.loadedPages[currentPage]);
+                    }).catch(Notification.exception);
+
+                    promises.push(pagePromise);
                 });
+
+                return promises;
+            },
+            config
+        );
+
+        pagedContentPromise.then((html, js) => {
+            View.registerPagedEventHandlers(root, View.namespace);
+            return Templates.replaceNodeContents(root.querySelector(Selectors.entityView.region), html, js);
+        }).then(() => {
+            const rootNode = document.querySelector(Selectors.entityView.region + ' .paged-content-page-container');
+            if (!rootNode) {
+                return;
             }
-            return itemsPerPage;
-        };
 
-        /**
-         * Intialise the entities list and cards views on page load.
-         *
-         * @param {object} root The root element for the entities view.
-         */
-        var initializePagedContent = function(root) {
-            namespace = "local_resourcelibrary" + root.attr('id') + "_" + Math.random();
-
-            var itemsPerPage = getItemPerPage(root);
-
-
-            var modifiers = getDisplayModifierValues(root);
-            var config = $.extend({}, DEFAULT_PAGED_CONTENT_CONFIG);
-            config.eventNamespace = namespace;
-
-            var pagedContentPromise = PagedContentFactory.createWithLimit(
-                itemsPerPage,
-                function(pagesData, actions) {
-                    var promises = [];
-
-                    pagesData.forEach(function(pageData) {
-                        var currentPage = pageData.pageNumber;
-                        var limit = pageData.limit;
-
-                        // Reset local variables if limits have changed.
-                        if (lastLimit !== limit) {
-                            loadedPages = [];
-                            lastPage = 0;
-                        }
-
-                        if (lastPage === currentPage) {
-                            // If we are on the last page and have it's data then load it from cache.
-                            actions.allItemsLoaded(lastPage);
-                            promises.push(renderEntities(root, loadedPages[currentPage]));
-                            return;
-                        }
-                        lastLimit = limit;
-                        var additionalValues = {};
-                        if (entityType !== 'course') {
-                            additionalValues = courseId;
-                        }
-                        var pagePromise = getEntities(
-                            modifiers,
-                            currentFilters,
-                            limit,
-                            limit * (currentPage - 1),
-                            additionalValues
-                        ).then(function(entities) {
-                            // Finished setting up the current page.
-                            loadedPages[currentPage] = {
-                                entities: entities
-                            };
-                            // Set the last page to either the current or next page.
-                            if (loadedPages[currentPage].entities.length < pageData.limit) {
-                                lastPage = currentPage;
-                                actions.allItemsLoaded(currentPage);
+            const waitForNodeReplacement = (mutationsList) => {
+                if (mutationsList) {
+                    mutationsList.forEach((mutation) => {
+                        if (mutation.type === 'childList') {
+                            const event = new CustomEvent('resource_library_card_rendered', {
+                                detail: {rootNode: rootNode}
+                            });
+                            const haspagecontent = document.querySelector(Selectors.entityView.region
+                                + ' .paged-content-page-container [data-region="paged-content-page"]');
+                            if (haspagecontent) {
+                                document.dispatchEvent(event);
                             }
-                            return renderEntities(root, loadedPages[currentPage]);
-                        }).catch(Notification.exception);
-
-                        promises.push(pagePromise);
-                    });
-
-                    return promises;
-                },
-                config
-            );
-
-            pagedContentPromise.then(function(html, js) {
-                registerPagedEventHandlers(root, namespace);
-                return Templates.replaceNodeContents(root.find(Selectors.entityView.region), html, js);
-            }).done(
-                () => {
-                    const rootNode = document.querySelector(Selectors.entityView.region
-                        + ' .paged-content-page-container');
-                    const waitForNodeReplacement = (mutationsList) => {
-                        if (mutationsList) {
-                            mutationsList.forEach(
-                                (mutation) => {
-                                    if (mutation.type === 'childList') {
-                                        const event = new CustomEvent('resource_library_card_rendered', {
-                                            'rootNode': rootNode
-                                        });
-                                        const haspagecontent = document.querySelector(Selectors.entityView.region
-                                            + ' .paged-content-page-container [data-region="paged-content-page"]');
-                                        if (haspagecontent) {
-                                            document.dispatchEvent(event);
-                                        }
-                                    }
-                                }
-                            );
                         }
-                    };
-                    const observer = new MutationObserver(waitForNodeReplacement);
-                    const config = {childList: true, subtree: true};
-                    observer.observe(rootNode, config);
-                    return true;
-                })
-                .catch(Notification.exception);
-        };
+                    });
+                }
+            };
+            const observer = new MutationObserver(waitForNodeReplacement);
+            const config = {childList: true, subtree: true};
+            observer.observe(rootNode, config);
+            return true;
+        }).catch(Notification.exception);
+    }
 
-        /**
-         * Listen to, and handle events for the Resource Library page.
-         *
-         * @param {Object} root resourcelibrary page
-         */
-        var registerEventListeners = function(root) {
-            CustomEvents.define(root, [
-                CustomEvents.events.activate
-            ]);
-        };
+    static refresh(root) {
+        if (typeof root === 'string') {
+            root = document.querySelector(root);
+        }
+        if (!(root instanceof HTMLElement)) {
+            throw new Error('Invalid root element provided. It must be a valid CSS selector or an HTMLElement.');
+        }
+        View.loadedPages = [];
+        View.lastPage = 0;
+        View.initializePagedContent(root);
+        View.entityType = root.getAttribute('data-entity-type');
+        View.courseId = parseInt(root.getAttribute('data-parent-id'));
+        View.categoryId = parseInt(root.getAttribute('data-category-id'));
+        if (!root.getAttribute('data-init')) {
+            root.setAttribute('data-init', 'true');
+        }
+    }
 
-        /**
-         * Intialise the entities list and cards views on page load.
-         *
-         * @param {object} root The root element for the entities view.
-         */
-        var refresh = function(root) {
-            root = $(root);
-            loadedPages = [];
-            lastPage = 0;
-            initializePagedContent(root);
-            entityType = root.attr('data-entity-type');
-            courseId = parseInt(root.attr('data-parent-id'));
-            categoryId = parseInt(root.attr('data-category-id'));
-            if (!root.attr('data-init')) {
-                registerEventListeners(root);
-                root.attr('data-init', true);
-            }
-        };
-        var init = function(root) {
-            // Only init the view when filters are initialised.
-            // Reset the views when we receive a change in filters.
-            $(document).on('resourcelibrary-filters-inited resourcelibrary-filters-change',
-                function(e, formdata) {
-                    currentFilters = formdata;
-                    this.refresh(root);
-                }.bind(this)
-            );
-        };
+    static init(root) {
+        document.addEventListener('resourcelibrary-filters-inited', (e) => {
+            View.currentFilters = e.detail;
+            View.refresh(root);
+        });
 
+        document.addEventListener('resourcelibrary-filters-change', (e) => {
+            View.currentFilters = e.detail;
+            View.refresh(root);
+        });
+    }
 
-        /**
-         * Reset the entities views to their original
-         * state on first page load.entityOffset
-         *
-         * This is called when configuration has changed for the event lists
-         * to cause them to reload their data.
-         *
-         * @param {Object} root The root element for the timeline view.
-         */
-        var reset = function(root) {
-            if (loadedPages.length > 0) {
-                loadedPages.forEach(function(entityList, index) {
-                    var pagedContentPage = getPagedContentContainer(root, index);
-                    renderEntities(root, entityList).then(function(html, js) {
+    static reset(root) {
+        if (typeof root === 'string') {
+            root = document.querySelector(root);
+        }
+        if (!(root instanceof HTMLElement)) {
+            throw new Error('Invalid root element provided. It must be a valid CSS selector or an HTMLElement.');
+        }
+        if (View.loadedPages.length > 0) {
+            View.loadedPages.forEach((entityList, index) => {
+                const pagedContentPage = View.getPagedContentContainer(root, index);
+                if (pagedContentPage) {
+                    View.renderEntities(root, entityList).then((html, js) => {
                         return Templates.replaceNodeContents(pagedContentPage, html, js);
                     }).catch(Notification.exception);
-                });
-            } else {
-                refresh(root);
-            }
-        };
+                }
+            });
+        } else {
+            View.refresh(root);
+        }
+    }
+}
 
-        return {
-            init: init,
-            reset: reset,
-            refresh: refresh,
-        };
-    });
