@@ -40,7 +40,7 @@ class multiselect_filter extends baseselect_filter {
      * @throws \moodle_exception
      */
     public static function check_is_righttype(\core_customfield\field_controller $field) {
-        return \local_resourcelibrary\locallib\utils::is_multiselect_installed()
+        return \local_resourcelibrary\local\utils::is_multiselect_installed()
                 && $field instanceof \customfield_multiselect\field_controller;
     }
     /**

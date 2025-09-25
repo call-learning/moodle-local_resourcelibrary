@@ -23,7 +23,7 @@
  */
 namespace local_resourcelibrary;
 use core_course\customfield\course_handler;
-use local_resourcelibrary\locallib\utils;
+use local_resourcelibrary\local\utils;
 use local_resourcelibrary\tests\local_resourcelibrary_testcase;
 
 defined('MOODLE_INTERNAL') || die();
@@ -43,7 +43,7 @@ final class filters_test extends local_resourcelibrary_testcase {
 
     /**
      * Test that we can obtain a single row result for a set of fields for a course and course module
-     * @covers \local_resourcelibrary\locallib\customfield_utils::get_sql_for_entity_customfields
+     * @covers \local_resourcelibrary\local\customfield_utils::get_sql_for_entity_customfields
      */
     public function test_flat_sql_course(): void {
         global $DB;
@@ -59,7 +59,7 @@ final class filters_test extends local_resourcelibrary_testcase {
         // But the datacontroller for each class (checkbox) will answer customfield_xx for the element name which
         // makes it impossible to prefix the Resource Library field by anything else than 'customfield_'.
         $dg->create_module('label', (object) $activitydata);
-        $sqlcourse = \local_resourcelibrary\locallib\customfield_utils::get_sql_for_entity_customfields('course');
+        $sqlcourse = \local_resourcelibrary\local\customfield_utils::get_sql_for_entity_customfields('course');
         $courserow = $DB->get_records_sql($sqlcourse . ' WHERE e.id =' . $c1->id);
         $this->assertCount(1, $courserow);
         foreach ([reset($courserow)] as $data) {
@@ -69,7 +69,7 @@ final class filters_test extends local_resourcelibrary_testcase {
 
     /**
      * Test that we can obtain a single row result for a set of fields for a course and course module
-     * @covers \local_resourcelibrary\locallib\customfield_utils::get_sql_for_entity_customfields
+     * @covers \local_resourcelibrary\local\customfield_utils::get_sql_for_entity_customfields
      */
     public function test_utils_get_hiddenfields_course(): void {
         $this->resetAfterTest();
@@ -87,7 +87,7 @@ final class filters_test extends local_resourcelibrary_testcase {
 
     /**
      * Test that we can obtain a single row result for a set of fields for a course and course module
-     * @covers \local_resourcelibrary\locallib\customfield_utils::set_hiddenfields_course
+     * @covers \local_resourcelibrary\local\customfield_utils::set_hiddenfields_course
      */
     public function test_utils_set_get_hiddenfields_course(): void {
         $this->resetAfterTest();
@@ -112,7 +112,7 @@ final class filters_test extends local_resourcelibrary_testcase {
 
     /**
      * Test that we can obtain a single row result for a set of fields for a course and course module
-     * @covers \local_resourcelibrary\locallib\customfield_utils::show_hiddenfields_course
+     * @covers \local_resourcelibrary\local\customfield_utils::show_hiddenfields_course
      */
     public function test_utils_show_hiddenfields_course(): void {
         $this->resetAfterTest();

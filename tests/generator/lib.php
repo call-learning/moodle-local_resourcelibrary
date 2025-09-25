@@ -159,7 +159,7 @@ class local_resourcelibrary_generator extends component_generator_base {
         $instanceid = $fielddata['instanceid'];
         $value = $fielddata['value'];
         $field = core_customfield\field_controller::create($fieldid);
-        if (local_resourcelibrary\locallib\utils::is_multiselect_installed()
+        if (\local_resourcelibrary\local\utils::is_multiselect_installed()
             && $field instanceof \customfield_multiselect\field_controller) {
             $value = explode(',', $value);
         }

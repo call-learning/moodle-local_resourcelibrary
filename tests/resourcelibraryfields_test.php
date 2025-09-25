@@ -24,9 +24,8 @@
 namespace local_resourcelibrary;
 use backup;
 use backup_controller;
-
 use core_course\customfield\course_handler;
-use local_resourcelibrary\locallib\utils;
+use local_resourcelibrary\local\utils;
 use local_resourcelibrary\tests\local_resourcelibrary_testcase;
 use restore_controller;
 use restore_dbops;

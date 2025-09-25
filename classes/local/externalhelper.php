@@ -1,5 +1,5 @@
 <?php
-namespace local_resourcelibrary\locallib;
+namespace local_resourcelibrary\local;
 use core_external\external_function_parameters;
 use core_external\external_multiple_structure;
 use core_external\external_single_structure;
