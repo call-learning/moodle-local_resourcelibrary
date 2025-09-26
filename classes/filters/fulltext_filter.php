@@ -33,7 +33,6 @@ namespace local_resourcelibrary\filters;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class fulltext_filter implements resourcelibrary_filter_interface, static_filter_interface {
-
     /**
      * Add to form
      *
@@ -42,13 +41,14 @@ class fulltext_filter implements resourcelibrary_filter_interface, static_filter
      */
     public function add_to_form(\MoodleQuickForm &$mform) {
         $elementname = $this->get_form_value_item_name();
-        $mform->addElement( 'text', 'fulltext', $this->get_label());
+        $mform->addElement('text', 'fulltext', $this->get_label());
         $mform->setType($elementname, PARAM_TEXT);
-        utils::add_filter_operators_to_form($mform,
+        utils::add_filter_operators_to_form(
+            $mform,
             'fulltext',
             PARAM_TEXT,
-            self::OPERATOR_EQUAL);
-
+            self::OPERATOR_EQUAL
+        );
     }
 
     /**

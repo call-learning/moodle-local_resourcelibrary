@@ -59,7 +59,7 @@ $string['resourcelibrary:changelockedcustomfields'] = 'Can change locked Resourc
 $string['resourcelibrary:configurecustomfields'] = 'Can configure Resource Library Custom Field values';
 $string['resourcelibrary:courseviewbaseurl'] = 'Base URL for course view.';
 $string['resourcelibrary:courseviewbaseurl:desc'] = 'Base URL for course view. Most of the time it will be /course/view.php.'
-    .' We add the identifier \'id\' to the URL with the id of the course.';
+    . ' We add the identifier \'id\' to the URL with the id of the course.';
 $string['resourcelibrary:editvalue'] = 'Can edit Resource Library Custom Field values';
 $string['resourcelibrary:hiddencoursesid'] = 'Hidden courses Id';
 $string['resourcelibrary:hiddencoursesid:desc'] = 'List of comma separated

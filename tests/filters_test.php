@@ -40,7 +40,6 @@ require_once($CFG->dirroot . '/backup/util/includes/restore_includes.php');
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class filters_test extends local_resourcelibrary_testcase {
-
     /**
      * Test that we can obtain a single row result for a set of fields for a course and course module
      * @covers \local_resourcelibrary\local\customfield_utils::get_sql_for_entity_customfields
@@ -107,7 +106,6 @@ final class filters_test extends local_resourcelibrary_testcase {
         $this->assertTrue(utils::is_field_hidden_filters($handler, 'f3'));
 
         $this->assertFalse(utils::is_field_hidden_filters($handler, 'f5'));
-
     }
 
     /**
@@ -139,6 +137,5 @@ final class filters_test extends local_resourcelibrary_testcase {
         $this->assertTrue(utils::is_field_hidden_filters($handler, 'f2'));
         $this->assertFalse(utils::is_field_hidden_filters($handler, 'f3'));
         $this->assertFalse(utils::is_field_hidden_filters($handler, 'f5'));
-
     }
 }

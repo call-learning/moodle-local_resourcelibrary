@@ -37,7 +37,7 @@ trait common_cf_handler {
     /**
      * @var common_cf_handler
      */
-    static protected $singleton;
+    protected static $singleton;
 
     /**
      * @var \context
@@ -151,7 +151,7 @@ trait common_cf_handler {
      */
     protected function setup_edit_page_with_external(field_controller $field, $externalpagename): string {
         global $CFG, $PAGE;
-        require_once($CFG->libdir.'/adminlib.php');
+        require_once($CFG->libdir . '/adminlib.php');
 
         $title = parent::setup_edit_page($field);
         admin_externalpage_setup($externalpagename);

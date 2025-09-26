@@ -70,7 +70,6 @@ function xmldb_local_resourcelibrary_upgrade($oldversion) {
     }
 
     if ($oldversion < 2023102300) {
-
         // Define table local_resourcelibrary to be created.
         $table = new xmldb_table('local_resourcelibrary');
 

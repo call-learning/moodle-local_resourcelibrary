@@ -48,19 +48,24 @@ class eventmanager {
         require_once($CFG->dirroot . '/local/resourcelibrary/lib.php');
         $course = $event->get_record_snapshot('course', $event->objectid);
         // Check if the course category is hidden.
-        $categorystatus = $DB->get_field('local_resourcelibrary', 'visibility',
+        $categorystatus = $DB->get_field(
+            'local_resourcelibrary',
+            'visibility',
             [
                 'itemid' => $course->category,
                 'itemtype' => utils::LOCAL_RESOURCELIBRARY_ITEMTYPE_CATEGORY,
-            ]);
+            ]
+        );
         if ($categorystatus == utils::LOCAL_RESOURCELIBRARY_ITEM_HIDDEN) {
             // Add a record for the course.
-            $DB->insert_record('local_resourcelibrary',
+            $DB->insert_record(
+                'local_resourcelibrary',
                 [
                     'itemid' => $course->id,
                     'itemtype' => utils::LOCAL_RESOURCELIBRARY_ITEMTYPE_COURSE,
                     'visibility' => utils::LOCAL_RESOURCELIBRARY_ITEM_HIDDEN,
-                ]);
+                ]
+            );
         }
     }
 }

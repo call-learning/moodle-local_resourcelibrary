@@ -1,4 +1,19 @@
 <?php
+// This file is part of Moodle - https://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
+
 namespace local_resourcelibrary\local;
 use core_external\external_function_parameters;
 use core_external\external_multiple_structure;
@@ -25,18 +40,24 @@ class externalhelper {
     public static function get_filter_generic_parameters($parentid, $parentiddesc) {
         return new external_function_parameters(
             [$parentid => new external_value(PARAM_INT, $parentiddesc),
-                'filters' => new external_multiple_structure (
+                'filters' => new external_multiple_structure(
                     new external_single_structure(
                         [
-                            'type' => new external_value(PARAM_ALPHANUM,
+                            'type' => new external_value(
+                                PARAM_ALPHANUM,
                                 'Filter type as per customfield/fields/ type class or another value like
-                                globalsearch, ...'),
-                            'shortname' => new external_value(PARAM_ALPHANUMEXT,
+                                globalsearch, ...'
+                            ),
+                            'shortname' => new external_value(
+                                PARAM_ALPHANUMEXT,
                                 'Matching customfield shortname if it is a customfield filter',
-                                VALUE_OPTIONAL),
-                            'operator' => new external_value(PARAM_INT,
+                                VALUE_OPTIONAL
+                            ),
+                            'operator' => new external_value(
+                                PARAM_INT,
                                 'Filter option as per local_resourcelibrary\filters class option
-                                (this will be EQUAL, CONTAINS, NOTEQUAL...'),
+                                (this will be EQUAL, CONTAINS, NOTEQUAL...'
+                            ),
                             'value' => new external_value(PARAM_RAW, 'the value of the filter to look for.'),
                         ]
                     ),
@@ -48,9 +69,12 @@ class externalhelper {
                 'sorting' => new external_multiple_structure(
                     new external_single_structure(
                         [
-                            'column' => new external_value(PARAM_ALPHANUM,
-                                'Column name for the sorting'),
-                            'order' => new external_value(PARAM_ALPHA,
+                            'column' => new external_value(
+                                PARAM_ALPHANUM,
+                                'Column name for the sorting'
+                            ),
+                            'order' => new external_value(
+                                PARAM_ALPHA,
                                 'ASC for ascending, DESC for descending, ascending by default'
                             ),
                         ]
@@ -82,5 +106,4 @@ class externalhelper {
         $sortsql = implode(',', $sortsqls);
         return $sortsql;
     }
-
 }

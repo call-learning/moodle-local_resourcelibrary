@@ -36,7 +36,7 @@ abstract class baseselect_filter extends base {
      *
      * @var array
      */
-    protected $_options;
+    protected $options;
 
     /**
      * Constructor
@@ -47,11 +47,11 @@ abstract class baseselect_filter extends base {
     public function __construct(\core_customfield\field_controller $field) {
         parent::__construct($field);
         $options = $field->get_options(); // TODO: MDL-0 this could be a non static method.
-        $this->_options = [];
+        $this->options = [];
         $context = $field->get_handler()->get_configuration_context();
         foreach ($options as $key => $option) {
             // Multilang formatting with filters.
-            $this->_options[$key] = format_string($option, true, ['context' => $context]);
+            $this->options[$key] = format_string($option, true, ['context' => $context]);
         }
     }
 }

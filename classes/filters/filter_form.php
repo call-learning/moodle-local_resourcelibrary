@@ -38,7 +38,6 @@ require_once($CFG->libdir . '/formslib.php');
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class filter_form extends \moodleform {
-
     /**
      * Form definition.
      */
@@ -57,8 +56,11 @@ class filter_form extends \moodleform {
         }
         // Add button.
 
-        $buttonarray[] = &$mform->createElement('submit', 'filterbutton',
-            get_string('filter:submit', 'local_resourcelibrary'));
+        $buttonarray[] = &$mform->createElement(
+            'submit',
+            'filterbutton',
+            get_string('filter:submit', 'local_resourcelibrary')
+        );
         $buttonarray[] = $mform->createElement('submit', 'resetbutton', get_string('clear'));
         $mform->addGroup($buttonarray, 'buttonar', '', [' '], false);
         $mform->closeHeaderBefore('buttonar');
