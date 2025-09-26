@@ -33,32 +33,31 @@ use local_resourcelibrary\local\customfield_utils;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 abstract class base implements resourcelibrary_filter_interface {
-
     /**
      * Name of the filter in the form
      *
      * @var string
      */
-    protected $_name;
+    protected $name;
 
     /**
      * label of the filter in the form
      *
      * @var string
      */
-    protected $_label;
+    protected $label;
 
     /**
      * @var \core_customfield\field_controller
      */
-    protected $_field;
+    protected $field;
 
     /**
      * Current operator
      *
      * @var int
      */
-    protected $_operator;
+    protected $operator;
 
     /**
      * Constructor
@@ -66,13 +65,17 @@ abstract class base implements resourcelibrary_filter_interface {
      * @param \core_customfield\field_controller $field user table filed name
      */
     public function __construct(\core_customfield\field_controller $field) {
-        $this->_name = customfield_utils::get_field_name('customfield', $field->get('shortname'));
-        $this->_operator = self::OPERATOR_EQUAL; // Equal by default.
-        $this->_label = $field->get_formatted_name();
-        $this->_field = $field;
+        $this->name = customfield_utils::get_field_name('customfield', $field->get('shortname'));
+        $this->operator = self::OPERATOR_EQUAL; // Equal by default.
+        $this->label = $field->get_formatted_name();
+        $this->field = $field;
         if (!static::check_is_righttype($field)) {
-            throw new \moodle_exception('wronghandlerforfilter', 'local_resourcelibrary',
-                $link = '', ['handlername' => self::class, 'fieldname' => $field->get('name')]);
+            throw new \moodle_exception(
+                'wronghandlerforfilter',
+                'local_resourcelibrary',
+                $link = '',
+                ['handlername' => self::class, 'fieldname' => $field->get('name')]
+            );
         }
     }
 
@@ -83,10 +86,12 @@ abstract class base implements resourcelibrary_filter_interface {
      * @throws \coding_exception
      */
     public function add_to_form(\MoodleQuickForm &$mform) {
-        utils::add_filter_operators_to_form($mform,
-            $this->_name,
-            $this->_field->get('type'),
-            $this->_operator);
+        utils::add_filter_operators_to_form(
+            $mform,
+            $this->name,
+            $this->field->get('type'),
+            $this->operator
+        );
     }
 
     /**
@@ -106,7 +111,7 @@ abstract class base implements resourcelibrary_filter_interface {
      * @return string
      */
     protected function get_form_value_item_name() {
-        return $this->_name . '[value]';
+        return $this->name . '[value]';
     }
 
     /**
@@ -132,8 +137,8 @@ abstract class base implements resourcelibrary_filter_interface {
      * @throws \ReflectionException
      */
     protected function get_sql_field_name() {
-        $datafieldcolumn = customfield_utils::get_datafieldcolumn_value_from_field_handler($this->_field);
-        $fieldid = $this->_field->get('id');
+        $datafieldcolumn = customfield_utils::get_datafieldcolumn_value_from_field_handler($this->field);
+        $fieldid = $this->field->get('id');
         return "customfield_{$fieldid}.{$datafieldcolumn}";
     }
 
@@ -143,7 +148,7 @@ abstract class base implements resourcelibrary_filter_interface {
      * @return string active filter label
      */
     public function get_label() {
-        return $this->_label;
+        return $this->label;
     }
 
     /**
@@ -153,4 +158,3 @@ abstract class base implements resourcelibrary_filter_interface {
      */
     abstract public function get_param_type();
 }
-

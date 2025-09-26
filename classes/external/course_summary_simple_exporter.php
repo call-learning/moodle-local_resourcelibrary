@@ -37,7 +37,6 @@ use moodle_url;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class course_summary_simple_exporter extends course_summary_exporter {
-
     /**
      * COURSE_VIEW_DEFAULT_URL
      */

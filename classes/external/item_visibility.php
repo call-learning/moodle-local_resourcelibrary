@@ -38,7 +38,6 @@ use local_resourcelibrary\local\utils;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class item_visibility extends external_api {
-
     /**
      * Returns description of method parameters
      *
@@ -67,9 +66,10 @@ class item_visibility extends external_api {
      * @param array $items
      */
     public static function set_items_visibility(array $items) {
-        GLOBAL $DB;
+        global $DB;
 
-        $params = self::validate_parameters(self::set_items_visibility_parameters(),
+        $params = self::validate_parameters(
+            self::set_items_visibility_parameters(),
             [
                 'items' => $items,
             ]
@@ -89,7 +89,6 @@ class item_visibility extends external_api {
         }
 
         foreach ($params['items'] as $item) {
-
             $warning = [];
 
             $item = (object)$item;
@@ -140,7 +139,7 @@ class item_visibility extends external_api {
      * @return array of items with id, itemid, itemtype and visibility
      */
     protected static function get_category_tree($categoryid, $visibility) {
-        GLOBAL $DB;
+        global $DB;
 
         $items = [];
 

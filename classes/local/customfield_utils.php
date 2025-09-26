@@ -55,9 +55,10 @@ class customfield_utils {
     public static function get_sql_for_entity_customfields($type, $additionaljoins = [], $additionalfields = []) {
         $table = 'course';
         $customfieldhandler = \core_course\customfield\course_handler::create();
-        list($customfields, $customjoins) = self::get_fields_and_joins_for_cf_handler(
+        [$customfields, $customjoins] = self::get_fields_and_joins_for_cf_handler(
             $customfieldhandler,
-            'course');
+            'course'
+        );
         $joinsfields = array_values(array_merge($additionalfields, $customfields));
         $joins = array_values(array_merge($additionaljoins, $customjoins));
 
@@ -160,14 +161,16 @@ class customfield_utils {
             // Check if the field is marked as hidden for filters.
             if (!utils::is_field_hidden_filters($handler, $filter['shortname'])) {
                 if (!empty($filter['shortname'])) {
-                    $matchingfields = array_filter($allfields,
-                        function($f) use ($filter) {
+                    $matchingfields = array_filter(
+                        $allfields,
+                        function ($f) use ($filter) {
                             return strtolower($f->get('shortname')) == strtolower($filter['shortname']);
-                        });
+                        }
+                    );
                     if ($matchingfields) {
                         $matchingfield = reset($matchingfields);
                         $f = self::get_filter_from_field($matchingfield);
-                        list($where, $params) = $f->get_sql_filter($filter['value']);
+                        [$where, $params] = $f->get_sql_filter($filter['value']);
                         if ($where) {
                             $sqlwhere .= " AND $where ";
                             $sqlparams += $params;
@@ -196,7 +199,8 @@ class customfield_utils {
      * @throws \dml_exception
      * @throws \moodle_exception
      */
-    public static function get_records_from_handler(handler $handler,
+    public static function get_records_from_handler(
+        handler $handler,
         $filters,
         $limit,
         $offset,
@@ -212,7 +216,7 @@ class customfield_utils {
         $sqlorderby = $additionalsorts ? "ORDER BY $additionalsorts" : "";
         // Courses or modules which are invisible are last (to avoid gaps in pagination).
 
-        list($sqlwherefilter, $sqlparamsfilters) = self::get_sql_from_filters_handler($filters, $handler);
+        [$sqlwherefilter, $sqlparamsfilters] = self::get_sql_from_filters_handler($filters, $handler);
         $sqlwhere .= $sqlwherefilter;
         $sqlparams += $sqlparamsfilters;
         $sqllimit = $limit ? "LIMIT {$limit} OFFSET {$offset}" : "";

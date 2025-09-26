@@ -100,5 +100,4 @@ class behat_local_resourcelibrary extends behat_base {
             }
         }
     }
-
 }

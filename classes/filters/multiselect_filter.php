@@ -31,7 +31,6 @@ namespace local_resourcelibrary\filters;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class multiselect_filter extends baseselect_filter {
-
     /**
      * Check if this is the right type for this handler
      *
@@ -51,13 +50,15 @@ class multiselect_filter extends baseselect_filter {
      * @throws \coding_exception
      */
     public function add_to_form(\MoodleQuickForm &$mform) {
-        $choices = $this->_options;
+        $choices = $this->options;
         $elementname = $this->get_form_value_item_name();
-        $mform->addElement('searchableselector',
+        $mform->addElement(
+            'searchableselector',
             $elementname,
-            $this->_label,
+            $this->label,
             $choices,
-            ['multiple' => true]);
+            ['multiple' => true]
+        );
         $mform->setType($elementname, $this->get_param_type());
         base::add_to_form($mform);
     }
@@ -77,7 +78,7 @@ class multiselect_filter extends baseselect_filter {
      * @return mixed array filter data or false when filter not set
      */
     public function check_data($formdata) {
-        $field = $this->_name;
+        $field = $this->name;
 
         if (array_key_exists($field, (array) $formdata) && $formdata->$field !== '') {
             return ['value' => (string) $formdata->$field];
@@ -124,4 +125,3 @@ class multiselect_filter extends baseselect_filter {
         return empty($values) ? [null, null] : $comparisonarray;
     }
 }
-

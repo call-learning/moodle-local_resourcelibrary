@@ -34,8 +34,7 @@ use local_resourcelibrary\tests\local_resourcelibrary_testcase;
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class get_filtered_course_test extends local_resourcelibrary_testcase {
-
+final class get_filtered_course_test extends local_resourcelibrary_testcase {
     /**
      * Test that we can obtain a single row result for a set of fields for a course and course module
      * get_filtered_courses($ids = array(), $filters = array(), $limit = 0, $offset = 0, $sorting = null) {
@@ -43,7 +42,7 @@ class get_filtered_course_test extends local_resourcelibrary_testcase {
      * @covers \local_resourcelibrary\local_resourcelibrary_external::get_filtered_courses
      * @runTestInSeparateProcess
      */
-    public function test_get_filtered_courses_simple() {
+    public function test_get_filtered_courses_simple(): void {
         $dg = $this->getDataGenerator();
 
         $data = [
@@ -79,21 +78,21 @@ class get_filtered_course_test extends local_resourcelibrary_testcase {
      * @covers \local_resourcelibrary\local_resourcelibrary_external::get_filtered_courses
      * @runTestInSeparateProcess
      */
-    public function test_get_filtered_courses_single_criteria() {
+    public function test_get_filtered_courses_single_criteria(): void {
         $dg = $this->getDataGenerator();
 
         $fieldsdata = [
             [
                 'f1' => 'Text 1',
-                'f5' => 1
+                'f5' => 1,
             ],
             [
                 'f1' => 'Text 2',
-                'f5' => 2
+                'f5' => 2,
             ],
             [
                 'f1' => 'Text 2',
-                'f5' => 1
+                'f5' => 1,
             ],
         ];
 
@@ -131,6 +130,5 @@ class get_filtered_course_test extends local_resourcelibrary_testcase {
         ]);
         $this->assertCount(1, $coursesfound);
         $this->assertEquals($courses[1]->id, $coursesfound[0]['id']);
-
     }
 }

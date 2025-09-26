@@ -42,7 +42,6 @@ use local_resourcelibrary\local\utils;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class manage_customfields extends external_api {
-
     /**
      * Returns description of method parameters
      *
@@ -51,10 +50,14 @@ class manage_customfields extends external_api {
     public static function get_hidden_fields_filters_parameters() {
         return new external_function_parameters(
             [
-                'component' => new external_value(PARAM_ALPHANUMEXT,
-                    'customfield handler type course'),
-                'area' => new external_value(PARAM_ALPHANUMEXT,
-                    'customfield handler area'),
+                'component' => new external_value(
+                    PARAM_ALPHANUMEXT,
+                    'customfield handler type course'
+                ),
+                'area' => new external_value(
+                    PARAM_ALPHANUMEXT,
+                    'customfield handler area'
+                ),
             ]
         );
     }
@@ -102,10 +105,14 @@ class manage_customfields extends external_api {
     public static function hide_fields_filter_parameters() {
         return new external_function_parameters(
             [
-                'component' => new external_value(PARAM_ALPHANUMEXT,
-                    'customfield handler type course'),
-                'area' => new external_value(PARAM_ALPHANUMEXT,
-                    'customfield handler area'),
+                'component' => new external_value(
+                    PARAM_ALPHANUMEXT,
+                    'customfield handler type course'
+                ),
+                'area' => new external_value(
+                    PARAM_ALPHANUMEXT,
+                    'customfield handler area'
+                ),
                 'fieldshortnames' => new external_multiple_structure(
                     new external_value(PARAM_ALPHANUMEXT, 'ccustomfield shortname')
                 ),
@@ -149,10 +156,14 @@ class manage_customfields extends external_api {
     public static function show_fields_filter_parameters() {
         return new external_function_parameters(
             [
-                'component' => new external_value(PARAM_ALPHANUMEXT,
-                    'customfield handler type course'),
-                'area' => new external_value(PARAM_ALPHANUMEXT,
-                    'customfield handler area'),
+                'component' => new external_value(
+                    PARAM_ALPHANUMEXT,
+                    'customfield handler type course'
+                ),
+                'area' => new external_value(
+                    PARAM_ALPHANUMEXT,
+                    'customfield handler area'
+                ),
                 'fieldshortnames' => new external_multiple_structure(
                     new external_value(PARAM_ALPHANUMEXT, 'ccustomfield shortname')
                 ),
@@ -187,5 +198,4 @@ class manage_customfields extends external_api {
     public static function show_fields_filter_returns() {
         return null;
     }
-
 }

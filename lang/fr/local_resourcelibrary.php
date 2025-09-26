@@ -62,7 +62,7 @@ $string['resourcelibrary:changelockedcustomfields'] = 'Peut éditer les valeurs 
 $string['resourcelibrary:configurecustomfields'] = 'Peut configurer les champs de la  Pédagothèque numérique';
 $string['resourcelibrary:coursviewbaseurl'] = 'URL de base pour voir le cours.';
 $string['resourcelibrary:coursviewbaseurl:desc'] = 'URL de base pour voir le cours. La plupart du temps: ce sera /course/view.php.'
-    .' On rajoute l\'identifiant id qui sera celui du cours.';
+    . ' On rajoute l\'identifiant id qui sera celui du cours.';
 $string['resourcelibrary:editvalue'] = 'Peut éditer les valeurs des champs de la  Pédagothèque numérique';
 $string['resourcelibrary:hiddencoursesid'] = 'Identifiant des cours invisible sur le catalogue';
 $string['resourcelibrary:hiddencoursesid:desc'] = 'Liste des identifiants de cours séparés par des virgules qui n\'apparaîtront

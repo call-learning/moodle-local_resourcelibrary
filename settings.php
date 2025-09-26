@@ -25,27 +25,35 @@ defined('MOODLE_INTERNAL') || die;
 if ($hassiteconfig) {
     $settings = new admin_category('resourcelibrary', get_string('pluginname', 'local_resourcelibrary'));
 
-    $settings->add('resourcelibrary',
-        new admin_externalpage('resourcelibrary_course_customfield',
+    $settings->add(
+        'resourcelibrary',
+        new admin_externalpage(
+            'resourcelibrary_course_customfield',
             new lang_string('resourcelibrary_course_customfield', 'local_resourcelibrary'),
             $CFG->wwwroot . '/local/resourcelibrary/coursefields.php',
             ['local/resourcelibrary:manage']
         )
     );
-    $mainsettings = new admin_settingpage('resourcelibrarymainsettings',
+    $mainsettings = new admin_settingpage(
+        'resourcelibrarymainsettings',
         get_string('resourcelibrarymainsettings', 'local_resourcelibrary'),
         ['local/resourcelibrary:manage'],
-        empty($CFG->enableresourcelibrary));
+        empty($CFG->enableresourcelibrary)
+    );
 
-    $mainsettings->add(new admin_setting_configtext('local_resourcelibrary/hiddencoursesid',
+    $mainsettings->add(new admin_setting_configtext(
+        'local_resourcelibrary/hiddencoursesid',
         get_string('resourcelibrary:hiddencoursesid', 'local_resourcelibrary'),
         get_string('resourcelibrary:hiddencoursesid:desc', 'local_resourcelibrary'),
-        ''));
+        ''
+    ));
 
-    $mainsettings->add(new admin_setting_configtext('local_resourcelibrary/courseviewbaseurl',
+    $mainsettings->add(new admin_setting_configtext(
+        'local_resourcelibrary/courseviewbaseurl',
         get_string('resourcelibrary:courseviewbaseurl', 'local_resourcelibrary'),
         get_string('resourcelibrary:courseviewbaseurl:desc', 'local_resourcelibrary'),
-        '/course/view.php'));
+        '/course/view.php'
+    ));
 
     $samplemenutext = '';
     $stringmanager = get_string_manager();
@@ -54,17 +62,20 @@ if ($hassiteconfig) {
         $samplemenutext .= \html_writer::tag('p', "\"{$text}\"|{$lang}\n");
     }
     $mainsettings->add(
-        new admin_setting_configtextarea('local_resourcelibrary/menutextoverride',
+        new admin_setting_configtextarea(
+            'local_resourcelibrary/menutextoverride',
             get_string('resourcelibrary:menutextoverride', 'local_resourcelibrary'),
             get_string('resourcelibrary:menutextoverride:desc', 'local_resourcelibrary', $samplemenutext),
             ''
         )
     );
 
-    $mainsettings->add(new admin_setting_configcheckbox('local_resourcelibrary/replacecourseindex',
+    $mainsettings->add(new admin_setting_configcheckbox(
+        'local_resourcelibrary/replacecourseindex',
         get_string('resourcelibrary:replacecourseindex', 'local_resourcelibrary'),
         get_string('resourcelibrary:replacecourseindex:desc', 'local_resourcelibrary'),
-        true));
+        true
+    ));
 
 
     $settings->add('resourcelibrary', $mainsettings);
@@ -73,10 +84,12 @@ if ($hassiteconfig) {
         $ADMIN->add('courses', $settings); // Add it to the course menu.
     }
     // Create a global Advanced Feature Toggle.
-    $enableoption = new admin_setting_configcheckbox('enableresourcelibrary',
+    $enableoption = new admin_setting_configcheckbox(
+        'enableresourcelibrary',
         new lang_string('enableresourcelibrary', 'local_resourcelibrary'),
         new lang_string('enableresourcelibrary', 'local_resourcelibrary'),
-        1);
+        1
+    );
     $enableoption->set_updatedcallback('local_resourcelibrary_enable_disable_plugin_callback');
 
     $optionalsubsystems = $ADMIN->locate('optionalsubsystems');

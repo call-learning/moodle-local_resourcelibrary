@@ -95,8 +95,7 @@ abstract class local_resourcelibrary_testcase extends advanced_testcase {
                 'configdata' => ['startyear' => 2000, 'endyear' => 3000, 'includetime' => 1],
                 'area' => $area,
                 'component' => $component,
-            ]
-        );
+            ]);
         if (utils::is_multiselect_installed()) {
             $generator->create_field([
                     'name' => 'Field 4',
@@ -106,8 +105,7 @@ abstract class local_resourcelibrary_testcase extends advanced_testcase {
                     'configdata' => ['options' => "a\nb\nc"],
                     'area' => $area,
                     'component' => $component,
-                ]
-            );
+                ]);
         }
         $generator->create_field(
             [

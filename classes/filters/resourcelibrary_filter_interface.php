@@ -31,7 +31,6 @@ namespace local_resourcelibrary\filters;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 interface resourcelibrary_filter_interface {
-
     /**
      * Returns the condition to be used with SQL where
      *
@@ -94,5 +93,4 @@ interface resourcelibrary_filter_interface {
      * Operator: Greater than.
      */
     const OPERATOR_GREATERTHAN = 8;
-
 }

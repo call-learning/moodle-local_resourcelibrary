@@ -32,7 +32,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class behat_local_resourcelibrary_generator extends behat_generator_base {
-
     /**
      * Get all entities that can be created
      *
@@ -64,9 +63,14 @@ class behat_local_resourcelibrary_generator extends behat_generator_base {
      */
     protected function preprocess_field($elementdata) {
         global $DB;
-        $elementdata['categoryid'] = $DB->get_field('customfield_category', 'id',
+        $elementdata['categoryid'] = $DB->get_field(
+            'customfield_category',
+            'id',
             ['name' => trim($elementdata['customfieldcategory']),
-                'area' => $elementdata['area'], 'component' => $elementdata['component'], ]);
+            'area' => $elementdata['area'],
+            'component' => $elementdata['component'],
+            ]
+        );
         return $elementdata;
     }
 
@@ -79,8 +83,11 @@ class behat_local_resourcelibrary_generator extends behat_generator_base {
      */
     protected function get_fieldid_id($shortname) {
         global $DB;
-        return $DB->get_field('customfield_category', 'id',
-            ['shortname' => trim($shortname)]);
+        return $DB->get_field(
+            'customfield_category',
+            'id',
+            ['shortname' => trim($shortname)]
+        );
     }
 
     /**
@@ -96,15 +103,17 @@ class behat_local_resourcelibrary_generator extends behat_generator_base {
             'customfield_field',
             'id',
             [
-                'shortname' => trim($elementdata['fieldshortname'])
+                'shortname' => trim($elementdata['fieldshortname']),
             ]
         );
         $field = core_customfield\field_controller::create($elementdata['fieldid']);
-        $courseid = $DB->get_field('course', 'id',
-            ['shortname' => trim($elementdata['courseshortname'])]);
+        $courseid = $DB->get_field(
+            'course',
+            'id',
+            ['shortname' => trim($elementdata['courseshortname'])]
+        );
         $elementdata['instanceid'] = $courseid;
 
         return $elementdata;
     }
-
 }

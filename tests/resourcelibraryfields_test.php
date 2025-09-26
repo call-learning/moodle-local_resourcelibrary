@@ -45,7 +45,6 @@ require_once($CFG->dirroot . '/backup/util/includes/restore_includes.php');
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class resourcelibraryfields_test extends local_resourcelibrary_testcase {
-
     /**
      * Test creating course with resourcelibrary custom fields and retrieving them
      * @covers \delete_course
@@ -119,8 +118,14 @@ final class resourcelibraryfields_test extends local_resourcelibrary_testcase {
         $backuptempdir = make_backup_temp_directory('');
         $packer = get_file_packer('application/vnd.moodle.backup');
 
-        $bc = new backup_controller(backup::TYPE_1COURSE, $courseid, backup::FORMAT_MOODLE, backup::INTERACTIVE_NO,
-            backup::MODE_GENERAL, $userid);
+        $bc = new backup_controller(
+            backup::TYPE_1COURSE,
+            $courseid,
+            backup::FORMAT_MOODLE,
+            backup::INTERACTIVE_NO,
+            backup::MODE_GENERAL,
+            $userid
+        );
         $bc->execute_plan();
 
         $results = $bc->get_results();

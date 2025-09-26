@@ -36,7 +36,6 @@ use core_privacy\local\request\writer;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class provider implements \core_privacy\local\metadata\provider, user_preference_provider {
-
     /**
      * Returns meta-data information about the resourcelibrary plugin.
      *
@@ -46,8 +45,10 @@ class provider implements \core_privacy\local\metadata\provider, user_preference
     public static function get_metadata(collection $collection): collection {
         $collection->add_user_preference('local_resourcelibrary_sort_preference', 'privacy:metadata:resourcelibrarysortpreference');
         $collection->add_user_preference('local_resourcelibrary_view_preference', 'privacy:metadata:resourcelibraryviewpreference');
-        $collection->add_user_preference('local_resourcelibrary_user_paging_preference',
-            'privacy:metadata:resourcelibrarypagingpreference');
+        $collection->add_user_preference(
+            'local_resourcelibrary_user_paging_preference',
+            'privacy:metadata:resourcelibrarypagingpreference'
+        );
         return $collection;
     }
     /**
@@ -58,25 +59,32 @@ class provider implements \core_privacy\local\metadata\provider, user_preference
     public static function export_user_preferences(int $userid) {
         $preference = get_user_preferences('local_resourcelibrary_user_sort_preference', null, $userid);
         if (isset($preference)) {
-            writer::export_user_preference('local_resourcelibrary',
-                'local_resourcelibrary_user_sort_preference', get_string($preference, 'local_resourcelibrary'),
-                get_string('privacy:metadata:resourcelibrarysortpreference', 'local_resourcelibrary'));
+            writer::export_user_preference(
+                'local_resourcelibrary',
+                'local_resourcelibrary_user_sort_preference',
+                get_string($preference, 'local_resourcelibrary'),
+                get_string('privacy:metadata:resourcelibrarysortpreference', 'local_resourcelibrary')
+            );
         }
 
         $preference = get_user_preferences('local_resourcelibrary_user_view_preference', null, $userid);
         if (isset($preference)) {
-            writer::export_user_preference('local_resourcelibrary',
+            writer::export_user_preference(
+                'local_resourcelibrary',
                 'local_resourcelibrary_user_view_preference',
                 get_string($preference, 'local_resourcelibrary'),
-                get_string('privacy:metadata:resourcelibraryviewpreference', 'local_resourcelibrary'));
+                get_string('privacy:metadata:resourcelibraryviewpreference', 'local_resourcelibrary')
+            );
         }
 
         $preference = get_user_preferences('local_resourcelibrary_user_paging_preference', null, $userid);
         if (isset($preference)) {
-            \core_privacy\local\request\writer::export_user_preference('local_resourcelibrary',
+            \core_privacy\local\request\writer::export_user_preference(
+                'local_resourcelibrary',
                 'local_resourcelibrary_user_paging_preference',
                 $preference,
-                get_string('privacy:metadata:resourcelibrarypagingpreference', 'local_resourcelibrary'));
+                get_string('privacy:metadata:resourcelibrarypagingpreference', 'local_resourcelibrary')
+            );
         }
     }
 }

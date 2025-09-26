@@ -40,8 +40,8 @@ abstract class basetext_filter extends base {
      */
     public function add_to_form(\MoodleQuickForm &$mform) {
         $elementname = $this->get_form_value_item_name();
-        $mform->addElement( 'text', $elementname, $this->_label, 'size=' . (int)
-            $this->_field->get_configdata_property('displaysize'));
+        $mform->addElement('text', $elementname, $this->label, 'size=' . (int)
+            $this->field->get_configdata_property('displaysize'));
         $mform->setType($elementname, $this->get_param_type());
         parent::add_to_form($mform);
     }
@@ -61,7 +61,7 @@ abstract class basetext_filter extends base {
      * @return mixed array filter data or false when filter not set
      */
     public function check_data($formdata) {
-        $field = $this->_name;
+        $field = $this->name;
         if (array_key_exists($field, (array) $formdata) && $formdata->$field !== '') {
             return ['value' => (string) $formdata->$field];
         }

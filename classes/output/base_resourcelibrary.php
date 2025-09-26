@@ -40,7 +40,6 @@ use templatable;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 abstract class base_resourcelibrary implements renderable, templatable {
-
     /**
      * Constants for the user preferences view options
      */
@@ -122,9 +121,10 @@ abstract class base_resourcelibrary implements renderable, templatable {
     public function __construct(
         $sort = self::SORT_FULLNAME_ASC,
         $view = self::VIEW_CARD,
-        $paging = self::PAGING_12) {
+        $paging = self::PAGING_12
+    ) {
 
-        list($this->sortcolumn, $this->sortorder) = explode(',', $sort);
+        [$this->sortcolumn, $this->sortorder] = explode(',', $sort);
         $this->view = $view;
         $this->paging = $paging;
         $config = get_config('local_resourcelibrary');
@@ -199,8 +199,13 @@ abstract class base_resourcelibrary implements renderable, templatable {
      */
     public function get_filters_content($handler) {
         global $_GET;
-        $filterform = new filter_form(null, ['handler' => $handler],
-            'post', '', ['class' => 'resourcelibrary-filters-form p-0']);
+        $filterform = new filter_form(
+            null,
+            ['handler' => $handler],
+            'post',
+            '',
+            ['class' => 'resourcelibrary-filters-form p-0']
+        );
 
         $filterscontent = $filterform->render();
         return $filterscontent;

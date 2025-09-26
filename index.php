@@ -72,7 +72,7 @@ if ($PAGE->user_allowed_editing()) {
         $url = new moodle_url($pageurl, $params);
         $editactionstring = !$edit ? get_string('turneditingon') : get_string('turneditingoff');
         $editbutton = $OUTPUT->single_button($url, $editactionstring);
-        $PAGE->set_button( $editbutton);
+        $PAGE->set_button($editbutton);
     }
 } else {
     $USER->editing = $edit = 0;

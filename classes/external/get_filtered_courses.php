@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -14,6 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
 namespace local_resourcelibrary\external;
 
 use context_course;
@@ -91,12 +91,17 @@ class get_filtered_courses extends external_api {
         $handler = \core_course\customfield\course_handler::create();
         $sortsql = externalhelper::get_sort_options_sql($sorting, array_keys($additionalfields));
 
-        $courses = customfield_utils::get_records_from_handler($handler, $filters, 0, 0,
+        $courses = customfield_utils::get_records_from_handler(
+            $handler,
+            $filters,
+            0,
+            0,
             ['LEFT JOIN {course_categories} ccat ON e.category = ccat.id'],
             $additionalfields,
             $sqlwhere,
             $sqlparams,
-            $sortsql);
+            $sortsql
+        );
 
         // Create return value.
         $coursesinfo = [];
@@ -110,7 +115,6 @@ class get_filtered_courses extends external_api {
             $invisiblecourseidlist = array_merge($invisiblecourseidlist, $managementhiddenlist);
         }
         foreach ($courses as $course) {
-
             if (in_array($course->id, $invisiblecourseidlist)) {
                 continue; // Skip invisible courses.
             }
@@ -140,7 +144,6 @@ class get_filtered_courses extends external_api {
             $courseinfo['customfields'] = [];
             $courseinfo['resourcelibraryfields'] = [];
             $coursesinfo[] = $courseinfo;
-
         }
 
         return array_slice($coursesinfo, $offset, $limit ? $limit : null);
@@ -151,7 +154,7 @@ class get_filtered_courses extends external_api {
      * @return array of course ids that are hidden.
      */
     public static function get_hidden_items() {
-        GLOBAL $DB;
+        global $DB;
         $sql = "SELECT itemid FROM {local_resourcelibrary} WHERE itemtype = :itemtype AND visibility = :visibility";
         $params = ['itemtype' => utils::LOCAL_RESOURCELIBRARY_ITEMTYPE_COURSE, 'visibility' => utils::LOCAL_RESOURCELIBRARY_ITEM_HIDDEN];
         $records = $DB->get_records_sql($sql, $params);
@@ -176,23 +179,40 @@ class get_filtered_courses extends external_api {
                         'id' => new external_value(PARAM_INT, 'course id'),
                         'shortname' => new external_value(PARAM_TEXT, 'course short name'),
                         'parentid' => new external_value(PARAM_INT, 'category id'),
-                        'parentsortorder' => new external_value(PARAM_INT,
-                            'sort order into the category', VALUE_OPTIONAL),
+                        'parentsortorder' => new external_value(
+                            PARAM_INT,
+                            'sort order into the category',
+                            VALUE_OPTIONAL
+                        ),
                         'fullname' => new external_value(PARAM_TEXT, 'full name'),
                         'idnumber' => new external_value(PARAM_RAW, 'id number', VALUE_OPTIONAL),
                         'image' => new external_value(PARAM_RAW, 'course image'),
-                        'startdate' => new external_value(PARAM_INT,
-                            'timestamp when the course start'),
-                        'enddate' => new external_value(PARAM_INT,
-                            'timestamp when the course end'),
-                        'visible' => new external_value(PARAM_INT,
-                            '1: available to student, 0:not available', VALUE_OPTIONAL),
-                        'timecreated' => new external_value(PARAM_INT,
-                            'timestamp when the course have been created', VALUE_OPTIONAL),
-                        'timemodified' => new external_value(PARAM_INT,
-                            'timestamp when the course have been modified', VALUE_OPTIONAL),
+                        'startdate' => new external_value(
+                            PARAM_INT,
+                            'timestamp when the course start'
+                        ),
+                        'enddate' => new external_value(
+                            PARAM_INT,
+                            'timestamp when the course end'
+                        ),
+                        'visible' => new external_value(
+                            PARAM_INT,
+                            '1: available to student, 0:not available',
+                            VALUE_OPTIONAL
+                        ),
+                        'timecreated' => new external_value(
+                            PARAM_INT,
+                            'timestamp when the course have been created',
+                            VALUE_OPTIONAL
+                        ),
+                        'timemodified' => new external_value(
+                            PARAM_INT,
+                            'timestamp when the course have been modified',
+                            VALUE_OPTIONAL
+                        ),
                         'viewurl' => new external_value(PARAM_URL, 'The course URL'),
-                    ], 'course'
+                    ],
+                    'course'
                 )
             );
     }

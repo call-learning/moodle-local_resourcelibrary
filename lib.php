@@ -49,11 +49,17 @@ function local_resourcelibrary_extend_navigation(global_navigation $nav) {
     if (empty($CFG->enableresourcelibrary)) {
         return;
     }
-    list($urltext, $url) = \local_resourcelibrary\local\utils::get_catalog_url();
+    [$urltext, $url] = \local_resourcelibrary\local\utils::get_catalog_url();
     $mycoursesnode = $nav->find('mycourses', null);
     if ($mycoursesnode) {
-        $node = $nav->create($urltext, $url, navigation_node::NODETYPE_LEAF, null, 'resourcelibrary',
-            new pix_icon('i/course', 'resourcelibrary'));
+        $node = $nav->create(
+            $urltext,
+            $url,
+            navigation_node::NODETYPE_LEAF,
+            null,
+            'resourcelibrary',
+            new pix_icon('i/course', 'resourcelibrary')
+        );
         $node->showinflatnavigation = true;
         $nav->add_node($node, 'mycourses');
     }

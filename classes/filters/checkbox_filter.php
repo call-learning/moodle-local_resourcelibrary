@@ -31,7 +31,6 @@ namespace local_resourcelibrary\filters;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class checkbox_filter extends base {
-
     /**
      * Check if this is the right type for this handler
      *
@@ -53,8 +52,8 @@ class checkbox_filter extends base {
      */
     public function add_to_form(\MoodleQuickForm &$mform) {
         $elementname = $this->get_form_value_item_name();
-        $mform->addElement( 'checkbox', $elementname, $this->_label);
-        $mform->setDefault($elementname, $this->_field->get_configdata_property('checkbydefault'));
+        $mform->addElement('checkbox', $elementname, $this->label);
+        $mform->setDefault($elementname, $this->field->get_configdata_property('checkbydefault'));
         $mform->setType($elementname, $this->get_param_type());
         parent::add_to_form($mform);
     }
@@ -75,9 +74,9 @@ class checkbox_filter extends base {
      * @return mixed array filter data or false when filter not set
      */
     public function check_data($formdata) {
-        $field = $this->_name;
+        $field = $this->name;
 
-        if (array_key_exists($field,  (array) $formdata) && $formdata->$field !== '') {
+        if (array_key_exists($field, (array) $formdata) && $formdata->$field !== '') {
             return ['value' => (string) $formdata->$field];
         }
 
@@ -98,4 +97,3 @@ class checkbox_filter extends base {
         return empty($data) ? [null, null] : ["$field=:$name", [$name => $data]];
     }
 }
-
