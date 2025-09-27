@@ -27,8 +27,9 @@
 namespace local_resourcelibrary\external;
 
 use core_course\external\course_summary_exporter;
-use renderer_base;
+use moodle_exception;
 use moodle_url;
+use renderer_base;
 
 /**
  * Class for exporting a course summary from an stdClass.
@@ -41,38 +42,6 @@ class course_summary_simple_exporter extends course_summary_exporter {
      * COURSE_VIEW_DEFAULT_URL
      */
     const COURSE_VIEW_DEFAULT_URL = '/course/view.php';
-
-    /**
-     * Define related context
-     *
-     * @return array|string[]
-     */
-    protected static function define_related() {
-        // We cache the context so it does not need to be retrieved from the course.
-        return ['context' => '\\context', 'isfavourite' => 'bool?'];
-    }
-
-    /**
-     * Get additional values
-     *
-     * @param renderer_base $output
-     * @return array
-     * @throws \moodle_exception
-     */
-    protected function get_other_values(renderer_base $output) {
-        $courseimage = self::get_course_image($this->data);
-        if (!$courseimage) {
-            $courseimage = $output->get_generated_image_for_id($this->data->id);
-        }
-        $courseviewurl = get_config('local_resourcelibrary', 'courseviewbaseurl');
-        if (!$courseviewurl) {
-            $courseviewurl = self::COURSE_VIEW_DEFAULT_URL;
-        }
-        return [
-            'viewurl' => (new moodle_url($courseviewurl, ['id' => $this->data->id]))->out(false),
-            'image' => $courseimage,
-        ];
-    }
 
     /**
      * Properties from DB
@@ -112,18 +81,6 @@ class course_summary_simple_exporter extends course_summary_exporter {
     }
 
     /**
-     * Get the formatting parameters for the summary.
-     *
-     * @return array
-     */
-    protected function get_format_parameters_for_summary() {
-        return [
-            'component' => 'course',
-            'filearea' => 'summary',
-        ];
-    }
-
-    /**
      * Additional properties
      *
      * @return array|array[]
@@ -136,6 +93,50 @@ class course_summary_simple_exporter extends course_summary_exporter {
             'image' => [
                 'type' => PARAM_RAW,
             ],
+        ];
+    }
+
+    /**
+     * Define related context
+     *
+     * @return array|string[]
+     */
+    protected static function define_related() {
+        // We cache the context so it does not need to be retrieved from the course.
+        return ['context' => '\\context', 'isfavourite' => 'bool?'];
+    }
+
+    /**
+     * Get additional values
+     *
+     * @param renderer_base $output
+     * @return array
+     * @throws moodle_exception
+     */
+    protected function get_other_values(renderer_base $output) {
+        $courseimage = self::get_course_image($this->data);
+        if (!$courseimage) {
+            $courseimage = $output->get_generated_image_for_id($this->data->id);
+        }
+        $courseviewurl = get_config('local_resourcelibrary', 'courseviewbaseurl');
+        if (!$courseviewurl) {
+            $courseviewurl = self::COURSE_VIEW_DEFAULT_URL;
+        }
+        return [
+            'viewurl' => (new moodle_url($courseviewurl, ['id' => $this->data->id]))->out(false),
+            'image' => $courseimage,
+        ];
+    }
+
+    /**
+     * Get the formatting parameters for the summary.
+     *
+     * @return array
+     */
+    protected function get_format_parameters_for_summary() {
+        return [
+            'component' => 'course',
+            'filearea' => 'summary',
         ];
     }
 }

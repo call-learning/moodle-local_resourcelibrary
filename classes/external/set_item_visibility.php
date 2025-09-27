@@ -23,13 +23,15 @@
  */
 
 namespace local_resourcelibrary\external;
+
+use context_system;
 use core_external\external_api;
 use core_external\external_function_parameters;
 use core_external\external_multiple_structure;
 use core_external\external_single_structure;
 use core_external\external_value;
 use core_external\external_warnings;
-use local_resourcelibrary\local\utils;
+use local_resourcelibrary\item_type;
 
 /**
  * Class used for Ajax Management of the visibility of categories and courses
@@ -37,14 +39,14 @@ use local_resourcelibrary\local\utils;
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class item_visibility extends external_api {
+class set_item_visibility extends external_api {
     /**
      * Returns description of method parameters
      *
      *
      * @return external_function_parameters
      */
-    public static function set_items_visibility_parameters() {
+    public static function execute_parameters() {
         return new external_function_parameters(
             [
                 'items' => new external_multiple_structure(
@@ -63,13 +65,14 @@ class item_visibility extends external_api {
 
     /**
      * Set the visibility status for items in the catalogue.
+     *
      * @param array $items
      */
-    public static function set_items_visibility(array $items) {
+    public static function execute(array $items) {
         global $DB;
 
         $params = self::validate_parameters(
-            self::set_items_visibility_parameters(),
+            self::execute_parameters(),
             [
                 'items' => $items,
             ]
@@ -79,37 +82,40 @@ class item_visibility extends external_api {
         $returneditems = [];
 
         // Check permissions for updating the catalogue.
-        $context = \context_system::instance();
+        $context = context_system::instance();
+        self::validate_context($context);
         if (!has_capability('local/resourcelibrary:setitemsvisibility', $context)) {
             $warnings[] = [
                 'itemid' => 0,
                 'warningcode' => 'settingvisibilitynotallowed',
                 'message' => get_string('settingvisibilitynotallowed', 'local_resourcelibrary'),
             ];
+            return $warnings;
         }
 
         foreach ($params['items'] as $item) {
             $warning = [];
 
-            $item = (object)$item;
+            $item = (object) $item;
             $item->timemodified = time();
 
             // Check if the item exists.
-            $sql = "SELECT id, visibility FROM {local_resourcelibrary} WHERE itemid = :itemid and itemtype = :itemtype";
+            $sql = "SELECT id, visibility FROM {local_resourcelibrary} WHERE itemid = :itemid AND itemtype = :itemtype";
             $params = ['itemid' => $item->itemid, 'itemtype' => $item->itemtype];
             $rlrecord = $DB->get_record_sql($sql, $params);
             if ($rlrecord) {
+                $item->id = $id ?? $rlrecord->id;
                 $DB->update_record('local_resourcelibrary', $item);
             } else {
                 $item->id = $DB->insert_record('local_resourcelibrary', $item);
             }
             // If the item is a category, we need to set the visibility of all courses and categories in this category.
-            if ($item->itemtype == utils::LOCAL_RESOURCELIBRARY_ITEMTYPE_CATEGORY) {
+            if ($item->itemtype == item_type::CATEGORY->value) {
                 $treeitems = self::get_category_tree($item->itemid, $item->visibility);
                 foreach ($treeitems as $treeitem) {
-                    $treeitem = (object)$treeitem;
+                    $treeitem = (object) $treeitem;
                     $treeitem->timemodified = time();
-                    $sql = "SELECT id, visibility FROM {local_resourcelibrary} WHERE itemid = :itemid and itemtype = :itemtype";
+                    $sql = "SELECT id, visibility FROM {local_resourcelibrary} WHERE itemid = :itemid AND itemtype = :itemtype";
                     $params = ['itemid' => $treeitem->itemid, 'itemtype' => $treeitem->itemtype];
                     $rlrecord = $DB->get_record_sql($sql, $params);
                     if ($rlrecord) {
@@ -132,6 +138,27 @@ class item_visibility extends external_api {
     }
 
     /**
+     * Returns description of method result value
+     *
+     * @return external_single_structure
+     */
+    public static function execute_returns() {
+        return new external_single_structure([
+            'warnings' => new external_warnings(),
+            'returneditems' => new external_multiple_structure(
+                new external_single_structure(
+                    [
+                        'id' => new external_value(PARAM_INT, 'id'),
+                        'itemid' => new external_value(PARAM_INT, 'item ID'),
+                        'itemtype' => new external_value(PARAM_INT, 'item type'),
+                        'visibility' => new external_value(PARAM_INT, 'visibility status'),
+                    ]
+                )
+            ),
+        ]);
+    }
+
+    /**
      * Recursive function the create an array of catalogue items from a category its subcategories and all courses within.
      *
      * @param int $categoryid
@@ -148,7 +175,7 @@ class item_visibility extends external_api {
         foreach ($courses as $course) {
             $items[] = [
                 'itemid' => $course->id,
-                'itemtype' => utils::LOCAL_RESOURCELIBRARY_ITEMTYPE_COURSE,
+                'itemtype' => item_type::COURSE->value,
                 'visibility' => $visibility,
             ];
         }
@@ -166,31 +193,10 @@ class item_visibility extends external_api {
         // Add this category to the list of items.
         $items[] = [
             'itemid' => $categoryid,
-            'itemtype' => utils::LOCAL_RESOURCELIBRARY_ITEMTYPE_CATEGORY,
+            'itemtype' => item_type::CATEGORY->value,
             'visibility' => $visibility,
         ];
 
         return $items;
-    }
-
-    /**
-     * Returns description of method result value
-     *
-     * @return external_single_structure
-     */
-    public static function set_items_visibility_returns() {
-        return new external_single_structure([
-            'warnings' => new external_warnings(),
-            'returneditems' => new external_multiple_structure(
-                new external_single_structure(
-                    [
-                        'id' => new external_value(PARAM_INT, 'id'),
-                        'itemid' => new external_value(PARAM_INT, 'item ID'),
-                        'itemtype' => new external_value(PARAM_INT, 'item type'),
-                        'visibility' => new external_value(PARAM_INT, 'visibility status'),
-                    ]
-                )
-            ),
-        ]);
     }
 }

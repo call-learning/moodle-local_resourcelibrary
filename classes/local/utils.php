@@ -36,31 +36,6 @@ use Matrix\Exception;
  */
 class utils {
     /**
-     * Item type is a category
-     * @var int
-     */
-    public const LOCAL_RESOURCELIBRARY_ITEMTYPE_CATEGORY  = 1;
-
-    /**
-     * Item type is a course
-     * @var int
-     */
-    public const LOCAL_RESOURCELIBRARY_ITEMTYPE_COURSE  = 2;
-
-
-    /**
-     * Item type is visible
-     * @var int
-     */
-    public const LOCAL_RESOURCELIBRARY_ITEM_VISIBLE  = 0;
-
-    /**
-     * Item type is hidden
-     * @var int
-     */
-    public const LOCAL_RESOURCELIBRARY_ITEM_HIDDEN  = 1;
-
-    /**
      * @var array $hiddenfields
      */
     private static $hiddenfields = null;
@@ -128,7 +103,7 @@ class utils {
      * @return array
      * @throws \coding_exception
      */
-    public static function get_hidden_fields_filters($handler) {
+    public static function get_hidden_fields_filters($handler): array {
         if (self::$hiddenfields) {
             return self::$hiddenfields;
         }

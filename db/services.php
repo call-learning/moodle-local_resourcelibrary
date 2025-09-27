@@ -36,8 +36,8 @@ $functions = [
         'loginrequired' => false, // Global filter course page is accessible without being logged in.
     ],
     'local_resourcelibrary_hide_fields_filters' => [
-        'classname' => \local_resourcelibrary\external\manage_customfields::class,
-        'methodname' => 'hide_fields_filter',
+        'classname' => \local_resourcelibrary\external\hide_fields_filter::class,
+        'methodname' => 'execute',
         'description' => 'Hide a set of fields from the filters',
         'type' => 'write',
         'capabilities' => 'local/resourcelibrary:configurecustomfields',
@@ -45,8 +45,8 @@ $functions = [
         'loginrequired' => true,
     ],
     'local_resourcelibrary_show_fields_filters' => [
-        'classname' => \local_resourcelibrary\external\manage_customfields::class,
-        'methodname' => 'show_fields_filter',
+        'classname' => \local_resourcelibrary\external\show_field_filter::class,
+        'methodname' => 'execute',
         'description' => 'Make sure that the given set of fields will show in the filters',
         'type' => 'write',
         'capabilities' => 'local/resourcelibrary:configurecustomfields',
@@ -54,8 +54,8 @@ $functions = [
         'loginrequired' => true,
     ],
     'local_resourcelibrary_get_hidden_fields_filters' => [
-        'classname' => \local_resourcelibrary\external\manage_customfields::class,
-        'methodname' => 'get_hidden_fields_filters',
+        'classname' => \local_resourcelibrary\external\get_hidden_fields::class,
+        'methodname' => 'execute',
         'description' => 'Get the list of filters that are hidden',
         'type' => 'read',
         'capabilities' => 'local/resourcelibrary:configurecustomfields',
@@ -63,8 +63,8 @@ $functions = [
         'loginrequired' => true,
     ],
     'local_resourcelibrary_set_items_visibility' => [
-        'classname' => \local_resourcelibrary\external\item_visibility::class,
-        'methodname' => 'set_items_visibility',
+        'classname' => \local_resourcelibrary\external\set_item_visibility::class,
+        'methodname' => 'execute',
         'description' => 'Set the visibility status for items in the catalogue',
         'type' => 'write',
         'capabilities' => 'local/resourcelibrary:setitemsvisibility',
