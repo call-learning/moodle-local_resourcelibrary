@@ -19,6 +19,7 @@ namespace local_resourcelibrary\external;
 use context_course;
 use context_system;
 use core\exception\moodle_exception;
+use core_course\customfield\course_handler;
 use core_course_category;
 use core_external\external_api;
 use core_external\external_description;
@@ -26,9 +27,10 @@ use core_external\external_function_parameters;
 use core_external\external_multiple_structure;
 use core_external\external_single_structure;
 use core_external\external_value;
+use local_resourcelibrary\item_type;
+use local_resourcelibrary\item_visibility;
 use local_resourcelibrary\local\customfield_utils;
 use local_resourcelibrary\local\externalhelper;
-use local_resourcelibrary\local\utils;
 
 /**
  * Get filtered course content for the catalogue
@@ -52,6 +54,7 @@ class get_filtered_courses extends external_api {
      * Get courses
      *
      * All returned fields are available to the template.
+     *
      * @param int $categoryid
      * @param array $filters
      * @param int $limit
@@ -60,16 +63,27 @@ class get_filtered_courses extends external_api {
      * @return array of visible courses (whichever is the context)
      * @since Moodle 2.2
      */
-    public static function execute($categoryid = 0, $filters = [], $limit = 0, $offset = 0, $sorting = []) {
+    public static function execute(
+        int $categoryid = 0,
+        array $filters = [],
+        int $limit = 0,
+        int $offset = 0,
+        array $sorting = []
+    ) {
         global $CFG, $PAGE;
         require_once($CFG->dirroot . "/course/lib.php");
 
         // Validate parameter.
         $inparams = compact(['categoryid', 'filters', 'limit', 'offset', 'sorting']);
-        self::validate_parameters(self::execute_parameters(), $inparams);
+        [
+            'categoryid' => $categoryid,
+            'filters' => $filter,
+            'limit' => $limit,
+            'offset' => $offset,
+            'sorting' => $sorting
+        ] = self::validate_parameters(self::execute_parameters(), $inparams);
 
         // Retrieve courses.
-
         $sqlparams = [];
         // Simplification here: we return only visible courses, whichever is the context.
         $sqlwhere = " e.id != " . SITEID . " ";
@@ -88,7 +102,7 @@ class get_filtered_courses extends external_api {
         foreach ($coursefields as $cfield) {
             $additionalfields[$cfield] = "e.{$cfield} AS {$cfield}";
         }
-        $handler = \core_course\customfield\course_handler::create();
+        $handler = course_handler::create();
         $sortsql = externalhelper::get_sort_options_sql($sorting, array_keys($additionalfields));
 
         $courses = customfield_utils::get_records_from_handler(
@@ -151,12 +165,16 @@ class get_filtered_courses extends external_api {
 
     /**
      * Get the catalogue items that are hidden from the catalogue.
+     *
      * @return array of course ids that are hidden.
      */
     public static function get_hidden_items() {
         global $DB;
         $sql = "SELECT itemid FROM {local_resourcelibrary} WHERE itemtype = :itemtype AND visibility = :visibility";
-        $params = ['itemtype' => utils::LOCAL_RESOURCELIBRARY_ITEMTYPE_COURSE, 'visibility' => utils::LOCAL_RESOURCELIBRARY_ITEM_HIDDEN];
+        $params = [
+            'itemtype' => item_type::COURSE->value,
+            'visibility' => item_visibility::HIDDEN->value,
+        ];
         $records = $DB->get_records_sql($sql, $params);
         $hiddenitems = [];
         foreach ($records as $record) {

@@ -13,11 +13,6 @@ the fields might be confused later with other less specialised types of custom f
 Downside of this is that the field will not appear in the Course edit form if we don't use
 the "$CFG->customscripts" trick.
 
-The two custom fields are defined in the classes/customfields folder. They both derive
-from the same trait that will (common_cf_handler):
-* Define if we use categories or not
-* Edit/View capabilities 
-
 The custom fields are backed up using moodle 2 standard backup procedure and should be
 restored the same way.
 

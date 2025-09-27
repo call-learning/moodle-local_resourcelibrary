@@ -14,33 +14,24 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * Tests for resourcelibraryfields in courses and modules
- *
- * @package    local_resourcelibrary
- * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace local_resourcelibrary\external;
 
 use core_external\external_api;
 use local_resourcelibrary\tests\local_resourcelibrary_testcase;
 
 /**
- * Tests for externallib static functions
+ * Tests for get_filtered_course_test static functions
  *
  * @package    local_resourcelibrary
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @covers \local_resourcelibrary\local_resourcelibrary_external::get_filtered_courses
+ * @runTestsInSeparateProcesses
  */
 final class get_filtered_course_test extends local_resourcelibrary_testcase {
     /**
      * Test that we can obtain a single row result for a set of fields for a course and course module
-     * get_filtered_courses($ids = array(), $filters = array(), $limit = 0, $offset = 0, $sorting = null) {
-     *
-     * @covers \local_resourcelibrary\local_resourcelibrary_external::get_filtered_courses
-     * @runTestInSeparateProcess
+     * get_filtered_courses($ids = array(), $filters = array(), $limit = 0, $offset = 0, $sorting = null)
      */
     public function test_get_filtered_courses_simple(): void {
         $dg = $this->getDataGenerator();
@@ -74,9 +65,6 @@ final class get_filtered_course_test extends local_resourcelibrary_testcase {
     /**
      * Test that we can obtain a single row result for a set of fields for a course and course module
      * get_filtered_courses($ids = array(), $filters = array(), $limit = 0, $offset = 0, $sorting = null) {
-     *
-     * @covers \local_resourcelibrary\local_resourcelibrary_external::get_filtered_courses
-     * @runTestInSeparateProcess
      */
     public function test_get_filtered_courses_single_criteria(): void {
         $dg = $this->getDataGenerator();

@@ -16,6 +16,8 @@
 
 namespace local_resourcelibrary\observer;
 
+use local_resourcelibrary\item_type;
+use local_resourcelibrary\item_visibility;
 use local_resourcelibrary\local\utils;
 
 /**
@@ -53,17 +55,17 @@ class eventmanager {
             'visibility',
             [
                 'itemid' => $course->category,
-                'itemtype' => utils::LOCAL_RESOURCELIBRARY_ITEMTYPE_CATEGORY,
+                'itemtype' => item_type::CATEGORY->value,
             ]
         );
-        if ($categorystatus == utils::LOCAL_RESOURCELIBRARY_ITEM_HIDDEN) {
+        if ($categorystatus == item_visibility::HIDDEN->value) {
             // Add a record for the course.
             $DB->insert_record(
                 'local_resourcelibrary',
                 [
                     'itemid' => $course->id,
-                    'itemtype' => utils::LOCAL_RESOURCELIBRARY_ITEMTYPE_COURSE,
-                    'visibility' => utils::LOCAL_RESOURCELIBRARY_ITEM_HIDDEN,
+                    'itemtype' => item_type::COURSE->value,
+                    'visibility' => item_visibility::HIDDEN->value,
                 ]
             );
         }

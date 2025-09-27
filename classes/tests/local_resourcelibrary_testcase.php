@@ -137,6 +137,7 @@ abstract class local_resourcelibrary_testcase extends advanced_testcase {
      *
      * $param array $data associative array of fieldname => value to override the defaults
      *
+     * @param array $data
      * @return array
      */
     protected function get_simple_cf_data(array $data = []): array {

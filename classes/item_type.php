@@ -14,19 +14,19 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+namespace local_resourcelibrary;
+
 /**
- * Plugin to manage Resource Library
+ * Item types
  *
- * @link https://www.imt.fr/formation/academie-transformations-educatives/ressources-pedagogiques/pedagotheque-numerique/
  * @package    local_resourcelibrary
- * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
+ * @copyright  2020 CALL Learning 2020 - Laurent David
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+enum item_type: int {
+    // Item type is a category.
+    case CATEGORY = 1;
 
-defined('MOODLE_INTERNAL') || die();
-
-$plugin->version   = 2025090202; // The current plugin version (Date: YYYYMMDDXX).
-$plugin->requires  = 2019052000; // Requires this Moodle version.
-$plugin->release   = '3.0.0'; // No more specific course fields.
-$plugin->maturity  = MATURITY_RC;
-$plugin->component = 'local_resourcelibrary'; // Full name of the plugin (used for diagnostics).
+    // Item type is a course.
+    case COURSE = 2;
+}
