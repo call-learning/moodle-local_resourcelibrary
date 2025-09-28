@@ -1,7 +1,7 @@
 Resource Library Local plugin
 =============================
 
-[![Build Status](https://travis-ci.org/call-learning/moodle-local_resourcelibrary.svg?branch=master)](https://travis-ci.org/call-learning/moodle-local_resourcelibrary)
+[![Moodle Plugin CI](https://github.com/call-learning/moodle-local_resourcelibrary/actions/workflows/main.yml/badge.svg?branch=MOODLE_405_STABLE)](https://github.com/call-learning/moodle-local_resourcelibrary/actions/workflows/main.yml)
 
 This plugin adds new customs fields (using the new customfield API in Moodle 3.7) to Courses and Activities so they can be searched and classified.
 The customfields are then used to filter courses and activities on a catalog page.
