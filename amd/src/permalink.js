@@ -29,7 +29,7 @@ let catalogURL = null;
 export const setupCopyLink = (triggerid, targetid) => {
     const triggerElement = document.querySelector(`#${triggerid}`);
     if (triggerElement) {
-        triggerElement.addEventListener('click', async () => {
+        triggerElement.addEventListener('click', async() => {
             const target = document.getElementById(targetid);
             if (target) {
                 target.select();
@@ -52,7 +52,7 @@ export const setupCopyLink = (triggerid, targetid) => {
 export const init = () => {
     catalogURL = new URL(window.location.href);
 
-    document.addEventListener('resourcelibrary-filters-change', async (e)=> {
+    document.addEventListener('resourcelibrary-filters-change', async(e)=> {
         const filterarray = e.detail;
 
         // Reset search params for filters
@@ -74,16 +74,12 @@ export const init = () => {
             }
         });
 
-        try {
-            Templates.render('local_resourcelibrary/permalink', {
-                url: catalogURL.toString()
-            }).then(async (html, js) => {
-                Templates.replaceNodeContents('#resourcelibrary-permalink', html, js);
-            });
-
-        } catch (error) {
-            Notification.exception(error);
-        }
+        Templates.render('local_resourcelibrary/permalink', {
+            url: catalogURL.toString()
+        }).then(async(html, js) => {
+            Templates.replaceNodeContents('#resourcelibrary-permalink', html, js);
+            return;
+        }).catch(Notification.exception);
     });
 };
 

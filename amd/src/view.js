@@ -244,7 +244,7 @@ export default class View {
             const observer = new MutationObserver(waitForNodeReplacement);
             const config = {childList: true, subtree: true};
             observer.observe(rootNode, config);
-            return true;
+            return;
         }).catch(Notification.exception);
     }
 
