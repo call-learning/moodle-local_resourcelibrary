@@ -31,39 +31,40 @@ const getFilterData = (target, ignoresesskey) => {
     for (const [name, value] of formData.entries()) {
         if (name === 'sesskey') {
             sesskeyconfirmed = value === Config.sesskey;
-        } else {
-            const parsename = name.match(/(customfield_)?(\w+)\[(\w+)\]\[?(\w*)\]?/);
-            if (parsename) {
-                let hasCustomShortName = false;
-                if (parsename.length >= 4) {
-                    parsename.shift();
-                    hasCustomShortName = true;
-                }
-                const rootname = parsename[1];
-                const type = parsename[2];
+            continue;
+        }
+        const parsename = name.match(/(customfield_)?(\w+)\[(\w+)\]\[?(\w*)\]?/);
+        if (!parsename) {
+            continue;
+        }
+        let hasCustomShortName = false;
+        if (parsename.length >= 4) {
+            parsename.shift();
+            hasCustomShortName = true;
+        }
+        const rootname = parsename[1];
+        const type = parsename[2];
 
-                if (filterdata[rootname] === undefined) {
-                    filterdata[rootname] = {};
-                }
+        if (filterdata[rootname] === undefined) {
+            filterdata[rootname] = {};
+        }
 
-                if (hasCustomShortName && filterdata[rootname].shortname === undefined) {
-                    Object.defineProperty(filterdata[rootname], 'shortname', {
-                        enumerable: true,
-                        value: rootname
-                    });
-                }
+        if (hasCustomShortName && filterdata[rootname].shortname === undefined) {
+            Object.defineProperty(filterdata[rootname], 'shortname', {
+                enumerable: true,
+                value: rootname
+            });
+        }
 
-                if (value !== "_qf__force_multiselect_submission") {
-                    if (typeof filterdata[rootname].value === "undefined") {
-                        Object.defineProperty(filterdata[rootname], type, {
-                            enumerable: true,
-                            value: value,
-                            writable: true
-                        });
-                    } else {
-                        filterdata[rootname].value += ',' + value;
-                    }
-                }
+        if (value !== "_qf__force_multiselect_submission") {
+            if (typeof filterdata[rootname].value === "undefined") {
+                Object.defineProperty(filterdata[rootname], type, {
+                    enumerable: true,
+                    value: value,
+                    writable: true
+                });
+            } else {
+                filterdata[rootname].value += ',' + value;
             }
         }
     }
