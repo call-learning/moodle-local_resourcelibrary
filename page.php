@@ -28,7 +28,6 @@ use local_resourcelibrary\local\persistent\catalogue_page;
 use local_resourcelibrary\output\catalogue_page_resourcelibrary;
 
 global $CFG, $PAGE, $DB, $OUTPUT, $USER;
-require_once($CFG->dirroot . '/course/lib.php');
 
 $id = required_param('id', PARAM_INT); // Catalogue page ID
 $edit = optional_param('edit', null, PARAM_BOOL);    // Turn editing on and off.
@@ -51,18 +50,13 @@ $context = context_system::instance();
 $renderable = new catalogue_page_resourcelibrary($cataloguepage);
 $PAGE->add_body_class('resource-library-catalogue-page');
 
-$site = get_site();
-
 $strresourcelibrary = \local_resourcelibrary\local\utils::get_resource_library_menu_text();
 $pagetitle = $cataloguepage->get('name');
-
 $pageurl = new moodle_url('/local/resourcelibrary/page.php', $pageparams);
 
 $PAGE->set_context($context);
 $PAGE->set_url($pageurl);
 $PAGE->set_title($pagetitle);
-
-// Breadcrumbs
 $PAGE->navbar->add($strresourcelibrary, new moodle_url('/local/resourcelibrary/index.php'));
 $PAGE->navbar->add($pagetitle);
 

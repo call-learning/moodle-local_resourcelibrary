@@ -74,7 +74,7 @@ class catalogue_page_resourcelibrary extends base_resourcelibrary {
         $handler = \core_course\customfield\course_handler::create();
 
         // Get the base export data
-        $defaultvariables = $this->get_export_defaults($output, $handler);
+        $defaultvariables = $this->get_export_defaults($output, $handler, $this->cataloguepage->get('id'));
         $defaultvariables['parentid'] = 0;
         $defaultvariables['categoryid'] = 0;
         $defaultvariables['pageid'] = $this->cataloguepage->get('id');
