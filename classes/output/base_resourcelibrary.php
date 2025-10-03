@@ -29,6 +29,7 @@ use local_resourcelibrary\filters\filter_form;
 use renderable;
 use renderer_base;
 use templatable;
+use moodle_url;
 
 /**
  * Base class for activity and course resourcelibrary
@@ -178,6 +179,8 @@ abstract class base_resourcelibrary implements renderable, templatable {
             'paging' => $this->paging,
             'displaycategories' => $this->displaycategories,
             'entitytype' => $handler->get_area(),
+            'editfieldsurl' => is_siteadmin() ? new moodle_url('/local/resourcelibrary/coursefields.php') : null,
+
         ];
         $defaultvariables['filtersformcontent'] = $this->get_filters_content($handler);
         return $defaultvariables;

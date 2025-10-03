@@ -28,6 +28,7 @@ use local_resourcelibrary\filters\filter_form;
 use renderable;
 use renderer_base;
 use templatable;
+use moodle_url;
 
 /**
  * Class containing data for the course resourcelibrary.

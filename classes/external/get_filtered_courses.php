@@ -27,9 +27,7 @@ use core_external\external_function_parameters;
 use core_external\external_multiple_structure;
 use core_external\external_single_structure;
 use core_external\external_value;
-use local_resourcelibrary\item_type;
-use local_resourcelibrary\item_visibility;
-use local_resourcelibrary\local\customfield_utils;
+use local_resourcelibrary\local\api\course_filter_api;
 use local_resourcelibrary\local\externalhelper;
 
 /**
@@ -70,117 +68,18 @@ class get_filtered_courses extends external_api {
         int $offset = 0,
         array $sorting = []
     ) {
-        global $CFG, $PAGE;
-        require_once($CFG->dirroot . "/course/lib.php");
-
         // Validate parameter.
         $inparams = compact(['categoryid', 'filters', 'limit', 'offset', 'sorting']);
         [
             'categoryid' => $categoryid,
-            'filters' => $filter,
+            'filters' => $filters,
             'limit' => $limit,
             'offset' => $offset,
             'sorting' => $sorting
         ] = self::validate_parameters(self::execute_parameters(), $inparams);
 
-        // Retrieve courses.
-        $sqlparams = [];
-        // Simplification here: we return only visible courses, whichever is the context.
-        $sqlwhere = " e.id != " . SITEID . " ";
-        if ($categoryid) {
-            $coursecat = core_course_category::get($categoryid);
-            $children = $coursecat->get_all_children_ids();
-            $children[] = $categoryid;
-            $sqlwhere .= " AND e.category IN (" . implode(',', $children) . ") ";
-        }
-
-        $coursefields = ['fullname', 'shortname', 'format', 'showgrades', 'newsitems', 'startdate', 'enddate', 'maxbytes',
-            'showreports', 'visible', 'groupmode', 'groupmodeforce', 'defaultgroupingid', 'enablecompletion', 'completionnotify',
-            'lang', 'theme', 'marker', 'category', 'summary', 'summaryformat', 'sortorder', 'idnumber', 'timecreated',
-            'timemodified', ];
-        $additionalfields = ['course_categoryname' => 'ccat.name AS course_categoryname'];
-        foreach ($coursefields as $cfield) {
-            $additionalfields[$cfield] = "e.{$cfield} AS {$cfield}";
-        }
-        $handler = course_handler::create();
-        $sortsql = externalhelper::get_sort_options_sql($sorting, array_keys($additionalfields));
-
-        $courses = customfield_utils::get_records_from_handler(
-            $handler,
-            $filters,
-            0,
-            0,
-            ['LEFT JOIN {course_categories} ccat ON e.category = ccat.id'],
-            $additionalfields,
-            $sqlwhere,
-            $sqlparams,
-            $sortsql
-        );
-
-        // Create return value.
-        $coursesinfo = [];
-        $sequenceid = 0;
-
-        $invisiblecourseidlist = [];
-        if ($invisiblecoursesids = get_config('local_resourcelibrary', 'hiddencoursesid')) {
-            $invisiblecourseidlist = explode(',', $invisiblecoursesids);
-        }
-        if ($managementhiddenlist = self::get_hidden_items()) {
-            $invisiblecourseidlist = array_merge($invisiblecourseidlist, $managementhiddenlist);
-        }
-        foreach ($courses as $course) {
-            if (in_array($course->id, $invisiblecourseidlist)) {
-                continue; // Skip invisible courses.
-            }
-            // Now security checks.
-            $context = context_course::instance($course->id, IGNORE_MISSING);
-            $hasvalidatedcontext = true;
-            try {
-                self::validate_context($context);
-                $PAGE->set_context($context);
-            } catch (moodle_exception $e) {
-                $hasvalidatedcontext = false;
-                $PAGE->set_context(context_system::instance());
-            }
-            $coursevisible = $course->visible;
-            $coursevisible = $coursevisible || has_any_capability([
-                    'moodle/course:update', 'moodle/course:viewhiddencourses', 'moodle/course:view', ], $context)
-                || is_enrolled($context);
-            if (!$coursevisible) {
-                continue;
-            }
-            // Here we use a simplified version for performance reasons.
-            $exporter = new course_summary_simple_exporter($course, ['context' => $context]);
-            $renderer = $PAGE->get_renderer('core');
-            $courseinfo = (array) $exporter->export($renderer);
-            $courseinfo['parentid'] = $course->category;
-            $courseinfo['parentsortorder'] = $course->sortorder;
-            $courseinfo['customfields'] = [];
-            $courseinfo['resourcelibraryfields'] = [];
-            $coursesinfo[] = $courseinfo;
-        }
-
-        return array_slice($coursesinfo, $offset, $limit ? $limit : null);
-    }
-
-    /**
-     * Get the catalogue items that are hidden from the catalogue.
-     *
-     * @return array of course ids that are hidden.
-     */
-    public static function get_hidden_items() {
-        global $DB;
-        $sql = "SELECT itemid FROM {local_resourcelibrary} WHERE itemtype = :itemtype AND visibility = :visibility";
-        $params = [
-            'itemtype' => item_type::COURSE->value,
-            'visibility' => item_visibility::HIDDEN->value,
-        ];
-        $records = $DB->get_records_sql($sql, $params);
-        $hiddenitems = [];
-        foreach ($records as $record) {
-            $hiddenitems[] = $record->itemid;
-        }
-        return $hiddenitems;
+        // Use the new API to get filtered courses
+        return course_filter_api::get_filtered_courses(0, $filters, $limit, $offset, $sorting, $categoryid);
     }
 
     /**

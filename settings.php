@@ -34,6 +34,16 @@ if ($hassiteconfig) {
             ['local/resourcelibrary:manage']
         )
     );
+
+    $settings->add(
+        'resourcelibrary',
+        new admin_externalpage(
+            'resourcelibrary_catalogue_pages',
+            new lang_string('cataloguepages', 'local_resourcelibrary'),
+            $CFG->wwwroot . '/local/resourcelibrary/catalogue_pages.php',
+            ['local/resourcelibrary:managecatalogues']
+        )
+    );
     $mainsettings = new admin_settingpage(
         'resourcelibrarymainsettings',
         get_string('resourcelibrarymainsettings', 'local_resourcelibrary'),

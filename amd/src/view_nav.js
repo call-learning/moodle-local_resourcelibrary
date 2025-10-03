@@ -23,8 +23,7 @@
 
 
 import {updateUserPreferences} from 'local_resourcelibrary/repository';
-import View from 'local_resourcelibrary/view';
-import Selectors from 'local_resourcelibrary/selectors';
+import State from 'local_resourcelibrary/local/state';
 
 
 export default class ViewNav {
@@ -81,13 +80,19 @@ export default class ViewNav {
                 const sortoption = sortTarget.getAttribute('data-sort');
                 const sortcolumn = sortTarget.getAttribute('data-column');
 
-                const entityRegion = root.querySelector(Selectors.entityView.region);
-                if (entityRegion) {
-                    entityRegion.setAttribute('data-sort-column', sortcolumn);
-                    entityRegion.setAttribute('data-sort-order', sortoption);
-                    ViewNav.updatePreferences('sort', sortcolumn + ',' + sortoption);
-                    View.refresh(root);
-                }
+                // Update visual active states
+                const allSortItems = root.querySelectorAll(ViewNav.SELECTORS.SORT_OPTION);
+                allSortItems.forEach(item => item.classList.remove('active'));
+                sortTarget.classList.add('active');
+
+                // Update state instead of DOM attributes
+                State.setValue('sorting', [{column: sortcolumn, order: sortoption.toUpperCase()}]);
+                State.setValue('currentPage', 1); // Reset to first page
+                ViewNav.updatePreferences('sort', sortcolumn + ',' + sortoption);
+
+                // Trigger data reload
+                State.loadCurrentPage();
+
                 e.preventDefault();
                 return;
             }
@@ -100,12 +105,15 @@ export default class ViewNav {
 
                 const displayoptions = displayTarget.getAttribute('data-display-option');
 
-                const entityRegion = root.querySelector(Selectors.entityView.region);
-                if (entityRegion) {
-                    entityRegion.setAttribute('data-display', displayoptions);
-                    ViewNav.updatePreferences('display', displayoptions);
-                    View.reset(root);
-                }
+                // Update visual active states
+                const allDisplayItems = root.querySelectorAll(ViewNav.SELECTORS.DISPLAY_OPTION);
+                allDisplayItems.forEach(item => item.classList.remove('active'));
+                displayTarget.classList.add('active');
+
+                // Update state instead of DOM attributes
+                State.setValue('display', displayoptions);
+                ViewNav.updatePreferences('display', displayoptions);
+
                 e.preventDefault();
             }
         });

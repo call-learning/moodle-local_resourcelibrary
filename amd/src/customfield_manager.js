@@ -33,12 +33,16 @@ export const init = (component, area, hidefilterlocator) => {
     const elements = document.querySelectorAll(hidefilterlocator);
 
     elements.forEach(element => {
-        element.addEventListener('click', async()=>{
+        element.addEventListener('click', async() => {
             const pending = new Pending('local_resourcelibrary/hide_show_field');
-            if (this.checked) {
-                await hideFieldsFilters(component, area, [this.dataset.fieldShortname]);
-            } else {
-                await showFieldsFilters(component, area, [this.dataset.fieldShortname]);
+            try {
+                if (element.checked) {
+                    await hideFieldsFilters(component, area, [element.dataset.fieldShortname]);
+                } else {
+                    await showFieldsFilters(component, area, [element.dataset.fieldShortname]);
+                }
+            } catch (error) {
+                // Error handling is done in the repository functions
             }
             pending.resolve();
         });

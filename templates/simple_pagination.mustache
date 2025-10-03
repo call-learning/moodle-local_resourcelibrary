@@ -1,0 +1,101 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_resourcelibrary/simple_pagination
+
+    Simple pagination controls for state-based view.
+
+    Context variables required for this template:
+    * currentPage - Current page number
+    * totalPages - Total number of pages
+    * itemsPerPage - Current items per page setting
+    * totalItems - Total number of items
+    * showPagination - Boolean: true if totalPages > 1
+    * hasPrevious - Boolean: true if currentPage > 1
+    * hasNext - Boolean: true if currentPage < totalPages
+    * pages - Array of page objects with number and active properties
+    * itemsPerPageOptions - Array of option objects with value and active properties
+
+    Example context:
+    {
+        "currentPage": 2,
+        "totalPages": 5,
+        "itemsPerPage": 12,
+        "totalItems": 57,
+        "showPagination": true,
+        "hasPrevious": true,
+        "hasNext": true,
+        "pages": [
+            {"number": 1, "active": false},
+            {"number": 2, "active": true}
+        ],
+        "itemsPerPageOptions": [
+            {"value": 12, "active": true},
+            {"value": 24, "active": false}
+        ]
+    }
+}}
+
+<div class="pagination-controls d-flex justify-content-between align-items-center mt-3">
+    {{#showPagination}}
+        <nav aria-label="{{#str}}page{{/str}}">
+            <ul class="pagination mb-0">
+                {{#hasPrevious}}
+                <li class="page-item">
+                    <button class="page-link" data-page="{{previousPage}}" aria-label="{{#str}}previous{{/str}}">
+                        {{#str}}previous{{/str}}
+                    </button>
+                </li>
+                {{/hasPrevious}}
+
+                {{#pages}}
+                <li class="page-item {{#active}}active{{/active}}">
+                    <button class="page-link" data-page="{{number}}"
+                        {{#active}}aria-current="page" aria-label="Page {{number}}, current"{{/active}}>
+                        {{number}}
+                    </button>
+                </li>
+                {{/pages}}
+
+                {{#hasNext}}
+                <li class="page-item">
+                    <button class="page-link" data-page="{{nextPage}}" aria-label="{{#str}}next{{/str}}">
+                        {{#str}}next{{/str}}
+                    </button>
+                </li>
+                {{/hasNext}}
+            </ul>
+        </nav>
+    {{/showPagination}}
+
+    <div class="pagination-info">
+        Showing {{startItem}} to {{endItem}} of {{totalItems}} items
+    </div>
+
+    {{#hasitemsPerPageOptions}}
+    <div class="items-per-page">
+        <label for="items-per-page-select" class="sr-only">Items per page</label>
+        <select id="items-per-page-select" class="form-control form-control-sm" data-items-per-page>
+            {{#itemsPerPageOptions}}
+            <option value="{{value}}" {{#active}}selected{{/active}}>
+                {{value}}
+            </option>
+            {{/itemsPerPageOptions}}
+        </select>
+    </div>
+    {{/hasitemsPerPageOptions}}
+</div>

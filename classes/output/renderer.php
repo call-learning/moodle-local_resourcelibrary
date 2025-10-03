@@ -50,6 +50,20 @@ class renderer extends plugin_renderer_base {
     }
 
     /**
+     * Return the main content for a catalogue page resource library
+     *
+     * @param catalogue_page_resourcelibrary $cataloguepagerl The catalogue page renderable
+     * @return string HTML string
+     * @throws \moodle_exception
+     */
+    public function render_catalogue_page_resourcelibrary(catalogue_page_resourcelibrary $cataloguepagerl) {
+        return $this->render_from_template(
+            'local_resourcelibrary/catalogue_page_resourcelibrary',
+            $cataloguepagerl->export_for_template($this)
+        );
+    }
+
+    /**
      * Render custom field management interface.
      *
      * @param customfield_management $list
