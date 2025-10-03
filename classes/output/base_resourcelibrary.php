@@ -169,9 +169,10 @@ abstract class base_resourcelibrary implements renderable, templatable {
      *
      * @param \core_renderer $output
      * @param handler $handler
+     * @param int|null $pageid Optional page ID for filtering custom fields
      * @return array
      */
-    public function get_export_defaults($output, handler $handler) {
+    public function get_export_defaults($output, handler $handler, $pageid = null) {
         $nocoursesurl = $output->image_url('noentities', 'local_resourcelibrary')->out();
         $defaultvariables = [
             'noentitiesimg' => $nocoursesurl,
@@ -182,7 +183,7 @@ abstract class base_resourcelibrary implements renderable, templatable {
             'editfieldsurl' => is_siteadmin() ? new moodle_url('/local/resourcelibrary/coursefields.php') : null,
 
         ];
-        $defaultvariables['filtersformcontent'] = $this->get_filters_content($handler);
+        $defaultvariables['filtersformcontent'] = $this->get_filters_content($handler, $pageid);
         return $defaultvariables;
     }
 
@@ -198,13 +199,14 @@ abstract class base_resourcelibrary implements renderable, templatable {
      * Get filters to be displayed
      *
      * @param string $handler
+     * @param int|null $pageid The catalogue page ID to filter custom fields
      * @return string|string[]|null
      */
-    public function get_filters_content($handler) {
+    public function get_filters_content($handler, $pageid = null) {
         global $_GET;
         $filterform = new filter_form(
             null,
-            ['handler' => $handler],
+            ['handler' => $handler, 'pageid' => $pageid],
             'post',
             '',
             ['class' => 'resourcelibrary-filters-form p-0']

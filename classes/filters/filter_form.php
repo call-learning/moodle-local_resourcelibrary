@@ -44,10 +44,22 @@ class filter_form extends \moodleform {
     public function definition() {
         $mform =& $this->_form;
         $handler = $this->_customdata['handler'];
+        $pageid = $this->_customdata['pageid'] ?? null;
+
         $mform->addElement('header', 'miscellaneoussettingshdr', get_string('filters', 'local_resourcelibrary'));
         $mform->setAdvanced('miscellaneoussettingshdr');
+
+        // Get allowed custom fields for this page
+        $allowedcustomfields = $this->get_allowed_customfields($pageid);
+
         foreach ($handler->get_fields() as $field) {
-            if (!utils::is_field_hidden_filters($handler, $field->get('shortname'))) {
+            $shortname = $field->get('shortname');
+            if (!utils::is_field_hidden_filters($handler, $shortname)) {
+                // If pageid is set, only show fields that are configured for this page
+                if ($pageid !== null && !empty($allowedcustomfields) && !in_array($shortname, $allowedcustomfields)) {
+                    continue;
+                }
+
                 $filter = customfield_utils::get_filter_from_field($field);
                 if ($filter) {
                     $filter->add_to_form($mform);
@@ -67,6 +79,30 @@ class filter_form extends \moodleform {
     }
 
     /**
+     * Get allowed custom fields for a specific catalogue page
+     *
+     * @param int|null $pageid The catalogue page ID
+     * @return array Array of allowed custom field shortnames, empty if all are allowed
+     */
+    private function get_allowed_customfields($pageid) {
+        if ($pageid === null) {
+            return []; // No filtering, show all fields
+        }
+
+        try {
+            $cataloguepage = \local_resourcelibrary\local\persistent\catalogue_page::get_record(['id' => $pageid]);
+            if ($cataloguepage) {
+                return $cataloguepage->get_customfields_array();
+            }
+        } catch (\Exception $e) {
+            // If page not found or error, show all fields
+            return [];
+        }
+
+        return [];
+    }
+
+    /**
      * Retrieve values passed as GET (to go directly to the search page)
      */
     public function after_definition() {
@@ -79,9 +115,19 @@ class filter_form extends \moodleform {
 
         // Filter out non relevant values.
         $handler = $this->_customdata['handler'];
+        $pageid = $this->_customdata['pageid'] ?? null;
+
+        // Get allowed custom fields for this page
+        $allowedcustomfields = $this->get_allowed_customfields($pageid);
+
         foreach ($handler->get_fields() as $field) {
             $shortname = $field->get('shortname');
             if (!utils::is_field_hidden_filters($handler, $shortname)) {
+                // If pageid is set, only process fields that are configured for this page
+                if ($pageid !== null && !empty($allowedcustomfields) && !in_array($shortname, $allowedcustomfields)) {
+                    continue;
+                }
+
                 $filter = customfield_utils::get_filter_from_field($field);
                 foreach ($submission as $key => $value) {
                     if ($key == 'customfield_' . $shortname) {
