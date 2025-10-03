@@ -77,4 +77,12 @@ $capabilities = [
             'manager' => CAP_ALLOW,
         ],
     ],
+    'local/resourcelibrary:managecatalogues' => [
+        'riskbitmask' => RISK_SPAM | RISK_XSS,
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_SYSTEM,
+        'archetypes' => [
+            'manager' => CAP_ALLOW,
+        ],
+    ],
 ];

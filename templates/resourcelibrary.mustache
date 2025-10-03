@@ -35,7 +35,13 @@
 
 <div id="local-resourcelibrary-{{uniqid}}" class="local-resourcelibrary block-cards" data-entity-type="{{entitytype}}" data-region="resourcelibrary" role="navigation"
      data-parent-id="{{parentid}}" data-category-id="{{categoryid}}">
-
+    <div class="w-100 d-flex justify-content-end">
+    {{#editfieldsurl}}
+        <a href="{{editfieldsurl}}" class="btn btn-sm btn-secondary m-2" role="button">
+            {{#str}}resourcelibraryfieldsettings, local_resourcelibrary{{/str}}
+        </a>
+    {{/editfieldsurl}}
+    </div>
     <div class="container-fluid">
         <div class="row no-gutters">
             <div class="col-12">
@@ -45,6 +51,7 @@
             </div>
         </div>
     </div>
+
     <div class="container-fluid resourcelibrary-content mt-4">
         <div data-region="display-modifiers" class="d-flex align-items-right flex-wrap justify-content-end"
                 aria-label="{{#str}} aria:controls, local_resourcelibrary {{/str}}">
@@ -66,6 +73,11 @@
                     data-displaycategories="{{displaycategories}}">
                 <div data-region="resourcelibrary-view-content">
                     {{> local_resourcelibrary/placeholders }}
+                </div>
+                <div data-region="loading">
+                </div>
+                <div data-region="pagination" class="mt-3">
+                    {{> local_resourcelibrary/simple_pagination }}
                 </div>
             </div>
         </div>

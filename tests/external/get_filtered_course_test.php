@@ -18,6 +18,7 @@ namespace local_resourcelibrary\external;
 
 use core_external\external_api;
 use local_resourcelibrary\tests\local_resourcelibrary_testcase;
+use local_resourcelibrary\local\api\course_filter_api;
 
 /**
  * Tests for get_filtered_course_test static functions
@@ -118,5 +119,75 @@ final class get_filtered_course_test extends local_resourcelibrary_testcase {
         ]);
         $this->assertCount(1, $coursesfound);
         $this->assertEquals($courses[1]->id, $coursesfound[0]['id']);
+    }
+
+    /**
+     * Test the new API directly for filtering by categories
+     */
+    public function test_course_filter_api_categories(): void {
+        $dg = $this->getDataGenerator();
+
+        // Create categories
+        $cat1 = $dg->create_category(['name' => 'Category 1']);
+        $cat2 = $dg->create_category(['name' => 'Category 2']);
+
+        // Create courses in different categories
+        $course1 = $dg->create_course(['category' => $cat1->id, 'fullname' => 'Course 1']);
+        $course2 = $dg->create_course(['category' => $cat2->id, 'fullname' => 'Course 2']);
+        $course3 = $dg->create_course(['category' => $cat1->id, 'fullname' => 'Course 3']);
+
+        // Test filtering by single category using legacy categoryid parameter
+        $courses = course_filter_api::get_filtered_courses(
+            0, [], 0, 0, [], $cat1->id
+        );
+        $this->assertCount(2, $courses);
+
+        // Test filtering by multiple categories using legacy categoryid parameter
+        $courses = course_filter_api::get_filtered_courses(
+            0, [], 0, 0, [], $cat2->id
+        );
+        $this->assertCount(1, $courses);
+    }
+
+    /**
+     * Test the new API for getting hidden course IDs
+     */
+    public function test_course_filter_api_hidden_courses(): void {
+        $hiddenids = course_filter_api::get_hidden_course_ids();
+        $this->assertIsArray($hiddenids);
+    }
+
+    /**
+     * Test the new API with catalogue page filtering
+     */
+    public function test_course_filter_api_with_pageid(): void {
+        $dg = $this->getDataGenerator();
+
+        // Create categories
+        $cat1 = $dg->create_category(['name' => 'Category 1']);
+        $cat2 = $dg->create_category(['name' => 'Category 2']);
+
+        // Create courses in different categories
+        $course1 = $dg->create_course(['category' => $cat1->id, 'fullname' => 'Course 1']);
+        $course2 = $dg->create_course(['category' => $cat2->id, 'fullname' => 'Course 2']);
+        $course3 = $dg->create_course(['category' => $cat1->id, 'fullname' => 'Course 3']);
+
+        // Create a catalogue page with specific categories
+        $cataloguepage = new \local_resourcelibrary\local\persistent\catalogue_page();
+        $cataloguepage->set('name', 'Test Catalogue Page');
+        $cataloguepage->set_categories_array([$cat1->id]);
+        $cataloguepage->create();
+
+        // Test filtering using pageid
+        $courses = course_filter_api::get_filtered_courses(
+            $cataloguepage->get('id'), [], 0, 0, []
+        );
+        $this->assertCount(2, $courses); // Should only return courses from cat1
+
+        // Test with pageid = 0 (show all courses)
+        $courses = course_filter_api::get_filtered_courses(
+            0, [], 0, 0, []
+        );
+        $this->assertCount(3, $courses); // Should return all courses
     }
 }

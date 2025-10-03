@@ -110,5 +110,30 @@ function xmldb_local_resourcelibrary_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2023102500, 'local', 'resourcelibrary');
     }
 
+    if ($oldversion < 2025090203) {
+        // Define table local_resourcelibrary_pages to be created.
+        $table = new xmldb_table('local_resourcelibrary_pages');
+
+        // Adding fields to table local_resourcelibrary_pages.
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('name', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('categories', XMLDB_TYPE_TEXT, null, null, null, null, null);
+        $table->add_field('customfields', XMLDB_TYPE_TEXT, null, null, null, null, null);
+        $table->add_field('usermodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('timemodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+
+        // Adding keys to table local_resourcelibrary_pages.
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $table->add_key('usermodified', XMLDB_KEY_FOREIGN, ['usermodified'], 'user', ['id']);
+
+        // Conditionally launch create table for local_resourcelibrary_pages.
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        upgrade_plugin_savepoint(true, 2025090203, 'local', 'resourcelibrary');
+    }
+
     return true;
 }

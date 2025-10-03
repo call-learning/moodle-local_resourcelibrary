@@ -21,7 +21,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-import Ajax from 'core/ajax';
 import Notification from 'core/notification';
 
 // Set the constants for the visibility.
@@ -119,24 +118,46 @@ class ItemVisibility {
     }
 
     /**
-     * Send the AJAX request.
+     * Send the REST API request.
      * @param {Object} params
      */
-    sendRequest(params) {
-        const items = {
-          items: [params]
-        };
-        Ajax.call([{
-            methodname: 'local_resourcelibrary_set_items_visibility',
-            args: items,
-            done: (data) => {
-                if (data.returneditems) {
-                    this.updateButtons(data.returneditems);
-                } else {
-                    Notification.exception(data);
-                }
+    async sendRequest(params) {
+        try {
+            const url = `${M.cfg.wwwroot}/r.php/api/rest/v2/local_resourcelibrary/items/${params.itemid}/visibility`;
+            const body = {
+                itemtype: parseInt(params.itemtype),
+                visibility: parseInt(params.visibility)
+            };
+
+            const response = await fetch(url, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: JSON.stringify(body)
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || `HTTP ${response.status}`);
             }
-        }]);
+
+            const data = await response.json();
+            if (data.success) {
+                this.updateButtons([{
+                    itemid: data.itemid,
+                    itemtype: data.itemtype,
+                    visibility: data.visibility
+                }]);
+            } else {
+                throw new Error('Failed to update item visibility');
+            }
+        } catch (error) {
+            Notification.exception({
+                message: error.message || 'An error occurred while updating item visibility'
+            });
+        }
     }
 
     /**
