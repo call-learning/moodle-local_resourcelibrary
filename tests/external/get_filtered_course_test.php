@@ -16,23 +16,25 @@
 
 namespace local_resourcelibrary\external;
 
-use core_external\external_api;
 use local_resourcelibrary\tests\local_resourcelibrary_testcase;
 use local_resourcelibrary\local\api\course_filter_api;
 
 /**
- * Tests for get_filtered_course_test static functions
+ * Legacy tests for get_filtered_course functionality
+ *
+ * Note: This test file is deprecated and will be removed in a future version.
+ * Use \local_resourcelibrary\local\api\course_filter_api_test instead.
  *
  * @package    local_resourcelibrary
  * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @covers \local_resourcelibrary\local_resourcelibrary_external::get_filtered_courses
+ * @covers \local_resourcelibrary\local\api\course_filter_api
+ * @deprecated Use course_filter_api_test instead
  * @runTestsInSeparateProcesses
  */
 final class get_filtered_course_test extends local_resourcelibrary_testcase {
     /**
      * Test that we can obtain a single row result for a set of fields for a course and course module
-     * get_filtered_courses($ids = array(), $filters = array(), $limit = 0, $offset = 0, $sorting = null)
      */
     public function test_get_filtered_courses_simple(): void {
         $dg = $this->getDataGenerator();
@@ -52,15 +54,14 @@ final class get_filtered_course_test extends local_resourcelibrary_testcase {
     }
 
     /**
-     * Helper
+     * Helper - directly use course_filter_api instead of external service
      *
      * @param mixed ...$params
      * @return mixed
      */
     protected function get_filtered_courses(...$params) {
-        $getfilteredcourses = get_filtered_courses::execute(...$params);
-
-        return external_api::clean_returnvalue(get_filtered_courses::execute_returns(), $getfilteredcourses);
+        // Use the new API directly instead of the external service
+        return course_filter_api::get_filtered_courses(...$params);
     }
 
     /**

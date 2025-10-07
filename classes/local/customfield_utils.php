@@ -84,18 +84,16 @@ class customfield_utils {
         $joins = [];
         $joinsfields = [];
         foreach ($handler->get_fields() as $f) {
-            if (!utils::is_field_hidden_filters($handler, $f->get('shortname'))) {
-                $id = $f->get('id');
-                $datafieldname = self::get_field_name($prefix, $f->get('shortname'));
-                $joins[$datafieldname] = "LEFT JOIN {customfield_data} {$prefix}_{$id}
-                ON e.id = {$prefix}_{$id}.instanceid AND {$prefix}_{$id}.fieldid = $id";
-                $datafieldcolumn = self::get_datafieldcolumn_value_from_field_handler($f);
-                $joinfield = "{$prefix}_{$id}." . $datafieldcolumn . " AS {$datafieldname}";
-                if (!empty($joinsfields[$datafieldname])) {
-                    throw new \moodle_exception('shortnameshouldbeunique', 'local_resourcelibrary');
-                }
-                $joinsfields[$datafieldname] = $joinfield;
+            $id = $f->get('id');
+            $datafieldname = self::get_field_name($prefix, $f->get('shortname'));
+            $joins[$datafieldname] = "LEFT JOIN {customfield_data} {$prefix}_{$id}
+            ON e.id = {$prefix}_{$id}.instanceid AND {$prefix}_{$id}.fieldid = $id";
+            $datafieldcolumn = self::get_datafieldcolumn_value_from_field_handler($f);
+            $joinfield = "{$prefix}_{$id}." . $datafieldcolumn . " AS {$datafieldname}";
+            if (!empty($joinsfields[$datafieldname])) {
+                throw new \moodle_exception('shortnameshouldbeunique', 'local_resourcelibrary');
             }
+            $joinsfields[$datafieldname] = $joinfield;
         }
         return [$joinsfields, $joins];
     }
@@ -158,23 +156,20 @@ class customfield_utils {
         $sqlparams = [];
         $allfields = $handler->get_fields();
         foreach ($filters as $filter) {
-            // Check if the field is marked as hidden for filters.
-            if (!utils::is_field_hidden_filters($handler, $filter['shortname'])) {
-                if (!empty($filter['shortname'])) {
-                    $matchingfields = array_filter(
-                        $allfields,
-                        function ($f) use ($filter) {
-                            return strtolower($f->get('shortname')) == strtolower($filter['shortname']);
-                        }
-                    );
-                    if ($matchingfields) {
-                        $matchingfield = reset($matchingfields);
-                        $f = self::get_filter_from_field($matchingfield);
-                        [$where, $params] = $f->get_sql_filter($filter['value']);
-                        if ($where) {
-                            $sqlwhere .= " AND $where ";
-                            $sqlparams += $params;
-                        }
+            if (!empty($filter['shortname'])) {
+                $matchingfields = array_filter(
+                    $allfields,
+                    function ($f) use ($filter) {
+                        return strtolower($f->get('shortname')) == strtolower($filter['shortname']);
+                    }
+                );
+                if ($matchingfields) {
+                    $matchingfield = reset($matchingfields);
+                    $f = self::get_filter_from_field($matchingfield);
+                    [$where, $params] = $f->get_sql_filter($filter['value']);
+                    if ($where) {
+                        $sqlwhere .= " AND $where ";
+                        $sqlparams += $params;
                     }
                 }
             }

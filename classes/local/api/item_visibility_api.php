@@ -15,87 +15,57 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Control the visibility of items in the catalogue.
+ * Item visibility management API.
  *
  * @package   local_resourcelibrary
- * @copyright  2023 CALL Learning - Bas Brands bas@sonsbeekmedia.nl
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @copyright 2025 Bas Brands <bas@sonsbeekmedia.nl>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_resourcelibrary\external;
+namespace local_resourcelibrary\local\api;
 
 use context_system;
-use core_external\external_api;
-use core_external\external_function_parameters;
-use core_external\external_multiple_structure;
-use core_external\external_single_structure;
-use core_external\external_value;
-use core_external\external_warnings;
 use local_resourcelibrary\item_type;
+use local_resourcelibrary\item_visibility;
 
 /**
- * Class used for Ajax Management of the visibility of categories and courses
+ * API for managing item visibility in the resource library catalogue.
  *
- * @copyright  2020 CALL Learning 2020 - Laurent David laurent@call-learning.fr
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   local_resourcelibrary
+ * @copyright 2025 Bas Brands <bas@sonsbeekmedia.nl>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class set_item_visibility extends external_api {
-    /**
-     * Returns description of method parameters
-     *
-     *
-     * @return external_function_parameters
-     */
-    public static function execute_parameters() {
-        return new external_function_parameters(
-            [
-                'items' => new external_multiple_structure(
-                    new external_single_structure(
-                        [
-                            'id' => new external_value(PARAM_INT, 'id'),
-                            'itemid' => new external_value(PARAM_INT, 'item ID'),
-                            'itemtype' => new external_value(PARAM_INT, 'item type'),
-                            'visibility' => new external_value(PARAM_INT, 'visibility status'),
-                        ]
-                    )
-                ),
-            ]
-        );
-    }
+class item_visibility_api {
 
     /**
      * Set the visibility status for items in the catalogue.
      *
-     * @param array $items
+     * @param array $items Array of items with id, itemid, itemtype, and visibility
+     * @return array Result array with warnings and returned items
+     * @throws \required_capability_exception
+     * @throws \invalid_parameter_exception
      */
-    public static function execute(array $items) {
+    public static function set_items_visibility(array $items): array {
         global $DB;
-
-        $params = self::validate_parameters(
-            self::execute_parameters(),
-            [
-                'items' => $items,
-            ]
-        );
 
         $warnings = [];
         $returneditems = [];
 
         // Check permissions for updating the catalogue.
         $context = context_system::instance();
-        self::validate_context($context);
         if (!has_capability('local/resourcelibrary:setitemsvisibility', $context)) {
             $warnings[] = [
                 'itemid' => 0,
                 'warningcode' => 'settingvisibilitynotallowed',
                 'message' => get_string('settingvisibilitynotallowed', 'local_resourcelibrary'),
             ];
-            return $warnings;
+            return [
+                'warnings' => $warnings,
+                'returneditems' => $returneditems,
+            ];
         }
 
-        foreach ($params['items'] as $item) {
-            $warning = [];
-
+        foreach ($items as $item) {
             $item = (object) $item;
             $item->timemodified = time();
 
@@ -103,12 +73,14 @@ class set_item_visibility extends external_api {
             $sql = "SELECT id, visibility FROM {local_resourcelibrary} WHERE itemid = :itemid AND itemtype = :itemtype";
             $params = ['itemid' => $item->itemid, 'itemtype' => $item->itemtype];
             $rlrecord = $DB->get_record_sql($sql, $params);
+
             if ($rlrecord) {
-                $item->id = $id ?? $rlrecord->id;
+                $item->id = $rlrecord->id;
                 $DB->update_record('local_resourcelibrary', $item);
             } else {
                 $item->id = $DB->insert_record('local_resourcelibrary', $item);
             }
+
             // If the item is a category, we need to set the visibility of all courses and categories in this category.
             if ($item->itemtype == item_type::CATEGORY->value) {
                 $treeitems = self::get_category_tree($item->itemid, $item->visibility);
@@ -118,6 +90,7 @@ class set_item_visibility extends external_api {
                     $sql = "SELECT id, visibility FROM {local_resourcelibrary} WHERE itemid = :itemid AND itemtype = :itemtype";
                     $params = ['itemid' => $treeitem->itemid, 'itemtype' => $treeitem->itemtype];
                     $rlrecord = $DB->get_record_sql($sql, $params);
+
                     if ($rlrecord) {
                         $treeitem->id = $rlrecord->id;
                         $DB->update_record('local_resourcelibrary', $treeitem);
@@ -131,41 +104,85 @@ class set_item_visibility extends external_api {
             }
         }
 
-        $result = [];
-        $result['warnings'] = $warnings;
-        $result['returneditems'] = $returneditems;
-        return $result;
+        return [
+            'warnings' => $warnings,
+            'returneditems' => $returneditems,
+        ];
     }
 
     /**
-     * Returns description of method result value
+     * Get the visibility status of a single item.
      *
-     * @return external_single_structure
+     * @param int $itemid The item ID
+     * @param int $itemtype The item type
+     * @return \stdClass|null The visibility record or null if not found
      */
-    public static function execute_returns() {
-        return new external_single_structure([
-            'warnings' => new external_warnings(),
-            'returneditems' => new external_multiple_structure(
-                new external_single_structure(
-                    [
-                        'id' => new external_value(PARAM_INT, 'id'),
-                        'itemid' => new external_value(PARAM_INT, 'item ID'),
-                        'itemtype' => new external_value(PARAM_INT, 'item type'),
-                        'visibility' => new external_value(PARAM_INT, 'visibility status'),
-                    ]
-                )
-            ),
-        ]);
+    public static function get_item_visibility(int $itemid, int $itemtype): ?\stdClass {
+        global $DB;
+
+        $sql = "SELECT id, itemid, itemtype, visibility FROM {local_resourcelibrary}
+                WHERE itemid = :itemid AND itemtype = :itemtype";
+        $params = ['itemid' => $itemid, 'itemtype' => $itemtype];
+
+        return $DB->get_record_sql($sql, $params) ?: null;
     }
 
     /**
-     * Recursive function the create an array of catalogue items from a category its subcategories and all courses within.
+     * Get visibility status for multiple items.
      *
-     * @param int $categoryid
-     * @param int $visibility
-     * @return array of items with id, itemid, itemtype and visibility
+     * @param array $items Array of items with itemid and itemtype
+     * @return array Array of visibility records
      */
-    protected static function get_category_tree($categoryid, $visibility) {
+    public static function get_items_visibility(array $items): array {
+        global $DB;
+
+        if (empty($items)) {
+            return [];
+        }
+
+        $conditions = [];
+        $params = [];
+
+        foreach ($items as $index => $item) {
+            $conditions[] = "(itemid = :itemid{$index} AND itemtype = :itemtype{$index})";
+            $params["itemid{$index}"] = $item['itemid'];
+            $params["itemtype{$index}"] = $item['itemtype'];
+        }
+
+        $sql = "SELECT id, itemid, itemtype, visibility FROM {local_resourcelibrary}
+                WHERE " . implode(' OR ', $conditions);
+
+        return $DB->get_records_sql($sql, $params);
+    }
+
+    /**
+     * Check if an item is visible in the catalogue.
+     *
+     * @param int $itemid The item ID
+     * @param int $itemtype The item type
+     * @return bool True if visible, false if hidden
+     */
+    public static function is_item_visible(int $itemid, int $itemtype): bool {
+        $record = self::get_item_visibility($itemid, $itemtype);
+
+        // If no record exists, item is visible by default
+        if (!$record) {
+            return true;
+        }
+
+        // VISIBLE = 0, HIDDEN = 1, so we need to check if visibility equals VISIBLE
+        return (int) $record->visibility === item_visibility::VISIBLE->value;
+    }
+
+    /**
+     * Recursive function to create an array of catalogue items from a category,
+     * its subcategories and all courses within.
+     *
+     * @param int $categoryid The category ID
+     * @param int $visibility The visibility status to apply
+     * @return array Array of items with itemid, itemtype and visibility
+     */
+    protected static function get_category_tree(int $categoryid, int $visibility): array {
         global $DB;
 
         $items = [];

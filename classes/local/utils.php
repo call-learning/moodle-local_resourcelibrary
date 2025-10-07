@@ -35,10 +35,7 @@ use Matrix\Exception;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class utils {
-    /**
-     * @var array $hiddenfields
-     */
-    private static $hiddenfields = null;
+
 
     /**
      * Get Resource library URL and text description for the current page
@@ -86,94 +83,9 @@ class utils {
         return $handler->get_component() . '_' . $handler->get_area();
     }
 
-    /**
-     * Simple function to get the filter config name for a handler
-     *
-     * @param handler $handler
-     * @return string
-     */
-    public static function get_hidden_filter_config_name($handler) {
-        return 'filter_hidden_' . static::get_handler_full_component($handler);
-    }
 
-    /**
-     * Get hidden fields
-     *
-     * @param handler $handler
-     * @return array
-     * @throws \coding_exception
-     */
-    public static function get_hidden_fields_filters($handler): array {
-        if (self::$hiddenfields) {
-            return self::$hiddenfields;
-        }
-        $configname = static::get_hidden_filter_config_name($handler);
-        $hiddenfieldslist =
-            get_config('local_resourcelibrary', $configname);
-        if (!$hiddenfieldslist) {
-            return [];
-        }
-        self::$hiddenfields = explode(',', $hiddenfieldslist);
-        return self::$hiddenfields;
-    }
 
-    /**
-     * Check if given field is hidden
-     *
-     * @param handler $handler
-     * @param string $fieldshortname
-     * @throws \coding_exception
-     */
-    public static function is_field_hidden_filters($handler, $fieldshortname) {
-        return in_array($fieldshortname, self::get_hidden_fields_filters($handler));
-    }
 
-    /**
-     * Hide a field from filtering
-     *
-     * @param handler $handler
-     * @param string|array $fieldshortname the field shortname or an array of fields shortnames
-     * @throws \dml_exception
-     */
-    public static function hide_fields_filter($handler, $fieldshortname) {
-        $hiddenfieldslist = self::get_hidden_fields_filters($handler);
-        if (is_string($fieldshortname)) {
-            $hiddenfieldslist[] = $fieldshortname;
-        } else {
-            if (is_array($fieldshortname)) {
-                $hiddenfieldslist = array_merge($hiddenfieldslist, $fieldshortname);
-            }
-        }
-        $hiddenfieldslist = array_unique($hiddenfieldslist); // Remove duplicate values.
-        $configname = static::get_hidden_filter_config_name($handler);
-        set_config($configname, implode(',', $hiddenfieldslist), 'local_resourcelibrary');
-        self::$hiddenfields = $hiddenfieldslist;
-    }
-
-    /**
-     * Show a field from filtering
-     *
-     * Removes it from the list of hidden fields if it is set.
-     *
-     * @param handler $handler
-     * @param string|array $fieldshortname the field shortname or an array of fields shortnames
-     * @throws \dml_exception
-     */
-    public static function show_fields_filter($handler, $fieldshortname) {
-        $hiddenfieldslist = self::get_hidden_fields_filters($handler);
-        $fieldstoremove = [];
-        if (is_string($fieldshortname)) {
-            $fieldstoremove[] = $fieldshortname;
-        } else {
-            if (is_array($fieldshortname)) {
-                $fieldstoremove = $fieldshortname;
-            }
-        }
-        $hiddenfieldslist = array_diff($hiddenfieldslist, $fieldstoremove);
-        $configname = static::get_hidden_filter_config_name($handler);
-        set_config($configname, implode(',', $hiddenfieldslist), 'local_resourcelibrary');
-        self::$hiddenfields = $hiddenfieldslist;
-    }
 
     /**
      * Global function to get the ressource library link/menu text.

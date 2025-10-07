@@ -87,6 +87,52 @@ export const getFilteredCourseList = (args) => {
 
 
 /**
+ * Update item visibility in the catalogue using the REST API.
+ *
+ * @param {Object} params Parameters for the visibility update
+ * @param {number} params.itemid The ID of the item to update
+ * @param {number} params.itemtype The type of the item (category/course)
+ * @param {number} params.visibility The visibility status (0=visible, 1=hidden)
+ * @return {promise} Resolved with the updated item data
+ */
+export const updateItemVisibility = async(params) => {
+    try {
+        const url = `${M.cfg.wwwroot}/r.php/api/rest/v2/local_resourcelibrary/items/${params.itemid}/visibility`;
+        const body = {
+            itemtype: parseInt(params.itemtype),
+            visibility: parseInt(params.visibility)
+        };
+
+        const response = await fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify(body)
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || `HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+        if (data.success) {
+            return {
+                itemid: data.itemid,
+                itemtype: data.itemtype,
+                visibility: data.visibility
+            };
+        } else {
+            throw new Error('Failed to update item visibility');
+        }
+    } catch (error) {
+        throw new Error(error.message || 'An error occurred while updating item visibility');
+    }
+};
+
+/**
  * Update the user preferences.
  *
  * @param {Object} args Arguments send to the webservice.
@@ -108,81 +154,4 @@ export const updateUserPreferences = (args) => {
     };
 
     Ajax.call([request])[0].fail(Notification.exception);
-};
-
-
-/**
- * Hide fields filters using REST API.
- *
- * @param {String} component
- * @param {String} area
- * @param {Array} fieldshortnames
- * @return {Promise}
- */
-export const hideFieldsFilters = async(component, area, fieldshortnames) => {
-    const url = `${M.cfg.wwwroot}/r.php/api/rest/v2/local_resourcelibrary/filters/${component}/${area}`;
-
-    try {
-        const response = await fetch(url, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            credentials: 'same-origin',
-            body: JSON.stringify({
-                fieldshortnames: fieldshortnames
-            })
-        });
-
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error || `HTTP ${response.status}`);
-        }
-
-        return await response.json();
-    } catch (error) {
-        Notification.exception({
-            message: error.message || 'An error occurred while hiding field filters'
-        });
-        throw error;
-    }
-};
-
-/**
- * Show fields filters using REST API.
- *
- * @param {String} component
- * @param {String} area
- * @param {Array} fieldshortnames
- * @return {Promise}
- */
-export const showFieldsFilters = async(component, area, fieldshortnames) => {
-    const url = `${M.cfg.wwwroot}/r.php/api/rest/v2/local_resourcelibrary/filters/${component}/${area}`;
-
-    try {
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            credentials: 'same-origin',
-            body: JSON.stringify({
-                fieldshortnames: fieldshortnames
-            })
-        });
-
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error || `HTTP ${response.status}`);
-        }
-
-        return await response.json();
-    } catch (error) {
-        Notification.exception({
-            message: error.message || 'An error occurred while showing field filters'
-        });
-        throw error;
-    }
 };

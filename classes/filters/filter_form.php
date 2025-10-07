@@ -25,7 +25,6 @@
 namespace local_resourcelibrary\filters;
 
 use local_resourcelibrary\local\customfield_utils;
-use local_resourcelibrary\local\utils;
 
 defined('MOODLE_INTERNAL') || die;
 global $CFG;
@@ -54,16 +53,14 @@ class filter_form extends \moodleform {
 
         foreach ($handler->get_fields() as $field) {
             $shortname = $field->get('shortname');
-            if (!utils::is_field_hidden_filters($handler, $shortname)) {
-                // If pageid is set, only show fields that are configured for this page
-                if ($pageid !== null && !empty($allowedcustomfields) && !in_array($shortname, $allowedcustomfields)) {
-                    continue;
-                }
+            // If pageid is set, only show fields that are configured for this page
+            if ($pageid !== null && !empty($allowedcustomfields) && !in_array($shortname, $allowedcustomfields)) {
+                continue;
+            }
 
-                $filter = customfield_utils::get_filter_from_field($field);
-                if ($filter) {
-                    $filter->add_to_form($mform);
-                }
+            $filter = customfield_utils::get_filter_from_field($field);
+            if ($filter) {
+                $filter->add_to_form($mform);
             }
         }
         // Add button.
@@ -122,24 +119,22 @@ class filter_form extends \moodleform {
 
         foreach ($handler->get_fields() as $field) {
             $shortname = $field->get('shortname');
-            if (!utils::is_field_hidden_filters($handler, $shortname)) {
-                // If pageid is set, only process fields that are configured for this page
-                if ($pageid !== null && !empty($allowedcustomfields) && !in_array($shortname, $allowedcustomfields)) {
-                    continue;
-                }
+            // If pageid is set, only process fields that are configured for this page
+            if ($pageid !== null && !empty($allowedcustomfields) && !in_array($shortname, $allowedcustomfields)) {
+                continue;
+            }
 
-                $filter = customfield_utils::get_filter_from_field($field);
-                foreach ($submission as $key => $value) {
-                    if ($key == 'customfield_' . $shortname) {
-                        $prefilters[$key]['operator'] = clean_param($value['operator'], PARAM_INT);
-                        $prefilters[$key]['type'] = clean_param($value['type'], PARAM_ALPHANUMEXT);
-                        if (is_array($value['value'])) {
-                            foreach ($value['value'] as $k => $v) {
-                                $prefilters[$key]['value'][$k] = clean_param($v, $filter->get_param_type());
-                            }
-                        } else {
-                            $prefilters[$key]['value'] = clean_param($value['value'], $filter->get_param_type());
+            $filter = customfield_utils::get_filter_from_field($field);
+            foreach ($submission as $key => $value) {
+                if ($key == 'customfield_' . $shortname) {
+                    $prefilters[$key]['operator'] = clean_param($value['operator'], PARAM_INT);
+                    $prefilters[$key]['type'] = clean_param($value['type'], PARAM_ALPHANUMEXT);
+                    if (is_array($value['value'])) {
+                        foreach ($value['value'] as $k => $v) {
+                            $prefilters[$key]['value'][$k] = clean_param($v, $filter->get_param_type());
                         }
+                    } else {
+                        $prefilters[$key]['value'] = clean_param($value['value'], $filter->get_param_type());
                     }
                 }
             }

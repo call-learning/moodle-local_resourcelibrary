@@ -22,6 +22,7 @@
  */
 
 import Notification from 'core/notification';
+import {updateItemVisibility} from './repository';
 
 // Set the constants for the visibility.
 const LOCAL_RESOURCELIBRARY_ITEM_VISIBLE = 0;
@@ -86,17 +87,23 @@ class ItemVisibility {
      *
      * @param {HTMLElement} element
      */
-    hideFromCatalogue(element) {
-        const id = element.dataset.id;
+    async hideFromCatalogue(element) {
         const itemid = element.dataset.itemid;
         const itemtype = element.dataset.itemtype;
         const params = {
-            id: id,
             itemid: itemid,
             itemtype: itemtype,
             visibility: LOCAL_RESOURCELIBRARY_ITEM_HIDDEN
         };
-        this.sendRequest(params);
+
+        try {
+            const result = await updateItemVisibility(params);
+            this.updateButtons([result]);
+        } catch (error) {
+            Notification.exception({
+                message: error.message
+            });
+        }
     }
 
     /**
@@ -104,58 +111,21 @@ class ItemVisibility {
      *
      * @param {HTMLElement} element
      */
-    showInCatalogue(element) {
-        const id = element.dataset.id;
+    async showInCatalogue(element) {
         const itemid = element.dataset.itemid;
         const itemtype = element.dataset.itemtype;
         const params = {
-            id: id,
             itemid: itemid,
             itemtype: itemtype,
             visibility: LOCAL_RESOURCELIBRARY_ITEM_VISIBLE
         };
-        this.sendRequest(params);
-    }
 
-    /**
-     * Send the REST API request.
-     * @param {Object} params
-     */
-    async sendRequest(params) {
         try {
-            const url = `${M.cfg.wwwroot}/r.php/api/rest/v2/local_resourcelibrary/items/${params.itemid}/visibility`;
-            const body = {
-                itemtype: parseInt(params.itemtype),
-                visibility: parseInt(params.visibility)
-            };
-
-            const response = await fetch(url, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest'
-                },
-                body: JSON.stringify(body)
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.error || `HTTP ${response.status}`);
-            }
-
-            const data = await response.json();
-            if (data.success) {
-                this.updateButtons([{
-                    itemid: data.itemid,
-                    itemtype: data.itemtype,
-                    visibility: data.visibility
-                }]);
-            } else {
-                throw new Error('Failed to update item visibility');
-            }
+            const result = await updateItemVisibility(params);
+            this.updateButtons([result]);
         } catch (error) {
             Notification.exception({
-                message: error.message || 'An error occurred while updating item visibility'
+                message: error.message
             });
         }
     }

@@ -99,6 +99,7 @@ $string['resourcelibraryfield_visibletoteachers_help'] = 'Resource Library Field
 $string['resourcelibraryfieldsettings'] = 'Resource Library Field Settings';
 $string['resourcelibrarymainsettings'] = 'Resource Library: Global Settings';
 $string['settingvisibilitynotallowed'] = 'Setting visibility is not allowed';
+$string['shortnameshouldbeunique'] = 'Custom field shortname should be unique';
 $string['showincatalogue'] = 'Show in catalogue';
 $string['title'] = 'Full name';
 $string['title:desc'] = 'Full name (Descending)';
