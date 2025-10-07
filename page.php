@@ -63,8 +63,6 @@ $PAGE->navbar->add($pagetitle);
 $renderer = $PAGE->get_renderer('local_resourcelibrary');
 
 echo $OUTPUT->header();
-
-// Display catalogue page description or filters info
 echo $OUTPUT->heading($pagetitle);
 
 echo $renderer->render($renderable);

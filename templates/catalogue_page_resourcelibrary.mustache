@@ -53,18 +53,18 @@
      data-catalogue-page="{{cataloguepage.id}}">
 
     <div class="w-100 d-flex justify-content-end">
-    {{#editfieldsurl}}
-        <a href="{{editfieldsurl}}" class="btn btn-sm btn-secondary m-2" role="button">
+    {{#pagesurl}}
+        <a href="{{pagesurl}}" class="btn btn-sm btn-secondary m-2" role="button">
             {{#str}}resourcelibraryfieldsettings, local_resourcelibrary{{/str}}
         </a>
-    {{/editfieldsurl}}
+    {{/pagesurl}}
     </div>
 
     <div class="container-fluid">
         <div class="row no-gutters">
             <div class="col-12">
                 <div id="resourcelibrary-filter-{{uniqid}}">
-                    {{{ filtersformcontent }}}
+                {{{ filtersformcontent }}}
                 </div>
             </div>
         </div>

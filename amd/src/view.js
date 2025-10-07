@@ -22,6 +22,7 @@
 import * as Selectors from 'local_resourcelibrary/selectors';
 import State from 'local_resourcelibrary/local/state';
 import stateTemplateInit from 'local_resourcelibrary/local/components/view';
+import {updateUserPreferences} from './repository';
 
 export default class View {
     static NUMCOURSES_PERPAGE = [12, 24, 48];
@@ -100,6 +101,16 @@ export default class View {
                 e.preventDefault();
                 const itemsPerPage = parseInt(itemsPerPageSelect.value, 10);
                 State.setItemsPerPage(itemsPerPage);
+
+                // Save user preference
+                updateUserPreferences({
+                    preferences: [
+                        {
+                            type: 'local_resourcelibrary_user_paging_preference',
+                            value: itemsPerPage.toString()
+                        }
+                    ]
+                });
             }
         });
     }

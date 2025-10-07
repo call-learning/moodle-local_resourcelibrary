@@ -88,16 +88,13 @@ class behat_local_resourcelibrary extends behat_base {
     /**
      * BeforeScenario hook to check if the scenario is tagged with @with_multiselect_installed
      *
-     * @BeforeScenario @mod_bigbluebuttonbn
+     * @BeforeScenario @with_multiselect_installed
      *
      * @param BeforeScenarioScope $scope
      */
     public function before_scenario(BeforeScenarioScope $scope) {
-        $tags = $scope->getFeature()->getTags();
-        foreach ($tags as $tag) {
-            if ($tag === 'with_multiselect_installed' && !utils::is_multiselect_installed()) {
-                throw new SkippedException('Multiselect plugin is not installed, skipping scenario.');
-            }
+        if (!utils::is_multiselect_installed()) {
+            throw new SkippedException('Multiselect plugin is not installed, skipping scenario.');
         }
     }
 }

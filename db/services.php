@@ -26,13 +26,5 @@
 defined('MOODLE_INTERNAL') || die;
 
 $functions = [
-    'local_resourcelibrary_get_hidden_fields_filters' => [
-        'classname' => \local_resourcelibrary\external\get_hidden_fields::class,
-        'methodname' => 'execute',
-        'description' => 'Get the list of filters that are hidden',
-        'type' => 'read',
-        'capabilities' => 'local/resourcelibrary:configurecustomfields',
-        'ajax' => true,
-        'loginrequired' => true,
-    ],
+    // Services can be added here if needed in the future
 ];

@@ -34,7 +34,7 @@ Feature: As an admin I should be able to navigate through the resource library
     And I should see "Course 01"
     And I should see "Course 11"
     And I should not see "Course 13"
-    And I click on "li.page-item[data-control='next'] a" "css"
+    And I click on "button[data-page='2']" "css"
     When I should see "Course 14"
     Then I should see "Course 18"
 
@@ -43,9 +43,12 @@ Feature: As an admin I should be able to navigate through the resource library
     And I log in as "admin"
     And I navigate to resource library "Home" page
     And I wait until the page is ready
-    And I click on "Show 12 items per page" "button"
-    And I click on "24" "link"
+    And I should see "Course 01"
+    And I should see "Course 12"
+    And I should not see "Course 13"
+    And I set the field "items-per-page-select" to "24"
+    And I wait until the page is ready
     And I should see "Course 18"
     And I reload the page
+    And I wait until the page is ready
     When I should see "Course 18"
-    Then I should see "24" in the "[data-action='limit-toggle']" "css_element"

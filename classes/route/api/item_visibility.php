@@ -31,7 +31,7 @@ use core\router\schema\request_body;
 use core\router\schema\response\content\payload_response_type;
 use core\router\schema\objects\schema_object;
 use core\router\schema\objects\scalar_type;
-use local_resourcelibrary\external\set_item_visibility;
+use local_resourcelibrary\local\api\item_visibility_api;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use GuzzleHttp\Psr7\Response;
@@ -107,8 +107,8 @@ class item_visibility {
         ];
 
         try {
-            // Use existing external service
-            $result = set_item_visibility::execute($items['items']);
+            // Use the new API directly
+            $result = item_visibility_api::set_items_visibility($items['items']);
 
             if (!empty($result['warnings'])) {
                 return new Response(403, ['Content-Type' => 'application/json'],
@@ -120,9 +120,9 @@ class item_visibility {
                 return new Response(200, ['Content-Type' => 'application/json'],
                     json_encode([
                         'success' => true,
-                        'itemid' => $item['itemid'],
-                        'itemtype' => $item['itemtype'],
-                        'visibility' => $item['visibility']
+                        'itemid' => $item->itemid,
+                        'itemtype' => $item->itemtype,
+                        'visibility' => $item->visibility
                     ]));
             }
 

@@ -127,7 +127,15 @@ abstract class base_resourcelibrary implements renderable, templatable {
 
         [$this->sortcolumn, $this->sortorder] = explode(',', $sort);
         $this->view = $view;
-        $this->paging = $paging;
+
+        // Check for user paging preference and use it if valid
+        $userPagingPreference = get_user_preferences('local_resourcelibrary_user_paging_preference');
+        if ($userPagingPreference && in_array((int)$userPagingPreference, [self::PAGING_12, self::PAGING_24, self::PAGING_48])) {
+            $this->paging = (int)$userPagingPreference;
+        } else {
+            $this->paging = $paging;
+        }
+
         $config = get_config('local_resourcelibrary');
         if (empty($config->displaycategories)) {
             $this->displaycategories = self::DISPLAY_CATEGORIES_OFF;
@@ -180,7 +188,7 @@ abstract class base_resourcelibrary implements renderable, templatable {
             'paging' => $this->paging,
             'displaycategories' => $this->displaycategories,
             'entitytype' => $handler->get_area(),
-            'editfieldsurl' => is_siteadmin() ? new moodle_url('/local/resourcelibrary/coursefields.php') : null,
+            'pagesurl' => is_siteadmin() ? new moodle_url('/local/resourcelibrary/catalogue_pages.php') : null,
 
         ];
         $defaultvariables['filtersformcontent'] = $this->get_filters_content($handler, $pageid);
