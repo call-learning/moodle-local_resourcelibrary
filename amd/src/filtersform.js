@@ -107,8 +107,13 @@ export const init = (selector) => {
     const form = target.querySelector('form');
     if (form) {
         const filterdataarray = getFilterData(form, true);
-        document.dispatchEvent(new CustomEvent('resourcelibrary-filters-inited', {
-            detail: filterdataarray
-        }));
+        // Only dispatch the event if there are actual filters with values
+        const hasFilters = filterdataarray && filterdataarray.length > 0 &&
+            filterdataarray.some(filter => filter.value !== undefined && filter.value !== '');
+        if (hasFilters) {
+            document.dispatchEvent(new CustomEvent('resourcelibrary-filters-inited', {
+                detail: filterdataarray
+            }));
+        }
     }
 };

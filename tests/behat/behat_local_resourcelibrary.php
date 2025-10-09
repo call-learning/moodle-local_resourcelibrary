@@ -38,18 +38,64 @@ require_once(__DIR__ . '/../../../../lib/behat/behat_base.php');
  */
 class behat_local_resourcelibrary extends behat_base {
     /**
-     * Add a step to navigate to /local/resourcelibrary/index.php
+     * Add a step to navigate to a specific resource library page
      *
-     * @param string $coursefullname
-     * @Given /^I navigate to resource library "(?P<coursefullname_string>(?:[^"]|\\")*)" page$/
+     * @param string $pagename The name of the catalogue page
+     * @Given /^I navigate to resource library "(?P<pagename_string>(?:[^"]|\\")*)" page$/
      */
-    public function i_navigate_to_resource_librar_course_content(string $coursefullname) {
+    public function i_navigate_to_resource_librar_course_content(string $pagename) {
         $url = new moodle_url('/local/resourcelibrary/index.php');
-        if ($coursefullname != "Home") {
-            $courseid = $this->get_course_id($coursefullname);
-            $url->param('courseid', $courseid);
+        if ($pagename != "Home") {
+            $pageid = $this->get_catalogue_page_id($pagename);
+            $url = new moodle_url('/local/resourcelibrary/page.php', ['id' => $pageid]);
         }
         $this->execute('behat_general::i_visit', [$url]);
+    }
+
+    /**
+     * Get the catalogue page ID from the page name
+     *
+     * @param string $pagename
+     * @return int
+     * @throws Exception
+     */
+    protected function get_catalogue_page_id(string $pagename): int {
+        global $DB;
+
+        $pageid = $DB->get_field('local_resourcelibrary_pages', 'id', ['name' => $pagename]);
+        if (!$pageid) {
+            throw new Exception("Catalogue page with name '{$pagename}' not found");
+        }
+
+        return $pageid;
+    }
+
+    /**
+     * Navigate to the catalogue pages management interface
+     *
+     * @Given /^I navigate to catalogue pages management$/
+     */
+    public function i_navigate_to_catalogue_pages_management() {
+        // First navigate to the resource library home page
+        $this->execute('behat_general::i_visit', [new moodle_url('/local/resourcelibrary/index.php')]);
+
+        // Then click on the "Catalogue pages" button
+        $this->execute('behat_general::i_click_on', ['Catalogue pages', 'button']);
+    }
+
+    /**
+     * Navigate to view a catalogue page by clicking view in the dropdown
+     *
+     * @param string $pagename
+     * @Given /^I view the catalogue page "(?P<pagename_string>(?:[^"]|\\")*)"$/
+     */
+    public function i_view_catalogue_page(string $pagename) {
+        // Find the actions dropdown for the specific page and click it
+        $xpath = "//tr[td/a[contains(text(), '$pagename')]]//button[contains(@id,'actions-dropdown')]";
+        $this->execute('behat_general::i_click_on', [$xpath, 'xpath_element']);
+
+        // Click on the view item in the dropdown
+        $this->execute('behat_general::i_click_on', ['View', 'link']);
     }
 
     /**

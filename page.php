@@ -49,6 +49,7 @@ $context = context_system::instance();
 // Create the renderable for this specific catalogue page
 $renderable = new catalogue_page_resourcelibrary($cataloguepage);
 $PAGE->add_body_class('resource-library-catalogue-page');
+$PAGE->add_body_class('mediumwidth');
 
 $strresourcelibrary = \local_resourcelibrary\local\utils::get_resource_library_menu_text();
 $pagetitle = $cataloguepage->get('name');
@@ -56,6 +57,7 @@ $pageurl = new moodle_url('/local/resourcelibrary/page.php', $pageparams);
 
 $PAGE->set_context($context);
 $PAGE->set_url($pageurl);
+
 $PAGE->set_title($pagetitle);
 $PAGE->navbar->add($strresourcelibrary, new moodle_url('/local/resourcelibrary/index.php'));
 $PAGE->navbar->add($pagetitle);

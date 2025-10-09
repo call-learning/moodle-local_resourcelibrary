@@ -48,7 +48,7 @@ if ($id > 0) {
     $title = get_string('addcataloguepage', 'local_resourcelibrary');
 }
 
-$PAGE->set_url('/local/resourcelibrary/edit.php', ['id' => $id]);
+$PAGE->set_url(new moodle_url('/local/resourcelibrary/edit.php', ['id' => $id]));
 $PAGE->set_context(context_system::instance());
 $PAGE->set_title($title);
 $PAGE->set_heading($title);

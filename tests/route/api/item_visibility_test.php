@@ -253,9 +253,9 @@ class item_visibility_test extends local_resourcelibrary_testcase {
         // Execute the request
         $result = $route->handle_put($request, $response, $course->id);
 
-        // Should return error due to lack of permissions
-        // The external service throws an exception which results in 500
-        $this->assertEquals(500, $result->getStatusCode());
+        // Should return 403 error due to lack of permissions
+        // The API properly returns 403 when there are permission issues
+        $this->assertEquals(403, $result->getStatusCode());
         $body = json_decode($result->getBody()->getContents(), true);
         $this->assertArrayHasKey('error', $body);
     }

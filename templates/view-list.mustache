@@ -33,13 +33,12 @@
         ]
     }
 }}
-
 <ul class="list-group">
     {{#entities}}
         <li class="list-group-item entity-listitem"
             data-region="entity-content"
             data-entity-id="{{{id}}}">
-            <div class="row-fluid">
+            <div class="row">
                 <div class="col-md-11 col-md-11 d-flex align-items-center">
                     <div class="d-flex align-items-center">
                         <div class="text-muted muted d-flex flex-wrap">
@@ -57,16 +56,13 @@
                                 <div>{{{shortname}}}</div>
                             {{/showshortname}}
                         </div>
-                        {{#image}}
-                            <img class="list-image mx-1" src="{{{image}}}" alt="{{#str}}aria:entityimage, local_resourcelibrary{{/str}}">
-                        {{/image}}
                         {{#iconurl}}
-                            <img class="list-icon" src="{{{iconurl}}}" alt="{{#str}}aria:entityimage, local_resourcelibrary{{/str}}">
+                            <img class="list-image p-2" src="{{{iconurl}}}" alt="{{#str}}aria:entityimage, local_resourcelibrary{{/str}}">
                         {{/iconurl}}
                         <span class="sr-only">
                             {{#str}}aria:fullname, local_resourcelibrary{{/str}}
                         </span>
-                        <span class="item-name">
+                        <span class="item-name p-x-1">
                             {{{fullname}}}
                         </span>
                         {{^visible}}

@@ -38,7 +38,7 @@ $context = context_system::instance();
 
 $renderable = new local_resourcelibrary\output\course_resourcelibrary();
 $PAGE->add_body_class('resource-library-courses');
-
+$PAGE->add_body_class('mediumwidth');
 
 $site = get_site();
 

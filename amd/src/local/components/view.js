@@ -33,6 +33,7 @@ const entitiesTemplate = (root = 'resourcelibrary') => {
     if (!app) {
         return;
     }
+    const wrapper = app.querySelector('[data-region="resourcelibrary-view"]');
     const region = app.querySelector('[data-region="resourcelibrary-view-content"]');
     if (!region) {
         return;
@@ -62,7 +63,7 @@ const entitiesTemplate = (root = 'resourcelibrary') => {
                     'local_resourcelibrary/view-cards';
                 ({html, js} = await Templates.renderForPromise(templateName, {entities: entities}));
             } else {
-                const noentitiesimg = region.getAttribute('data-noentitiesimg');
+                const noentitiesimg = wrapper.getAttribute('data-noentitiesimg');
                 ({html, js} = await Templates.renderForPromise('local_resourcelibrary/no-entities', {
                     noentitiesimg: noentitiesimg
                 }));
@@ -94,10 +95,7 @@ const paginationTemplate = (root = 'resourcelibrary') => {
 
     const renderPagination = async() => {
         const data = State.getData();
-        if (data.currentPage === undefined || data.totalItems <= data.itemsPerPage) {
-            region.innerHTML = '';
-            return;
-        }
+        region.innerHTML = '';
 
         const totalPages = Math.ceil(data.totalItems / data.itemsPerPage);
         const currentPage = data.currentPage;
@@ -113,7 +111,7 @@ const paginationTemplate = (root = 'resourcelibrary') => {
             endItem: Math.min(currentPage * itemsPerPage, data.totalItems),
             previousPage: currentPage - 1,
             nextPage: currentPage + 1,
-            showPagination: totalPages > 1,
+            showPagination: true,
             hasPrevious: currentPage > 1,
             hasNext: currentPage < totalPages,
             pages: [],
