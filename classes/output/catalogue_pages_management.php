@@ -101,11 +101,11 @@ class catalogue_pages_management implements renderable, templatable {
             ];
         }
 
-        $addurl = new moodle_url('/local/resourcelibrary/edit.php');
+        $addurl = is_siteadmin() ? new moodle_url('/local/resourcelibrary/edit.php') : null;
 
         return [
             'pages' => $pagedata,
-            'addurl' => $addurl->out(false),
+            'addurl' => $addurl ? $addurl->out(false) : null,
             'haspages' => !empty($pagedata),
         ];
     }

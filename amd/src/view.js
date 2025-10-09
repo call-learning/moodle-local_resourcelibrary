@@ -74,9 +74,9 @@ export default class View {
         }
 
         // Listen for filter changes
-        // document.addEventListener('resourcelibrary-filters-inited', (e) => {
-        //     State.setFilters(e.detail);
-        // });
+        document.addEventListener('resourcelibrary-filters-inited', (e) => {
+            State.setFilters(e.detail);
+        });
 
         document.addEventListener('resourcelibrary-filters-change', (e) => {
             State.setFilters(e.detail);
