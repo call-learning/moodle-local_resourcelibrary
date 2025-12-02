@@ -1,9 +1,10 @@
 .card-course {
-    background: #ffffff;
+    background: #fff;
     box-shadow: 0 2px 14px -4px rgba(0, 0, 0, 0.25);
     height: 288px !important; /* stylelint-disable-line declaration-no-important */
     position: relative;
 }
+
 @media (max-width: 767.98px) {
     .card-course {
         margin: 0;
@@ -147,11 +148,13 @@
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
 }
+
 @media (min-width: 576px) {
     .path-local-resourcelibrary .dashboard-card-deck .dashboard-card.card-course {
         width: calc(50% - 0.5rem);
     }
 }
+
 @media (min-width: 840px) {
     .path-local-resourcelibrary .dashboard-card-deck .dashboard-card.card-course {
         width: calc(33.33% - 0.5rem);
