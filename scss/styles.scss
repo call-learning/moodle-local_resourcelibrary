@@ -4,8 +4,7 @@ $primary: #00b8de;
 .card-course {
     background: $white;
     box-shadow: 0 2px 14px -4px rgba(0, 0, 0, 0.25);
-    /* stylelint-disable declaration-no-important */
-    height: 288px !important;
+    height: 288px !important; /* stylelint-disable-line declaration-no-important */
     position: relative;
 
     @media (max-width: 767.98px) {
@@ -61,6 +60,9 @@ $primary: #00b8de;
         position: absolute;
         right: 0; // Fix dashboard card arrow.
     }
+}
+#page-local-resourcelibrary-edit .form-autocomplete-selection .text-dark {
+    color: #fff !important; /* stylelint-disable-line declaration-no-important */
 }
 
 #page-local-resourcelibrary-page .dashboard-card-deck .dashboard-card,
