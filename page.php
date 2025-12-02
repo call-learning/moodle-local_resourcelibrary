@@ -29,12 +29,12 @@ use local_resourcelibrary\output\catalogue_page_resourcelibrary;
 
 global $CFG, $PAGE, $DB, $OUTPUT, $USER;
 
-$id = required_param('id', PARAM_INT); // Catalogue page ID
+$id = required_param('id', PARAM_INT); // Catalogue page ID.
 $edit = optional_param('edit', null, PARAM_BOOL);    // Turn editing on and off.
 
 require_login();
 
-// Load the catalogue page
+// Load the catalogue page.
 try {
     $cataloguepage = new catalogue_page($id);
 } catch (Exception $e) {
@@ -46,7 +46,7 @@ $pageparams = ['id' => $id];
 
 $context = context_system::instance();
 
-// Create the renderable for this specific catalogue page
+// Create the renderable for this specific catalogue page.
 $renderable = new catalogue_page_resourcelibrary($cataloguepage);
 $PAGE->add_body_class('resource-library-catalogue-page');
 $PAGE->add_body_class('mediumwidth');

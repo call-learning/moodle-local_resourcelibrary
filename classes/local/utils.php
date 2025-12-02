@@ -35,8 +35,6 @@ use Matrix\Exception;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class utils {
-
-
     /**
      * Get Resource library URL and text description for the current page
      *

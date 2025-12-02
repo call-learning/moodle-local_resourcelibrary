@@ -20,7 +20,6 @@ use core\param;
 use core\router\route;
 use core\router\schema\parameters\query_parameter;
 use core\router\schema\response\payload_response;
-
 use local_resourcelibrary\local\api\course_filter_api;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -40,7 +39,6 @@ use Psr\Http\Message\ServerRequestInterface;
     path: '/courses',
 )]
 class courses {
-
     /**
      * Get filtered courses from the resource library
      *
@@ -55,9 +53,9 @@ class courses {
      * @return payload_response
      */
     #[route(
-        method: 'GET',
         title: 'Get filtered courses',
         description: 'Retrieve filtered and paginated course list from the resource library with custom field support',
+        method: 'GET',
         queryparams: [
             new query_parameter(
                 name: 'pageid',
@@ -105,28 +103,28 @@ class courses {
         int $limit = 0,
         int $offset = 0,
     ): payload_response {
-        // Parse query parameters
+        // Parse query parameters.
         $queryparams = $request->getQueryParams();
 
-        // Override URL parameters with query parameters if provided
+        // Override URL parameters with query parameters if provided.
         $pageid = isset($queryparams['pageid']) ? (int) $queryparams['pageid'] : $pageid;
         $categoryid = isset($queryparams['categoryid']) ? (int) $queryparams['categoryid'] : $categoryid;
         $limit = isset($queryparams['limit']) ? (int) $queryparams['limit'] : $limit;
         $offset = isset($queryparams['offset']) ? (int) $queryparams['offset'] : $offset;
 
-        // Parse filters from JSON string if provided
+        // Parse filters from JSON string if provided.
         $filters = [];
         if (!empty($queryparams['filters'])) {
             $filters = json_decode($queryparams['filters'], true) ?? [];
         }
 
-        // Parse sorting from JSON string if provided
+        // Parse sorting from JSON string if provided.
         $sorting = [];
         if (!empty($queryparams['sorting'])) {
             $sorting = json_decode($queryparams['sorting'], true) ?? [];
         }
 
-        // Use the new API to get filtered courses
+        // Use the new API to get filtered courses.
         $result = course_filter_api::get_filtered_courses($pageid, $filters, $limit, $offset, $sorting, $categoryid);
 
         return new payload_response($result, $request, $response);

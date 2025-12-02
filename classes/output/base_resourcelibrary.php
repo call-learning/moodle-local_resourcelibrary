@@ -128,10 +128,10 @@ abstract class base_resourcelibrary implements renderable, templatable {
         [$this->sortcolumn, $this->sortorder] = explode(',', $sort);
         $this->view = $view;
 
-        // Check for user paging preference and use it if valid
-        $userPagingPreference = get_user_preferences('local_resourcelibrary_user_paging_preference');
-        if ($userPagingPreference && in_array((int)$userPagingPreference, [self::PAGING_12, self::PAGING_24, self::PAGING_48])) {
-            $this->paging = (int)$userPagingPreference;
+        // Check for user paging preference and use it if valid.
+        $userpaginpreference = get_user_preferences('local_resourcelibrary_user_paging_preference');
+        if ($userpaginpreference && in_array((int)$userpaginpreference, [self::PAGING_12, self::PAGING_24, self::PAGING_48])) {
+            $this->paging = (int)$userpaginpreference;
         } else {
             $this->paging = $paging;
         }

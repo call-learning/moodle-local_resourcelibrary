@@ -76,10 +76,10 @@ class behat_local_resourcelibrary extends behat_base {
      * @Given /^I navigate to catalogue pages management$/
      */
     public function i_navigate_to_catalogue_pages_management() {
-        // First navigate to the resource library home page
+        // First navigate to the resource library home page.
         $this->execute('behat_general::i_visit', [new moodle_url('/local/resourcelibrary/index.php')]);
 
-        // Then click on the "Catalogue pages" button
+        // Then click on the "Catalogue pages" button.
         $this->execute('behat_general::i_click_on', ['Catalogue pages', 'button']);
     }
 
@@ -90,11 +90,11 @@ class behat_local_resourcelibrary extends behat_base {
      * @Given /^I view the catalogue page "(?P<pagename_string>(?:[^"]|\\")*)"$/
      */
     public function i_view_catalogue_page(string $pagename) {
-        // Find the actions dropdown for the specific page and click it
+        // Find the actions dropdown for the specific page and click it.
         $xpath = "//tr[td/a[contains(text(), '$pagename')]]//button[contains(@id,'actions-dropdown')]";
         $this->execute('behat_general::i_click_on', [$xpath, 'xpath_element']);
 
-        // Click on the view item in the dropdown
+        // Click on the view item in the dropdown.
         $this->execute('behat_general::i_click_on', ['View', 'link']);
     }
 

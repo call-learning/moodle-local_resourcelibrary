@@ -60,7 +60,7 @@ final class get_filtered_course_test extends local_resourcelibrary_testcase {
      * @return mixed
      */
     protected function get_filtered_courses(...$params) {
-        // Use the new API directly instead of the external service
+        // Use the new API directly instead of the external service.
         return course_filter_api::get_filtered_courses(...$params);
     }
 
@@ -128,24 +128,34 @@ final class get_filtered_course_test extends local_resourcelibrary_testcase {
     public function test_course_filter_api_categories(): void {
         $dg = $this->getDataGenerator();
 
-        // Create categories
+        // Create categories.
         $cat1 = $dg->create_category(['name' => 'Category 1']);
         $cat2 = $dg->create_category(['name' => 'Category 2']);
 
-        // Create courses in different categories
+        // Create courses in different categories.
         $course1 = $dg->create_course(['category' => $cat1->id, 'fullname' => 'Course 1']);
         $course2 = $dg->create_course(['category' => $cat2->id, 'fullname' => 'Course 2']);
         $course3 = $dg->create_course(['category' => $cat1->id, 'fullname' => 'Course 3']);
 
-        // Test filtering by single category using legacy categoryid parameter
+        // Test filtering by single category using legacy categoryid parameter.
         $courses = course_filter_api::get_filtered_courses(
-            0, [], 0, 0, [], $cat1->id
+            0,
+            [],
+            0,
+            0,
+            [],
+            $cat1->id
         );
         $this->assertCount(2, $courses);
 
-        // Test filtering by multiple categories using legacy categoryid parameter
+        // Test filtering by multiple categories using legacy categoryid parameter.
         $courses = course_filter_api::get_filtered_courses(
-            0, [], 0, 0, [], $cat2->id
+            0,
+            [],
+            0,
+            0,
+            [],
+            $cat2->id
         );
         $this->assertCount(1, $courses);
     }
@@ -164,31 +174,39 @@ final class get_filtered_course_test extends local_resourcelibrary_testcase {
     public function test_course_filter_api_with_pageid(): void {
         $dg = $this->getDataGenerator();
 
-        // Create categories
+        // Create categories.
         $cat1 = $dg->create_category(['name' => 'Category 1']);
         $cat2 = $dg->create_category(['name' => 'Category 2']);
 
-        // Create courses in different categories
+        // Create courses in different categories.
         $course1 = $dg->create_course(['category' => $cat1->id, 'fullname' => 'Course 1']);
         $course2 = $dg->create_course(['category' => $cat2->id, 'fullname' => 'Course 2']);
         $course3 = $dg->create_course(['category' => $cat1->id, 'fullname' => 'Course 3']);
 
-        // Create a catalogue page with specific categories
+        // Create a catalogue page with specific categories.
         $cataloguepage = new \local_resourcelibrary\local\persistent\catalogue_page();
         $cataloguepage->set('name', 'Test Catalogue Page');
         $cataloguepage->set_categories_array([$cat1->id]);
         $cataloguepage->create();
 
-        // Test filtering using pageid
+        // Test filtering using pageid.
         $courses = course_filter_api::get_filtered_courses(
-            $cataloguepage->get('id'), [], 0, 0, []
+            $cataloguepage->get('id'),
+            [],
+            0,
+            0,
+            []
         );
-        $this->assertCount(2, $courses); // Should only return courses from cat1
+        $this->assertCount(2, $courses); // Should only return courses from cat1.
 
-        // Test with pageid = 0 (show all courses)
+        // Test with pageid = 0 (show all courses).
         $courses = course_filter_api::get_filtered_courses(
-            0, [], 0, 0, []
+            0,
+            [],
+            0,
+            0,
+            []
         );
-        $this->assertCount(3, $courses); // Should return all courses
+        $this->assertCount(3, $courses); // Should return all courses.
     }
 }

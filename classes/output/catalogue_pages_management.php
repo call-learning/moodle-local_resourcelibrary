@@ -30,8 +30,6 @@ use renderable;
 use renderer_base;
 use templatable;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Catalogue pages management renderable
  *
@@ -40,7 +38,6 @@ defined('MOODLE_INTERNAL') || die();
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class catalogue_pages_management implements renderable, templatable {
-
     /**
      * Constructor
      */
@@ -63,7 +60,7 @@ class catalogue_pages_management implements renderable, templatable {
             $categoriesarray = $page->get_categories_array();
             $customfieldsarray = $page->get_customfields_array();
 
-            // Format categories for display
+            // Format categories for display.
             $categoriestext = '';
             if (!empty($categoriesarray)) {
                 $categorynames = [];
@@ -75,7 +72,7 @@ class catalogue_pages_management implements renderable, templatable {
                 $categoriestext = implode(', ', $categorynames);
             }
 
-            // Format custom fields for display
+            // Format custom fields for display.
             $customfieldstext = '';
             if (!empty($customfieldsarray)) {
                 $customfieldstext = implode(', ', $customfieldsarray);
@@ -86,7 +83,7 @@ class catalogue_pages_management implements renderable, templatable {
             $deleteurl = new moodle_url('/local/resourcelibrary/edit.php', [
                 'id' => $page->get('id'),
                 'action' => 'delete',
-                'sesskey' => sesskey()
+                'sesskey' => sesskey(),
             ]);
 
             $pagedata[] = [

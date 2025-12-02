@@ -48,12 +48,12 @@ class filter_form extends \moodleform {
         $mform->addElement('header', 'miscellaneoussettingshdr', get_string('filters', 'local_resourcelibrary'));
         $mform->setAdvanced('miscellaneoussettingshdr');
 
-        // Get allowed custom fields for this page
+        // Get allowed custom fields for this page.
         $allowedcustomfields = $this->get_allowed_customfields($pageid);
 
         foreach ($handler->get_fields() as $field) {
             $shortname = $field->get('shortname');
-            // If pageid is set, only show fields that are configured for this page
+            // If pageid is set, only show fields that are configured for this page.
             if ($pageid !== null && !empty($allowedcustomfields) && !in_array($shortname, $allowedcustomfields)) {
                 continue;
             }
@@ -83,7 +83,7 @@ class filter_form extends \moodleform {
      */
     private function get_allowed_customfields($pageid) {
         if ($pageid === null) {
-            return []; // No filtering, show all fields
+            return []; // No filtering, show all fields.
         }
 
         try {
@@ -92,7 +92,7 @@ class filter_form extends \moodleform {
                 return $cataloguepage->get_customfields_array();
             }
         } catch (\Exception $e) {
-            // If page not found or error, show all fields
+            // If page not found or error, show all fields.
             return [];
         }
 
@@ -114,12 +114,12 @@ class filter_form extends \moodleform {
         $handler = $this->_customdata['handler'];
         $pageid = $this->_customdata['pageid'] ?? null;
 
-        // Get allowed custom fields for this page
+        // Get allowed custom fields for this page.
         $allowedcustomfields = $this->get_allowed_customfields($pageid);
 
         foreach ($handler->get_fields() as $field) {
             $shortname = $field->get('shortname');
-            // If pageid is set, only process fields that are configured for this page
+            // If pageid is set, only process fields that are configured for this page.
             if ($pageid !== null && !empty($allowedcustomfields) && !in_array($shortname, $allowedcustomfields)) {
                 continue;
             }

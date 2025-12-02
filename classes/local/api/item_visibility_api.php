@@ -36,7 +36,6 @@ use local_resourcelibrary\item_visibility;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class item_visibility_api {
-
     /**
      * Set the visibility status for items in the catalogue.
      *
@@ -165,12 +164,12 @@ class item_visibility_api {
     public static function is_item_visible(int $itemid, int $itemtype): bool {
         $record = self::get_item_visibility($itemid, $itemtype);
 
-        // If no record exists, item is visible by default
+        // If no record exists, item is visible by default.
         if (!$record) {
             return true;
         }
 
-        // VISIBLE = 0, HIDDEN = 1, so we need to check if visibility equals VISIBLE
+        // VISIBLE = 0, HIDDEN = 1, so we need to check if visibility equals VISIBLE.
         return (int) $record->visibility === item_visibility::VISIBLE->value;
     }
 

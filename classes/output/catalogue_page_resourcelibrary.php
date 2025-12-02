@@ -24,11 +24,9 @@
 
 namespace local_resourcelibrary\output;
 
-use local_resourcelibrary\local\persistent\catalogue_page;
 use local_resourcelibrary\local\api\course_filter_api;
-use renderable;
+use local_resourcelibrary\local\persistent\catalogue_page;
 use renderer_base;
-use templatable;
 
 /**
  * Class containing data for a specific catalogue page resourcelibrary.
@@ -38,7 +36,6 @@ use templatable;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class catalogue_page_resourcelibrary extends base_resourcelibrary {
-
     /**
      * The catalogue page
      *
@@ -56,9 +53,9 @@ class catalogue_page_resourcelibrary extends base_resourcelibrary {
      */
     public function __construct(
         catalogue_page $cataloguepage,
-        $sort = self::SORT_FULLNAME_ASC,
-        $view = self::VIEW_CARD,
-        $paging = self::PAGING_12
+        string $sort = self::SORT_FULLNAME_ASC,
+        string $view = self::VIEW_CARD,
+        int $paging = self::PAGING_12,
     ) {
         parent::__construct($sort, $view, $paging);
         $this->cataloguepage = $cataloguepage;
@@ -73,61 +70,63 @@ class catalogue_page_resourcelibrary extends base_resourcelibrary {
     public function export_for_template(renderer_base $output) {
         $handler = \core_course\customfield\course_handler::create();
 
-        // Get the base export data
+        // Get the base export data.
         $defaultvariables = $this->get_export_defaults($output, $handler, $this->cataloguepage->get('id'));
         $defaultvariables['parentid'] = 0;
         $defaultvariables['categoryid'] = 0;
         $defaultvariables['pageid'] = $this->cataloguepage->get('id');
 
-        // Add catalogue page specific data
+        // Add catalogue page specific data.
         $defaultvariables['cataloguepage'] = [
             'id' => $this->cataloguepage->get('id'),
             'name' => $this->cataloguepage->get('name'),
         ];
 
-        // Get filtered courses with pagination data
-        $courseData = $this->get_filtered_courses();
-        $filteredcourses = $courseData['courses'];
-        $totalItems = $courseData['totalItems'];
+        // Get filtered courses with pagination data.
+        $coursedata = $this->get_filtered_courses();
+        $filteredcourses = $coursedata['courses'];
+        $totalitems = $coursedata['totalItems'];
 
         $defaultvariables['hascourses'] = !empty($filteredcourses);
         $defaultvariables['entities'] = $filteredcourses;
-        $defaultvariables['totalItems'] = $totalItems;
+        $defaultvariables['totalItems'] = $totalitems;
         $defaultvariables['currentPage'] = 1;
         $defaultvariables['itemsPerPage'] = $this->paging;
 
-        // Add view-specific data
+        // Add view-specific data.
         $defaultvariables['view_cards'] = ($this->view === self::VIEW_CARD);
         $defaultvariables['view_list'] = ($this->view === self::VIEW_LIST);
 
-        // Add pagination data if needed
-        $totalPages = ceil($totalItems / $this->paging);
-        $defaultvariables['showPagination'] = $totalPages > 1;
-        $defaultvariables['totalPages'] = $totalPages;
+        // Add pagination data if needed.
+        $totalpages = ceil($totalitems / $this->paging);
+        $defaultvariables['showPagination'] = $totalpages > 1;
+        $defaultvariables['totalPages'] = $totalpages;
 
         $preferences = $this->get_preferences();
         return array_merge($defaultvariables, $preferences);
-    }    /**
+    }
+
+    /**
      * Get the courses filtered by the catalogue page criteria
      *
      * @return array Array with 'courses' and 'totalItems' keys
      */
     protected function get_filtered_courses() {
-        // Get all courses first to count total
-        $allCourses = course_filter_api::get_filtered_courses(
-            $this->cataloguepage->get('id'), // pageid - catalogue page ID
-            [], // filters - can be extended to support runtime filtering
-            0,  // limit - no limit to get total count
-            0,  // offset - no pagination
-            []  // sorting - default sorting
+        // Get all courses first to count total.
+        $allcourses = course_filter_api::get_filtered_courses(
+            $this->cataloguepage->get('id'), // Pageid - catalogue page ID.
+            [], // Filters - can be extended to support runtime filtering.
+            0, // Limit - no limit to get total count.
+            0, // Offset - no pagination.
+            []  // Sorting - default sorting.
         );
 
-        // Limit to first 12 items for initial render
-        $limitedCourses = array_slice($allCourses, 0, $this->paging);
+        // Limit to first 12 items for initial render.
+        $limitedcourses = array_slice($allcourses, 0, $this->paging);
 
         return [
-            'courses' => $limitedCourses,
-            'totalItems' => count($allCourses)
+            'courses' => $limitedcourses,
+            'totalItems' => count($allcourses),
         ];
     }
 }

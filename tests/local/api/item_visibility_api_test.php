@@ -23,7 +23,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_resourcelibrary\tests\local\api;
+namespace local_resourcelibrary\local\api;
 
 use local_resourcelibrary\local\api\item_visibility_api;
 use local_resourcelibrary\item_type;
@@ -39,8 +39,7 @@ use local_resourcelibrary\tests\local_resourcelibrary_testcase;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @coversDefaultClass \local_resourcelibrary\local\api\item_visibility_api
  */
-class item_visibility_api_test extends local_resourcelibrary_testcase {
-
+final class item_visibility_api_test extends local_resourcelibrary_testcase {
     /**
      * Set up the test environment.
      */
@@ -66,7 +65,7 @@ class item_visibility_api_test extends local_resourcelibrary_testcase {
                 'itemid' => $course->id,
                 'itemtype' => item_type::COURSE->value,
                 'visibility' => item_visibility::HIDDEN->value,
-            ]
+            ],
         ];
 
         $result = item_visibility_api::set_items_visibility($items);
@@ -79,10 +78,10 @@ class item_visibility_api_test extends local_resourcelibrary_testcase {
         $this->assertEquals(item_type::COURSE->value, $item->itemtype);
         $this->assertEquals(item_visibility::HIDDEN->value, $item->visibility);
 
-        // Verify database record
+        // Verify database record.
         $record = $DB->get_record('local_resourcelibrary', [
             'itemid' => $course->id,
-            'itemtype' => item_type::COURSE->value
+            'itemtype' => item_type::COURSE->value,
         ]);
         $this->assertNotFalse($record);
         $this->assertEquals(item_visibility::HIDDEN->value, $record->visibility);
@@ -109,16 +108,16 @@ class item_visibility_api_test extends local_resourcelibrary_testcase {
                 'itemid' => $categories['cat1']->id,
                 'itemtype' => item_type::CATEGORY->value,
                 'visibility' => item_visibility::HIDDEN->value,
-            ]
+            ],
         ];
 
         $result = item_visibility_api::set_items_visibility($items);
 
         $this->assertEmpty($result['warnings']);
-        // Should return 4 items: 2 courses + 2 categories
+        // Should return 4 items: 2 courses + 2 categories.
         $this->assertCount(4, $result['returneditems']);
 
-        // Verify all items are hidden
+        // Verify all items are hidden.
         foreach ($result['returneditems'] as $item) {
             $this->assertEquals(item_visibility::HIDDEN->value, $item->visibility);
         }
@@ -134,11 +133,11 @@ class item_visibility_api_test extends local_resourcelibrary_testcase {
 
         $course = $this->getDataGenerator()->create_course();
 
-        // Initially, no record should exist
+        // Initially, no record should exist.
         $visibility = item_visibility_api::get_item_visibility($course->id, item_type::COURSE->value);
         $this->assertNull($visibility);
 
-        // Create a visibility record
+        // Create a visibility record.
         $record = new \stdClass();
         $record->itemid = $course->id;
         $record->itemtype = item_type::COURSE->value;
@@ -148,7 +147,7 @@ class item_visibility_api_test extends local_resourcelibrary_testcase {
         $record->timemodified = time();
         $DB->insert_record('local_resourcelibrary', $record);
 
-        // Now it should return the record
+        // Now it should return the record.
         $visibility = item_visibility_api::get_item_visibility($course->id, item_type::COURSE->value);
         $this->assertNotNull($visibility);
         $this->assertEquals($course->id, $visibility->itemid);
@@ -166,7 +165,7 @@ class item_visibility_api_test extends local_resourcelibrary_testcase {
         $course2 = $this->getDataGenerator()->create_course();
         $category = $this->getDataGenerator()->create_category();
 
-        // Set visibility for some items
+        // Set visibility for some items.
         $items = [
             [
                 'id' => 0,
@@ -179,21 +178,21 @@ class item_visibility_api_test extends local_resourcelibrary_testcase {
                 'itemid' => $category->id,
                 'itemtype' => item_type::CATEGORY->value,
                 'visibility' => item_visibility::VISIBLE->value,
-            ]
+            ],
         ];
 
         item_visibility_api::set_items_visibility($items);
 
-        // Query multiple items
-        $queryItems = [
+        // Query multiple items.
+        $queryitems = [
             ['itemid' => $course1->id, 'itemtype' => item_type::COURSE->value],
-            ['itemid' => $course2->id, 'itemtype' => item_type::COURSE->value], // No record
+            ['itemid' => $course2->id, 'itemtype' => item_type::COURSE->value], // No record.
             ['itemid' => $category->id, 'itemtype' => item_type::CATEGORY->value],
         ];
 
-        $results = item_visibility_api::get_items_visibility($queryItems);
+        $results = item_visibility_api::get_items_visibility($queryitems);
 
-        // Should return 2 records (course1 and category)
+        // Should return 2 records (course1 and category).
         $this->assertCount(2, $results);
     }
 
@@ -205,28 +204,28 @@ class item_visibility_api_test extends local_resourcelibrary_testcase {
     public function test_is_item_visible(): void {
         $course = $this->getDataGenerator()->create_course();
 
-        // Item with no record should be visible by default
+        // Item with no record should be visible by default.
         $this->assertTrue(item_visibility_api::is_item_visible($course->id, item_type::COURSE->value));
 
-        // Set item as hidden
+        // Set item as hidden.
         $items = [
             [
                 'id' => 0,
                 'itemid' => $course->id,
                 'itemtype' => item_type::COURSE->value,
                 'visibility' => item_visibility::HIDDEN->value,
-            ]
+            ],
         ];
         item_visibility_api::set_items_visibility($items);
 
-        // Now it should be hidden
+        // Now it should be hidden.
         $this->assertFalse(item_visibility_api::is_item_visible($course->id, item_type::COURSE->value));
 
-        // Set item as visible
+        // Set item as visible.
         $items[0]['visibility'] = item_visibility::VISIBLE->value;
         item_visibility_api::set_items_visibility($items);
 
-        // Now it should be visible
+        // Now it should be visible.
         $this->assertTrue(item_visibility_api::is_item_visible($course->id, item_type::COURSE->value));
     }
 
@@ -240,28 +239,28 @@ class item_visibility_api_test extends local_resourcelibrary_testcase {
 
         $course = $this->getDataGenerator()->create_course();
 
-        // First, create a visibility record
+        // First, create a visibility record.
         $items = [
             [
                 'id' => 0,
                 'itemid' => $course->id,
                 'itemtype' => item_type::COURSE->value,
                 'visibility' => item_visibility::HIDDEN->value,
-            ]
+            ],
         ];
         $result = item_visibility_api::set_items_visibility($items);
-        $recordId = $result['returneditems'][0]->id;
+        $recordid = $result['returneditems'][0]->id;
 
-        // Verify initial state
-        $record = $DB->get_record('local_resourcelibrary', ['id' => $recordId]);
+        // Verify initial state.
+        $record = $DB->get_record('local_resourcelibrary', ['id' => $recordid]);
         $this->assertEquals(item_visibility::HIDDEN->value, $record->visibility);
 
-        // Update the visibility
+        // Update the visibility.
         $items[0]['visibility'] = item_visibility::VISIBLE->value;
         item_visibility_api::set_items_visibility($items);
 
-        // Verify the update
-        $record = $DB->get_record('local_resourcelibrary', ['id' => $recordId]);
+        // Verify the update.
+        $record = $DB->get_record('local_resourcelibrary', ['id' => $recordid]);
         $this->assertEquals(item_visibility::VISIBLE->value, $record->visibility);
     }
 
@@ -271,7 +270,7 @@ class item_visibility_api_test extends local_resourcelibrary_testcase {
      * @covers ::set_items_visibility
      */
     public function test_set_visibility_no_permission(): void {
-        // Create a regular user without the required capability
+        // Create a regular user without the required capability.
         $user = $this->getDataGenerator()->create_user();
         $this->setUser($user);
 
@@ -282,12 +281,12 @@ class item_visibility_api_test extends local_resourcelibrary_testcase {
                 'itemid' => $course->id,
                 'itemtype' => item_type::COURSE->value,
                 'visibility' => item_visibility::HIDDEN->value,
-            ]
+            ],
         ];
 
         $result = item_visibility_api::set_items_visibility($items);
 
-        // Should return warning about permissions
+        // Should return warning about permissions.
         $this->assertNotEmpty($result['warnings']);
         $this->assertEquals('settingvisibilitynotallowed', $result['warnings'][0]['warningcode']);
         $this->assertEmpty($result['returneditems']);
@@ -304,8 +303,8 @@ class item_visibility_api_test extends local_resourcelibrary_testcase {
         $this->assertEmpty($result['warnings']);
         $this->assertEmpty($result['returneditems']);
 
-        $visibilityResults = item_visibility_api::get_items_visibility([]);
-        $this->assertEmpty($visibilityResults);
+        $visibilityresults = item_visibility_api::get_items_visibility([]);
+        $this->assertEmpty($visibilityresults);
     }
 
     /**

@@ -25,6 +25,7 @@
 require_once('../../config.php');
 
 use local_resourcelibrary\local\persistent\catalogue_page;
+global $CFG, $PAGE, $OUTPUT;
 
 $id = optional_param('id', 0, PARAM_INT);
 $action = optional_param('action', '', PARAM_ALPHA);
@@ -61,20 +62,18 @@ require_once($CFG->libdir . '/formslib.php');
  * Form for editing catalogue pages
  */
 class catalogue_page_form extends moodleform {
-
     /**
      * Define the form
      */
     public function definition() {
         $mform = $this->_form;
-        $page = $this->_customdata['page'] ?? null;
 
-        // Name field
+        // Name field.
         $mform->addElement('text', 'name', get_string('name'), 'maxlength="255" size="60"');
         $mform->setType('name', PARAM_TEXT);
         $mform->addRule('name', null, 'required', null, 'client');
 
-        // Course categories selection
+        // Course categories selection.
         $options = [];
         $categories = core_course_category::get_all();
         foreach ($categories as $category) {
@@ -85,7 +84,7 @@ class catalogue_page_form extends moodleform {
         $select->setMultiple(true);
         $mform->addHelpButton('categories', 'categories', 'local_resourcelibrary');
 
-        // Custom fields selection
+        // Custom fields selection.
         $handler = \core_customfield\handler::get_handler('core_course', 'course');
         $customfields = $handler->get_fields();
 
@@ -95,16 +94,21 @@ class catalogue_page_form extends moodleform {
         }
 
         if (!empty($customfieldoptions)) {
-            $select = $mform->addElement('autocomplete', 'customfields', get_string('customfields', 'local_resourcelibrary'), $customfieldoptions);
+            $select = $mform->addElement(
+                'autocomplete',
+                'customfields',
+                get_string('customfields', 'local_resourcelibrary'),
+                $customfieldoptions
+            );
             $select->setMultiple(true);
             $mform->addHelpButton('customfields', 'customfields', 'local_resourcelibrary');
         }
 
-        // Hidden fields
+        // Hidden fields.
         $mform->addElement('hidden', 'id');
         $mform->setType('id', PARAM_INT);
 
-        // Action buttons
+        // Action buttons.
         $this->add_action_buttons();
     }
 
@@ -132,16 +136,15 @@ $form = new catalogue_page_form(null, ['page' => $page]);
 if ($form->is_cancelled()) {
     redirect($returnurl);
 } else if ($data = $form->get_data()) {
-
     if ($page) {
-        // Update existing page
+        // Update existing page.
         $page->set('name', $data->name);
         $page->set_categories_array($data->categories ?? []);
         $page->set_customfields_array($data->customfields ?? []);
         $page->update();
         $message = get_string('cataloguepageupdated', 'local_resourcelibrary');
     } else {
-        // Create new page
+        // Create new page.
         $page = new catalogue_page();
         $page->set('name', $data->name);
         $page->set_categories_array($data->categories ?? []);
@@ -153,7 +156,7 @@ if ($form->is_cancelled()) {
     redirect($returnurl, $message, null, \core\output\notification::NOTIFY_SUCCESS);
 }
 
-// Set form data
+// Set form data.
 if ($page) {
     $formdata = [
         'id' => $page->get('id'),

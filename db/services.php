@@ -26,5 +26,5 @@
 defined('MOODLE_INTERNAL') || die;
 
 $functions = [
-    // Services can be added here if needed in the future
+    // Services can be added here if needed in the future.
 ];

@@ -28,7 +28,6 @@ use local_resourcelibrary\local\persistent\catalogue_page;
  * @covers \local_resourcelibrary\local\api\course_filter_api
  */
 final class course_filter_api_test extends local_resourcelibrary_testcase {
-
     /**
      * Test basic course filtering without any parameters
      */
@@ -57,24 +56,34 @@ final class course_filter_api_test extends local_resourcelibrary_testcase {
     public function test_get_filtered_courses_by_category(): void {
         $dg = $this->getDataGenerator();
 
-        // Create categories
+        // Create categories.
         $cat1 = $dg->create_category(['name' => 'Category 1']);
         $cat2 = $dg->create_category(['name' => 'Category 2']);
 
-        // Create courses in different categories
+        // Create courses in different categories.
         $course1 = $dg->create_course(['category' => $cat1->id, 'fullname' => 'Course 1']);
         $course2 = $dg->create_course(['category' => $cat2->id, 'fullname' => 'Course 2']);
         $course3 = $dg->create_course(['category' => $cat1->id, 'fullname' => 'Course 3']);
 
-        // Test filtering by single category using legacy categoryid parameter
+        // Test filtering by single category using legacy categoryid parameter.
         $courses = course_filter_api::get_filtered_courses(
-            0, [], 0, 0, [], $cat1->id
+            0,
+            [],
+            0,
+            0,
+            [],
+            $cat1->id
         );
         $this->assertCount(2, $courses);
 
-        // Test filtering by different category
+        // Test filtering by different category.
         $courses = course_filter_api::get_filtered_courses(
-            0, [], 0, 0, [], $cat2->id
+            0,
+            [],
+            0,
+            0,
+            [],
+            $cat2->id
         );
         $this->assertCount(1, $courses);
         $this->assertEquals('Course 2', $courses[0]['fullname']);
@@ -86,38 +95,46 @@ final class course_filter_api_test extends local_resourcelibrary_testcase {
     public function test_get_filtered_courses_with_pageid(): void {
         $dg = $this->getDataGenerator();
 
-        // Create categories
+        // Create categories.
         $cat1 = $dg->create_category(['name' => 'Category 1']);
         $cat2 = $dg->create_category(['name' => 'Category 2']);
 
-        // Create courses in different categories
+        // Create courses in different categories.
         $course1 = $dg->create_course(['category' => $cat1->id, 'fullname' => 'Course 1']);
         $course2 = $dg->create_course(['category' => $cat2->id, 'fullname' => 'Course 2']);
         $course3 = $dg->create_course(['category' => $cat1->id, 'fullname' => 'Course 3']);
 
-        // Create a catalogue page with specific categories
+        // Create a catalogue page with specific categories.
         $cataloguepage = new catalogue_page();
         $cataloguepage->set('name', 'Test Catalogue Page');
         $cataloguepage->set_categories_array([$cat1->id]);
         $cataloguepage->create();
 
-        // Test filtering using pageid
+        // Test filtering using pageid.
         $courses = course_filter_api::get_filtered_courses(
-            $cataloguepage->get('id'), [], 0, 0, []
+            $cataloguepage->get('id'),
+            [],
+            0,
+            0,
+            []
         );
-        $this->assertCount(2, $courses); // Should only return courses from cat1
+        $this->assertCount(2, $courses); // Should only return courses from cat1.
 
-        // Verify the correct courses are returned
-        $courseNames = array_column($courses, 'fullname');
-        $this->assertContains('Course 1', $courseNames);
-        $this->assertContains('Course 3', $courseNames);
-        $this->assertNotContains('Course 2', $courseNames);
+        // Verify the correct courses are returned.
+        $coursenames = array_column($courses, 'fullname');
+        $this->assertContains('Course 1', $coursenames);
+        $this->assertContains('Course 3', $coursenames);
+        $this->assertNotContains('Course 2', $coursenames);
 
-        // Test with pageid = 0 (show all courses)
+        // Test with pageid = 0 (show all courses).
         $courses = course_filter_api::get_filtered_courses(
-            0, [], 0, 0, []
+            0,
+            [],
+            0,
+            0,
+            []
         );
-        $this->assertCount(3, $courses); // Should return all courses
+        $this->assertCount(3, $courses); // Should return all courses.
     }
 
     /**
@@ -152,7 +169,7 @@ final class course_filter_api_test extends local_resourcelibrary_testcase {
             $courses[] = $dg->create_course($coursedata);
         }
 
-        // Filter on f1 = 'Text 2'
+        // Filter on f1 = 'Text 2'.
         $coursesfound = course_filter_api::get_filtered_courses(0, [
             [
                 'type' => 'text',
@@ -165,7 +182,7 @@ final class course_filter_api_test extends local_resourcelibrary_testcase {
         $this->assertEquals($courses[1]->id, $coursesfound[0]['id']);
         $this->assertEquals($courses[2]->id, $coursesfound[1]['id']);
 
-        // Filter on f5 = '2'
+        // Filter on f5 = '2'.
         $coursesfound = course_filter_api::get_filtered_courses(0, [
             [
                 'type' => 'text',
@@ -184,7 +201,7 @@ final class course_filter_api_test extends local_resourcelibrary_testcase {
     public function test_get_filtered_courses_pagination(): void {
         $dg = $this->getDataGenerator();
 
-        // Create multiple courses
+        // Create multiple courses.
         for ($i = 1; $i <= 5; $i++) {
             $dg->create_course([
                 'shortname' => "SN$i",
@@ -193,15 +210,15 @@ final class course_filter_api_test extends local_resourcelibrary_testcase {
             ]);
         }
 
-        // Test limit
+        // Test limit.
         $courses = course_filter_api::get_filtered_courses(0, [], 3, 0, []);
         $this->assertCount(3, $courses);
 
-        // Test offset
+        // Test offset.
         $courses = course_filter_api::get_filtered_courses(0, [], 2, 2, []);
         $this->assertCount(2, $courses);
 
-        // Test limit and offset combined
+        // Test limit and offset combined.
         $courses = course_filter_api::get_filtered_courses(0, [], 2, 1, []);
         $this->assertCount(2, $courses);
     }
@@ -212,14 +229,14 @@ final class course_filter_api_test extends local_resourcelibrary_testcase {
     public function test_get_filtered_courses_sorting(): void {
         $dg = $this->getDataGenerator();
 
-        // Create courses with different names
+        // Create courses with different names.
         $course1 = $dg->create_course(['fullname' => 'Z Course']);
         $course2 = $dg->create_course(['fullname' => 'A Course']);
         $course3 = $dg->create_course(['fullname' => 'M Course']);
 
-        // Test sorting by fullname ASC
+        // Test sorting by fullname ASC.
         $courses = course_filter_api::get_filtered_courses(0, [], 0, 0, [
-            ['column' => 'fullname', 'order' => 'ASC']
+            ['column' => 'fullname', 'order' => 'ASC'],
         ]);
 
         $this->assertCount(3, $courses);
@@ -227,9 +244,9 @@ final class course_filter_api_test extends local_resourcelibrary_testcase {
         $this->assertEquals('M Course', $courses[1]['fullname']);
         $this->assertEquals('Z Course', $courses[2]['fullname']);
 
-        // Test sorting by fullname DESC
+        // Test sorting by fullname DESC.
         $courses = course_filter_api::get_filtered_courses(0, [], 0, 0, [
-            ['column' => 'fullname', 'order' => 'DESC']
+            ['column' => 'fullname', 'order' => 'DESC'],
         ]);
 
         $this->assertEquals('Z Course', $courses[0]['fullname']);
@@ -243,7 +260,7 @@ final class course_filter_api_test extends local_resourcelibrary_testcase {
     public function test_get_hidden_course_ids(): void {
         $hiddenids = course_filter_api::get_hidden_course_ids();
         $this->assertIsArray($hiddenids);
-        // By default, no courses should be hidden
+        // By default, no courses should be hidden.
         $this->assertEmpty($hiddenids);
     }
 
@@ -253,20 +270,24 @@ final class course_filter_api_test extends local_resourcelibrary_testcase {
     public function test_catalogue_page_empty_categories(): void {
         $dg = $this->getDataGenerator();
 
-        // Create categories and courses
+        // Create categories and courses.
         $cat1 = $dg->create_category(['name' => 'Category 1']);
         $course1 = $dg->create_course(['category' => $cat1->id, 'fullname' => 'Course 1']);
         $course2 = $dg->create_course(['category' => $cat1->id, 'fullname' => 'Course 2']);
 
-        // Create a catalogue page with no categories configured
+        // Create a catalogue page with no categories configured.
         $cataloguepage = new catalogue_page();
         $cataloguepage->set('name', 'Empty Catalogue Page');
         $cataloguepage->set_categories_array([]);
         $cataloguepage->create();
 
-        // Should show all courses when no categories are configured
+        // Should show all courses when no categories are configured.
         $courses = course_filter_api::get_filtered_courses(
-            $cataloguepage->get('id'), [], 0, 0, []
+            $cataloguepage->get('id'),
+            [],
+            0,
+            0,
+            []
         );
         $this->assertCount(2, $courses);
     }
@@ -277,34 +298,38 @@ final class course_filter_api_test extends local_resourcelibrary_testcase {
     public function test_get_filtered_courses_includes_subcategories(): void {
         $dg = $this->getDataGenerator();
 
-        // Create parent category
+        // Create parent category.
         $parentcat = $dg->create_category(['name' => 'Parent Category']);
 
-        // Create subcategory
+        // Create subcategory.
         $subcat = $dg->create_category([
             'name' => 'Sub Category',
-            'parent' => $parentcat->id
+            'parent' => $parentcat->id,
         ]);
 
-        // Create courses in both categories
+        // Create courses in both categories.
         $course1 = $dg->create_course(['category' => $parentcat->id, 'fullname' => 'Parent Course']);
         $course2 = $dg->create_course(['category' => $subcat->id, 'fullname' => 'Sub Course']);
 
-        // Create catalogue page with parent category
+        // Create catalogue page with parent category.
         $cataloguepage = new catalogue_page();
         $cataloguepage->set('name', 'Parent Category Page');
         $cataloguepage->set_categories_array([$parentcat->id]);
         $cataloguepage->create();
 
-        // Should return courses from both parent and subcategory
+        // Should return courses from both parent and subcategory.
         $courses = course_filter_api::get_filtered_courses(
-            $cataloguepage->get('id'), [], 0, 0, []
+            $cataloguepage->get('id'),
+            [],
+            0,
+            0,
+            []
         );
 
         $this->assertCount(2, $courses);
-        $courseNames = array_column($courses, 'fullname');
-        $this->assertContains('Parent Course', $courseNames);
-        $this->assertContains('Sub Course', $courseNames);
+        $coursenames = array_column($courses, 'fullname');
+        $this->assertContains('Parent Course', $coursenames);
+        $this->assertContains('Sub Course', $coursenames);
     }
 
     /**
@@ -313,12 +338,16 @@ final class course_filter_api_test extends local_resourcelibrary_testcase {
     public function test_get_filtered_courses_invalid_pageid(): void {
         $dg = $this->getDataGenerator();
 
-        // Create a course
+        // Create a course.
         $course1 = $dg->create_course(['fullname' => 'Test Course']);
 
-        // Test with non-existent pageid - should show all courses
+        // Test with non-existent pageid - should show all courses.
         $courses = course_filter_api::get_filtered_courses(
-            999999, [], 0, 0, []
+            999999,
+            [],
+            0,
+            0,
+            []
         );
 
         $this->assertCount(1, $courses);

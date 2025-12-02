@@ -48,7 +48,6 @@ use local_resourcelibrary\local\persistent\catalogue_page;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class course_filter_api {
-
     /**
      * Get filtered courses
      *
@@ -73,11 +72,11 @@ class course_filter_api {
         global $CFG, $PAGE;
         require_once($CFG->dirroot . "/course/lib.php");
 
-        // Build SQL WHERE clause
+        // Build SQL WHERE clause.
         $sqlparams = [];
         $sqlwhere = " e.id != " . SITEID . " ";
 
-        // Category filtering based on catalogue page configuration
+        // Category filtering based on catalogue page configuration.
         if ($pageid > 0) {
             $cataloguepage = catalogue_page::get_record(['id' => $pageid]);
             if ($cataloguepage) {
@@ -99,7 +98,7 @@ class course_filter_api {
                 }
             }
         } else if ($categoryid > 0) {
-            // Legacy category filtering for backward compatibility
+            // Legacy category filtering for backward compatibility.
             $coursecat = core_course_category::get($categoryid, IGNORE_MISSING);
             if ($coursecat) {
                 $allcategories = $coursecat->get_all_children_ids();
@@ -108,14 +107,14 @@ class course_filter_api {
                 $sqlwhere .= " AND e.category IN (" . implode(',', $allcategories) . ") ";
             }
         }
-        // If both pageid = 0 and categoryid = 0, show all courses in all categories
+        // If both pageid = 0 and categoryid = 0, show all courses in all categories.
 
-        // Course fields to retrieve
+        // Course fields to retrieve.
         $coursefields = [
             'fullname', 'shortname', 'format', 'showgrades', 'newsitems', 'startdate', 'enddate', 'maxbytes',
             'showreports', 'visible', 'groupmode', 'groupmodeforce', 'defaultgroupingid', 'enablecompletion',
             'completionnotify', 'lang', 'theme', 'marker', 'category', 'summary', 'summaryformat', 'sortorder',
-            'idnumber', 'timecreated', 'timemodified'
+            'idnumber', 'timecreated', 'timemodified',
         ];
 
         $additionalfields = ['course_categoryname' => 'ccat.name AS course_categoryname'];
@@ -126,7 +125,7 @@ class course_filter_api {
         $handler = course_handler::create();
         $sortsql = externalhelper::get_sort_options_sql($sorting, array_keys($additionalfields));
 
-        // Get courses using the custom field utility
+        // Get courses using the custom field utility.
         $courses = customfield_utils::get_records_from_handler(
             $handler,
             $filters,
@@ -139,20 +138,20 @@ class course_filter_api {
             $sortsql
         );
 
-        // Custom field filtering is now handled via the $filters parameter
+        // Custom field filtering is now handled via the $filters parameter.
 
-        // Get list of hidden courses
+        // Get list of hidden courses.
         $invisiblecourseidlist = self::get_hidden_course_ids();
 
-        // Process and format courses
+        // Process and format courses.
         $coursesinfo = [];
         foreach ($courses as $course) {
-            // Skip hidden courses
+            // Skip hidden courses.
             if (in_array($course->id, $invisiblecourseidlist)) {
                 continue;
             }
 
-            // Security and visibility checks
+            // Security and visibility checks.
             $context = context_course::instance($course->id, IGNORE_MISSING);
             if (!$context) {
                 continue;
@@ -168,14 +167,14 @@ class course_filter_api {
             $coursevisible = $coursevisible || has_any_capability([
                 'moodle/course:update',
                 'moodle/course:viewhiddencourses',
-                'moodle/course:view'
+                'moodle/course:view',
             ], $context) || is_enrolled($context);
 
             if (!$coursevisible) {
                 continue;
             }
 
-            // Export course data
+            // Export course data.
             $exporter = new course_summary_simple_exporter($course, ['context' => $context]);
             $renderer = $PAGE->get_renderer('core');
             $courseinfo = (array) $exporter->export($renderer);
@@ -186,7 +185,7 @@ class course_filter_api {
             $coursesinfo[] = $courseinfo;
         }
 
-        // Apply pagination
+        // Apply pagination.
         return array_slice($coursesinfo, $offset, $limit ? $limit : null);
     }
 
@@ -200,13 +199,13 @@ class course_filter_api {
 
         $invisiblecourseidlist = [];
 
-        // Get courses hidden via configuration
+        // Get courses hidden via configuration.
         if ($invisiblecoursesids = get_config('local_resourcelibrary', 'hiddencoursesid')) {
             $invisiblecourseidlist = explode(',', $invisiblecoursesids);
             $invisiblecourseidlist = array_map('intval', $invisiblecourseidlist);
         }
 
-        // Get courses hidden via management interface
+        // Get courses hidden via management interface.
         $sql = "SELECT itemid FROM {local_resourcelibrary} WHERE itemtype = :itemtype AND visibility = :visibility";
         $params = [
             'itemtype' => item_type::COURSE->value,
