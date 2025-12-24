@@ -47,6 +47,7 @@ $string['lastmodification:desc'] = 'Dernière modification (Descendant)';
 $string['list'] = 'Liste';
 $string['mainresourcelibrary'] = 'Liste de cours';
 $string['manage:hiddenfilter'] = 'Caché pour Filtres?';
+$string['managecataloguepages'] = 'Gérer les pages du catalogue';
 $string['noentities'] = 'Aucun résultats ! Veuillez sélectionner d\'autres valeurs pour les filtres.';
 $string['operator:instructions:greaterthan'] = 'Plus grand que';
 $string['permalink:copy'] = 'Copier';
