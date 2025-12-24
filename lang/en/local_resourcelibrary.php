@@ -60,6 +60,7 @@ $string['lastmodification:desc'] = 'Last modification (Descending)';
 $string['list'] = 'List';
 $string['mainresourcelibrary'] = 'Main library';
 $string['manage:hiddenfilter'] = 'Hidden in Filter?';
+$string['managecataloguepages'] = 'Manage catalogue pages';
 $string['noentities'] = 'Nothing found ! Please select another filter.';
 $string['operator:instructions:greaterthan'] = 'Greater Than';
 $string['permalink:copy'] = 'Copy';
