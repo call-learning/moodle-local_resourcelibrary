@@ -28,16 +28,6 @@ if ($hassiteconfig) {
     $settings->add(
         'resourcelibrary',
         new admin_externalpage(
-            'resourcelibrary_course_customfield',
-            new lang_string('resourcelibrary_course_customfield', 'local_resourcelibrary'),
-            $CFG->wwwroot . '/local/resourcelibrary/coursefields.php',
-            ['local/resourcelibrary:manage']
-        )
-    );
-
-    $settings->add(
-        'resourcelibrary',
-        new admin_externalpage(
             'resourcelibrary_catalogue_pages',
             new lang_string('cataloguepages', 'local_resourcelibrary'),
             $CFG->wwwroot . '/local/resourcelibrary/catalogue_pages.php',
